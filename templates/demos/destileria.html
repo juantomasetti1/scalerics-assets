@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scalerics – Demo E-commerce | La Destileria</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;700;800&family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #14B8A6;
+      --accent2: #06B6D4;
+    }
+
+    body {
+      font-family: 'DM Sans', 'Inter', sans-serif;
+      background: #0F1419;
+      color: #f1f5f9;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #06B6D4, #14B8A6);
+      z-index: 9999;
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 0 10px rgba(6,182,212,0.5);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateY(16px) scale(0.99);
+      transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+      z-index: 10;
+    }
+    .slide.prev {
+      transform: translateY(-16px) scale(0.99);
+      opacity: 0;
+    }
+
+    .glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(130px);
+      opacity: 0.08;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 1.25rem;
+    }
+
+    .glass-blue {
+      background: rgba(0,10,40,0.5);
+      backdrop-filter: blur(14px);
+      border: 1px solid #1E3A8A;
+      border-radius: 1.25rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.875rem;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .grad-yellow {
+      background: linear-gradient(135deg, #F59E0B, #FBBF24, #FDE68A);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .grad-brand {
+      background: linear-gradient(135deg, #06B6D4, #14B8A6, #0D9488);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 6px; right: 20px;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .nav-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .nav-dot.active {
+      background: #06B6D4;
+      width: 22px;
+      border-radius: 3px;
+    }
+
+    /* ============================================
+       BROWSER FRAME
+    ============================================ */
+    .browser-wrapper {
+      width: 100%;
+      max-width: 840px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.75),
+                  0 0 0 1px rgba(255,255,255,0.06),
+                  0 0 60px rgba(37,99,235,0.08);
+    }
+
+    .browser-bar {
+      background: #0d1117;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .b-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+
+    .browser-url-bar {
+      flex: 1;
+      background: #161b22;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-family: monospace;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .browser-content {
+      overflow-y: auto;
+      height: 450px;
+      scroll-behavior: smooth;
+    }
+
+    .browser-content::-webkit-scrollbar { width: 4px; }
+    .browser-content::-webkit-scrollbar-track { background: #0d0d0d; }
+    .browser-content::-webkit-scrollbar-thumb { background: rgba(20,184,166,0.3); border-radius: 2px; }
+
+    /* ============================================
+       TEMPLATE 1 — INDUSTRIAL / BOLD
+    ============================================ */
+    .t1 { background: #0D1520; font-family: 'DM Sans', sans-serif; color: #FFFFFF; }
+
+    .t1-topbar { background: #0D9488; color: rgba(255,255,255,0.85); text-align: center; padding: 8px; font-size: 10px; letter-spacing: 0.08em; }
+    .t1-topbar strong { color: #A7F3D0; }
+
+    .t1-nav {
+      background: #0D1520;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 60px;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .t1-logo { font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 0.08em; color: #FFFFFF; display: flex; align-items: center; gap: 8px; }
+    .t1-logo-icon { width: 26px; height: 26px; background: #06B6D4; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+    .t1-nav-links { display: flex; gap: 18px; list-style: none; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 600; }
+    .t1-nav-actions { display: flex; align-items: center; gap: 12px; font-size: 12px; color: rgba(255,255,255,0.7); }
+    .t1-cart-btn { background: #06B6D4; color: #0D1520; border: none; padding: 7px 14px; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; cursor: pointer; display: flex; align-items: center; gap: 5px; border-radius: 4px; }
+
+    .t1-hero {
+      background: #0D1520;
+      padding: 0 0 0 36px;
+      display: flex;
+      align-items: center;
+      min-height: 260px;
+      position: relative;
+      overflow: hidden;
+    }
+    .t1-hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 50%, rgba(37,99,235,0.15) 0%, transparent 65%); }
+    .t1-hero-text { flex: 1; z-index: 2; padding: 36px 0; }
+    .t1-hero-eyebrow { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #06B6D4; margin-bottom: 12px; }
+    .t1-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: 58px; line-height: 0.95; color: white; margin-bottom: 14px; letter-spacing: 0.02em; }
+    .t1-hero h1 em { color: #06B6D4; font-style: normal; }
+    .t1-hero p { font-size: 12px; color: rgba(255,255,255,0.5); max-width: 280px; line-height: 1.75; margin-bottom: 24px; }
+    .t1-btn { background: #06B6D4; color: #0D1520; border: none; padding: 11px 24px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
+    .t1-btn-outline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); padding: 11px 18px; font-size: 11px; cursor: pointer; margin-left: 8px; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 4px; }
+    .t1-hero-img { width: 280px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 110px; z-index: 2; }
+
+    .t1-cats { background: #111827; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 20px; display: flex; gap: 0; }
+    .t1-cat { padding: 12px 16px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600; white-space: nowrap; }
+    .t1-cat.act { color: #06B6D4; border-bottom-color: #06B6D4; }
+
+    .t1-section { padding: 28px 20px; background: #0D1520; }
+    .t1-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.05em; color: #FFFFFF; margin-bottom: 3px; }
+    .t1-section-sub { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+
+    .t1-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.06); }
+    .t1-card { background: #111827; overflow: hidden; cursor: pointer; }
+    .t1-card-img { height: 130px; background: #1E2A3A; display: flex; align-items: center; justify-content: center; font-size: 54px; position: relative; }
+    .t1-card-badge { position: absolute; top: 8px; left: 8px; background: #06B6D4; color: #0D1520; font-size: 9px; font-weight: 800; padding: 3px 7px; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 3px; }
+    .t1-card-body { padding: 12px 14px; }
+    .t1-card-cat { font-size: 9px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+    .t1-card-name { font-weight: 700; font-size: 13px; color: #FFFFFF; margin-bottom: 6px; }
+    .t1-card-price { font-size: 17px; font-weight: 800; color: #06B6D4; }
+    .t1-card-price-old { font-size: 11px; color: rgba(255,255,255,0.4); text-decoration: line-through; margin-left: 5px; font-weight: 400; }
+    .t1-card-btn { width: 100%; background: #0D9488; color: white; border: none; padding: 8px; font-size: 10px; font-weight: 700; cursor: pointer; margin-top: 8px; letter-spacing: 0.04em; transition: background 0.2s; border-radius: 3px; }
+    .t1-card-btn:hover { background: #14B8A6; }
+
+    .t1-banner { background: #0D9488; padding: 40px 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .t1-banner-left h2 { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: white; line-height: 1; letter-spacing: 0.03em; }
+    .t1-banner-left h2 em { color: #06B6D4; font-style: normal; }
+    .t1-banner-left p { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 10px; max-width: 340px; line-height: 1.7; }
+    .t1-banner-img { font-size: 80px; opacity: 0.85; }
+
+    .t1-trust { background: #111827; border-top: 1px solid rgba(255,255,255,0.06); padding: 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .t1-trust-item { text-align: center; }
+    .t1-trust-icon { font-size: 18px; margin-bottom: 6px; color: #06B6D4; }
+    .t1-trust-text { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 600; }
+    .t1-trust-sub { font-size: 9px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+    .t1-footer { background: #0A0F1A; color: rgba(255,255,255,0.3); padding: 20px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; }
+    .t1-footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); }
+    .t1-footer-links { display: flex; gap: 16px; }
+
+    /* ============================================
+       TEMPLATE 2 — CLEAN / MODERNO
+    ============================================ */
+    .t2 { background: #FFFFFF; font-family: 'Inter', sans-serif; color: #1C1C1C; }
+
+    .t2-nav {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E5E5E5;
+      padding: 16px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .t2-logo { font-family: 'DM Sans', sans-serif; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: #0D9488; font-weight: 800; }
+    .t2-nav-links { display: flex; gap: 22px; list-style: none; font-size: 13px; color: #666; }
+    .t2-nav-icons { display: flex; gap: 16px; align-items: center; color: #1E3A8A; font-size: 15px; }
+
+    .t2-hero {
+      background: linear-gradient(135deg, #EFF6FF 0%, #FEF9EC 100%);
+      padding: 52px 28px 44px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .t2-hero-eyebrow { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #14B8A6; margin-bottom: 16px; }
+    .t2-hero h1 { font-size: 40px; line-height: 1.1; color: #1C1C1C; font-weight: 700; margin-bottom: 18px; }
+    .t2-hero h1 em { font-style: normal; color: #0D9488; }
+    .t2-hero p { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 24px; max-width: 300px; }
+    .t2-btn { background: #0D9488; border: none; color: white; padding: 11px 28px; font-size: 13px; cursor: pointer; border-radius: 4px; }
+    .t2-hero-image { display: flex; align-items: center; justify-content: center; height: 240px; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(13,148,136,0.1); font-size: 110px; }
+
+    .t2-divider { height: 1px; background: #E5E5E5; margin: 0 28px; }
+
+    .t2-featured { padding: 40px 28px; }
+    .t2-featured-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 28px; }
+    .t2-featured-title { font-size: 24px; font-weight: 700; color: #1C1C1C; }
+    .t2-featured-link { font-size: 13px; color: #14B8A6; border-bottom: 1px solid #14B8A6; padding-bottom: 2px; cursor: pointer; }
+
+    .t2-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .t2-card { cursor: pointer; border: 1px solid #E5E5E5; border-radius: 8px; overflow: hidden; }
+    .t2-card-img { height: 160px; background: #F0F4FF; display: flex; align-items: center; justify-content: center; font-size: 66px; }
+    .t2-card-body { padding: 14px; }
+    .t2-card-cat { font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: #14B8A6; margin-bottom: 5px; }
+    .t2-card-name { font-size: 16px; font-weight: 600; color: #1C1C1C; margin-bottom: 7px; line-height: 1.3; }
+    .t2-card-price { font-size: 15px; color: #0D9488; font-weight: 700; }
+    .t2-card-btn { width: 100%; background: #0D9488; border: none; color: white; padding: 9px; font-size: 12px; cursor: pointer; margin-top: 10px; border-radius: 4px; transition: all 0.3s; }
+    .t2-card-btn:hover { background: #14B8A6; }
+
+    .t2-journal { padding: 40px 28px; background: #F0FDFA; border-top: 1px solid #E5E5E5; }
+    .t2-journal-title { font-size: 22px; font-weight: 700; color: #1C1C1C; margin-bottom: 20px; }
+    .t2-journal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .t2-article-img { height: 100px; background: #CCFBF1; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-size: 36px; border-radius: 6px; }
+    .t2-article-date { font-size: 10px; text-transform: uppercase; color: #14B8A6; margin-bottom: 5px; }
+    .t2-article-title { font-size: 13px; font-weight: 500; color: #1C1C1C; line-height: 1.45; }
+
+    .t2-footer { background: #0D9488; padding: 20px 28px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,0.7); }
+
+    /* ============================================
+       TEMPLATE 3 — PREMIUM / ELEGANTE
+    ============================================ */
+    .t3 { background: #FFFFFF; font-family: 'DM Sans', sans-serif; color: #1C1C1C; }
+
+    .t3-topbar { background: #0D9488; color: rgba(255,255,255,0.8); text-align: center; padding: 8px; font-size: 10px; letter-spacing: 0.1em; }
+    .t3-topbar strong { color: #A7F3D0; }
+
+    .t3-nav {
+      background: white;
+      border-bottom: 1px solid #EBEBEB;
+      padding: 0 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 60px;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .t3-logo { text-align: center; }
+    .t3-logo-name { font-family: 'Cormorant Garamond', serif; font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: #0D9488; font-weight: 600; line-height: 1; }
+    .t3-logo-sub { font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase; color: #999; margin-top: 2px; }
+    .t3-nav-left { display: flex; gap: 18px; list-style: none; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #555; font-weight: 600; }
+    .t3-nav-right { display: flex; gap: 14px; align-items: center; color: #0D9488; font-size: 13px; }
+
+    .t3-hero {
+      height: 320px;
+      background: linear-gradient(160deg, #0F172A 0%, #1E3A8A 55%, #92400E 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 36px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .t3-hero-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end; padding-right: 36px; font-size: 200px; opacity: 0.1; filter: grayscale(100%); }
+    .t3-hero-text { position: relative; z-index: 2; }
+    .t3-hero-tag { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #06B6D4; margin-bottom: 10px; }
+    .t3-hero h1 { font-family: 'DM Sans', sans-serif; font-size: 42px; font-weight: 300; color: white; line-height: 1.1; margin-bottom: 14px; }
+    .t3-hero h1 em { font-style: italic; color: #A7F3D0; }
+    .t3-btn-white { background: white; color: #0D9488; border: none; padding: 10px 24px; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
+    .t3-btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.4); color: white; padding: 10px 18px; font-size: 10px; cursor: pointer; margin-left: 8px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 4px; }
+
+    .t3-selection { padding: 40px 28px; }
+    .t3-selection-header { text-align: center; margin-bottom: 28px; }
+    .t3-selection-eyebrow { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: #14B8A6; margin-bottom: 7px; }
+    .t3-selection-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; color: #1C1C1C; }
+
+    .t3-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+    .t3-card { background: #F8F8F8; cursor: pointer; }
+    .t3-card-img { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 80px; background: #F0FDFA; }
+    .t3-card-body { padding: 18px 22px; border-top: 1px solid #EBEBEB; }
+    .t3-card-collection { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: #14B8A6; margin-bottom: 4px; }
+    .t3-card-name { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; color: #1C1C1C; margin-bottom: 6px; }
+    .t3-card-price { font-size: 15px; color: #0D9488; font-weight: 700; }
+    .t3-card-btn { margin-top: 12px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #14B8A6; border-bottom: 1px solid #14B8A6; padding-bottom: 2px; display: inline-block; cursor: pointer; }
+
+    .t3-lifestyle { display: grid; grid-template-columns: 1fr 1fr; height: 220px; }
+    .t3-lifestyle-panel { display: flex; align-items: flex-end; padding: 24px; position: relative; overflow: hidden; cursor: pointer; }
+    .t3-lp-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 100px; opacity: 0.14; }
+    .t3-lp-1 { background: #0D9488; }
+    .t3-lp-2 { background: #0F172A; }
+    .t3-lifestyle-text { position: relative; z-index: 2; }
+    .t3-lp-cat { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 5px; }
+    .t3-lp-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: white; line-height: 1.2; }
+
+    .t3-trust { padding: 24px 28px; background: #F8F8F8; border-top: 1px solid #E5E5E5; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .t3-trust-item { text-align: center; padding: 14px; }
+    .t3-trust-icon { font-size: 20px; margin-bottom: 8px; color: #14B8A6; }
+    .t3-trust-label { font-size: 11px; font-weight: 700; color: #1C1C1C; letter-spacing: 0.04em; }
+    .t3-trust-sub { font-size: 10px; color: #666; margin-top: 3px; }
+
+    .t3-footer { background: #0F172A; padding: 24px 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; border-top: 1px solid #0D9488; }
+    .t3-footer-col-title { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
+    .t3-footer-col-item { font-size: 11px; color: rgba(255,255,255,0.22); margin-bottom: 5px; cursor: pointer; }
+    .t3-footer-bottom { background: #0A0F1A; padding: 14px 28px; display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.18); letter-spacing: 0.06em; }
+
+    .nav-dots-row { display: flex; gap: 6px; align-items: center; }
+  </style>
+</head>
+<body>
+  <div class="glow" style="width:600px;height:600px;background:#1E40AF;top:-200px;right:-150px;"></div>
+  <div class="glow" style="width:500px;height:500px;background:#F59E0B;bottom:-200px;left:-100px;"></div>
+
+  <div id="progress-bar" style="width:10%;"></div>
+
+  <div class="top-bar">
+    <span id="curr">1</span> / <span id="total">9</span>
+    <span style="color:rgba(255,255,255,0.12)">|</span>
+    <span style="color:rgba(6,182,212,0.6); font-size:10px; letter-spacing:0.08em;">LA DESTILERIA</span>
+  </div>
+
+  <main style="position:relative; width:100%; height:100vh; overflow:hidden;">
+
+    <!-- ===================== SLIDE 1: PORTADA ===================== -->
+    <div class="slide active" id="slide-1">
+      <div style="text-align:center; max-width:780px;">
+        <div style="margin:0 auto 28px; display:inline-flex; flex-direction:column; align-items:center; gap:6px;">
+                      <img src="https://raw.githubusercontent.com/juantomasetti1/scalerics-assets/main/logo_full_alt.png" alt="Scalerics" style="width:8000px;">
+
+        </div>
+
+        <h1 style="font-family:'Cormorant Garamond',serif; font-size:clamp(46px,6.5vw,82px); font-weight:300; line-height:1.05; margin-bottom:20px; color:white;">
+          Tu catálogo de bebidas,<br><em style="font-style:italic;" class="grad-yellow">vendiendo online.</em>
+        </h1>
+        <p style="font-size:16px; color:rgba(255,255,255,0.4); max-width:600px; margin:0 auto 36px; line-height:1.8; font-family:'DM Sans',sans-serif;">
+          Hola <strong style="color:rgba(255,255,255,0.85);">La Destileria</strong> — Te mostramos cómo tu catálogo de bebidas premium puede generar ventas online con una tienda diseñada para tu distribuidora.
+        </p>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:22px; font-size:13px; color:rgba(255,255,255,0.35); font-family:'DM Sans',sans-serif;">
+          <div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-store" style="color:#06B6D4;"></i> Ecommerce a medida</div>
+          <div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-credit-card" style="color:#06B6D4;"></i> Pagos online integrados</div>
+          <div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-search" style="color:#06B6D4;"></i> SEO desde el día 1</div>
+          <div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-water" style="color:#06B6D4;"></i> Control de inventario</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SLIDE 2: EL CONTEXTO ===================== -->
+    <div class="slide" id="slide-2">
+      <div style="max-width:900px; width:100%;">
+        <div class="tag" style="background:rgba(239,68,68,0.08); color:#f87171; border:1px solid rgba(239,68,68,0.15); margin-bottom:28px;">La situación hoy</div>
+        <h2 style="font-size:clamp(34px,5vw,56px); font-weight:800; margin-bottom:16px; line-height:1.1;">
+          Muchas bebidas en stock.<br>Cero ventas online.
+        </h2>
+        <p style="color:rgba(255,255,255,0.4); font-size:17px; margin-bottom:36px; max-width:540px; line-height:1.7;">
+          Cada día sin tienda online es un día que tu cliente busca en Google "vinos y bebidas" y termina comprando en otro lado.
+        </p>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+          <div class="glass" style="padding:24px;">
+            <div style="font-size:28px; margin-bottom:14px;">🍷</div>
+            <h3 style="font-weight:700; font-size:16px; margin-bottom:8px; color:white;">Stock sin visibilidad</h3>
+            <p style="color:rgba(255,255,255,0.4); font-size:13px; line-height:1.65;">Tus bebidas existen, pero no están visibles para quien busca online en tu región.</p>
+          </div>
+          <div class="glass" style="padding:24px;">
+            <div style="font-size:28px; margin-bottom:14px;">📱</div>
+            <h3 style="font-weight:700; font-size:16px; margin-bottom:8px; color:white;">Tu cliente ya busca online</h3>
+            <p style="color:rgba(255,255,255,0.4); font-size:13px; line-height:1.65;">Quién va a comprar bebidas para una fiesta o evento consulta online antes de llamar. Si no estás, pierdes la venta.</p>
+          </div>
+          <div class="glass" style="padding:24px;">
+            <div style="font-size:28px; margin-bottom:14px;">🎯</div>
+            <h3 style="font-weight:700; font-size:16px; margin-bottom:8px; color:white;">SEO = clientes gratuitos</h3>
+            <p style="color:rgba(255,255,255,0.4); font-size:13px; line-height:1.65;">Una tienda bien posicionada trae tráfico orgánico desde Google. Sin pagar publicidad mes a mes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SLIDE 3: LA SOLUCIÓN ===================== -->
+    <div class="slide" id="slide-3">
+      <div style="max-width:900px; width:100%; display:flex; flex-direction:column; align-items:center;">
+        <div class="tag" style="background:rgba(37,99,235,0.1); color:#60A5FA; border:1px solid rgba(37,99,235,0.2); margin-bottom:24px;">La solución</div>
+        <h2 style="font-size:clamp(34px,5vw,56px); font-weight:800; margin-bottom:16px; text-align:center; line-height:1.1;">
+          Una tienda que vende por vos,<br><span class="grad-yellow">24 horas, 7 días.</span>
+        </h2>
+        <p style="color:rgba(255,255,255,0.4); font-size:16px; margin-bottom:36px; max-width:600px; text-align:center; line-height:1.75;">
+          Desarrollamos tu e-commerce de bebidas premium con el estilo que mejor represente tu marca, optimizado para SEO y listo para recibir pagos y órdenes desde cualquier parte.
+        </p>
+        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px; max-width:700px; width:100%;">
+          <div style="display:flex; align-items:start; gap:12px; padding:18px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+            <div style="width:28px; height:28px; border-radius:50%; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; color:#06B6D4; font-size:12px; flex-shrink:0;"><i class="fas fa-check"></i></div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:white; margin-bottom:4px;">Catálogo completo con filtros</div>
+              <div style="font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6;">Vinos, cervezas, destilados y bebidas sin alcohol. Filtrable por tipo, región, precio y rating.</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:start; gap:12px; padding:18px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+            <div style="width:28px; height:28px; border-radius:50%; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; color:#06B6D4; font-size:12px; flex-shrink:0;"><i class="fas fa-check"></i></div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:white; margin-bottom:4px;">Pagos con Mercado Pago y tarjetas</div>
+              <div style="font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6;">Cuotas, débito, crédito y transferencia bancaria.</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:start; gap:12px; padding:18px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+            <div style="width:28px; height:28px; border-radius:50%; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; color:#06B6D4; font-size:12px; flex-shrink:0;"><i class="fas fa-check"></i></div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:white; margin-bottom:4px;">SEO técnico y contenido optimizado</div>
+              <div style="font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6;">Aparecer en Google para búsquedas de bebidas premium desde el día 1.</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:start; gap:12px; padding:18px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+            <div style="width:28px; height:28px; border-radius:50%; background:rgba(6,182,212,0.15); display:flex; align-items:center; justify-content:center; color:#06B6D4; font-size:12px; flex-shrink:0;"><i class="fas fa-check"></i></div>
+            <div>
+              <div style="font-weight:700; font-size:14px; color:white; margin-bottom:4px;">Diseño 100% mobile-first</div>
+              <div style="font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6;">Tu cliente compra desde el celular. La tienda se ve perfecta en cualquier pantalla.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SLIDE 4: TEMPLATE 1 — INDUSTRIAL BOLD ===================== -->
+    <div class="slide" id="slide-4" style="padding:1.25rem;">
+      <div style="max-width:880px; width:100%; display:flex; flex-direction:column; align-items:center;">
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-bottom:12px;">
+          <div>
+            <span class="tag" style="background:rgba(245,158,11,0.1); color:#F59E0B; border:1px solid rgba(245,158,11,0.2); margin-right:10px;">Estilo 1 de 3</span>
+            <span style="color:white; font-weight:700; font-size:17px;">Industrial / Bold</span>
+            <span style="color:rgba(255,255,255,0.3); font-size:13px; margin-left:10px;">— Fuerza · Solidez · Confianza</span>
+          </div>
+          <span style="color:rgba(255,255,255,0.3); font-size:11px;">Scrolleá para ver más ↓</span>
+        </div>
+        <div class="browser-wrapper" style="width:100%;">
+          <div class="browser-bar">
+            <span class="b-dot" style="background:#FF5F57"></span>
+            <span class="b-dot" style="background:#FFBD2E"></span>
+            <span class="b-dot" style="background:#28CA41"></span>
+            <div class="browser-url-bar">
+              <i class="fas fa-lock" style="color:#F59E0B; font-size:9px;"></i>
+              lacasadelasaberturas.com.uy
+            </div>
+          </div>
+          <div class="browser-content">
+            <div class="t1">
+              <div class="t1-topbar"><strong>Envío rápido a todo el país</strong> · Atención personalizad a mayoristas y minoristas</div>
+              <div class="t1-nav">
+                <div class="t1-logo">
+                  <div class="t1-logo-icon">🍷</div>
+                  LA DESTILERIA
+                </div>
+                <ul class="t1-nav-links">
+                  <li>Vinos</li><li>Cervezas</li><li>Destilados</li><li>Sin Alcohol</li><li>Promociones</li>
+                </ul>
+                <div class="t1-nav-actions">
+                  <i class="fas fa-search"></i>
+                  <button class="t1-cart-btn"><i class="fas fa-shopping-cart"></i> Carrito</button>
+                </div>
+              </div>
+              <div class="t1-hero">
+                <div class="t1-hero-bg"></div>
+                <div class="t1-hero-text">
+                  <div class="t1-hero-eyebrow">Bebidas Premium · Distribuidora La Destileria</div>
+                  <h1>BEBIDAS DE<br><em>CALIDAD.</em></h1>
+                  <p>Vinos, cervezas premium y destilados importados. Distribuidora especializada con amplio catálogo para particulares y mayoristas.</p>
+                  <button class="t1-btn">Ver catálogo</button>
+                  <button class="t1-btn-outline">Consultar mayorista</button>
+                </div>
+                <div class="t1-hero-img">🍷</div>
+              </div>
+              <div class="t1-cats">
+                <div class="t1-cat act">Todo</div>
+                <div class="t1-cat">Vinos</div>
+                <div class="t1-cat">Cervezas</div>
+                <div class="t1-cat">Destilados</div>
+                <div class="t1-cat">Sin Alcohol</div>
+                <div class="t1-cat">Promociones</div>
+              </div>
+              <div class="t1-section">
+                <div class="t1-section-title">Productos Destacados</div>
+                <div class="t1-section-sub">Bebidas Premium - Más vendidas</div>
+                <div class="t1-grid">
+                  <div class="t1-card">
+                    <div class="t1-card-img"><div class="t1-card-badge">Nuevo</div>🍷</div>
+                    <div class="t1-card-body">
+                      <div class="t1-card-cat">Vino · Tinto Reserva</div>
+                      <div class="t1-card-name">Vino Tinto Premium</div>
+                      <div><span class="t1-card-price">$850</span></div>
+                      <button class="t1-card-btn">Comprar</button>
+                    </div>
+                  </div>
+                  <div class="t1-card">
+                    <div class="t1-card-img">🍺</div>
+                    <div class="t1-card-body">
+                      <div class="t1-card-cat">Cerveza · Artesanal</div>
+                      <div class="t1-card-name">Cerveza Artesanal IPA</div>
+                      <div><span class="t1-card-price">$280</span><span class="t1-card-price-old">$350</span></div>
+                      <button class="t1-card-btn">Comprar</button>
+                    </div>
+                  </div>
+                  <div class="t1-card">
+                    <div class="t1-card-img"><div class="t1-card-badge">Oferta</div>🥃</div>
+                    <div class="t1-card-body">
+                      <div class="t1-card-cat">Destilado · Whisky</div>
+                      <div class="t1-card-name">Whisky Importado 12 años</div>
+                      <div><span class="t1-card-price">$1.450</span><span class="t1-card-price-old">$1.790</span></div>
+                      <button class="t1-card-btn">Comprar</button>
+                    </div>
+                  </div>
+                  <div class="t1-card">
+                    <div class="t1-card-img">🍹</div>
+                    <div class="t1-card-body">
+                      <div class="t1-card-cat">Bebida · Sin Alcohol</div>
+                      <div class="t1-card-name">Bebida Refrescante Natural</div>
+                      <div><span class="t1-card-price">$120</span></div>
+                      <button class="t1-card-btn">Comprar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="t1-banner">
+                <div class="t1-banner-left">
+                  <h2>BEBIDAS<br><em>IMPORTADAS</em></h2>
+                  <p>Distribuidor oficial de bebidas premium. Amplio catálogo de vinos, cervezas y destilados. Atendemos mayoristas, minoristas y particulares.</p>
+                  <div style="margin-top:18px;"><button class="t1-btn">Ver catálogo completo</button></div>
+                </div>
+                <div class="t1-banner-img">🍾</div>
+              </div>
+              <div class="t1-trust">
+                <div class="t1-trust-item">
+                  <div class="t1-trust-icon"><i class="fas fa-truck"></i></div>
+                  <div class="t1-trust-text">Envío a todo el país</div>
+                  <div class="t1-trust-sub">Rápido y asegurado</div>
+                </div>
+                <div class="t1-trust-item">
+                  <div class="t1-trust-icon"><i class="fas fa-shield-alt"></i></div>
+                  <div class="t1-trust-text">Garantía de calidad</div>
+                  <div class="t1-trust-sub">Productos auténticos</div>
+                </div>
+                <div class="t1-trust-item">
+                  <div class="t1-trust-icon"><i class="fas fa-credit-card"></i></div>
+                  <div class="t1-trust-text">Múltiples formas de pago</div>
+                  <div class="t1-trust-sub">Tarjeta · Transferencia</div>
+                </div>
+                <div class="t1-trust-item">
+                  <div class="t1-trust-icon"><i class="fas fa-headset"></i></div>
+                  <div class="t1-trust-text">Atención al cliente</div>
+                  <div class="t1-trust-sub">Soporte profesional</div>
+                </div>
+              </div>
+              <div class="t1-footer">
+                <div class="t1-footer-logo">LA DESTILERIA</div>
+                <div class="t1-footer-links"><span>Catálogo</span><span>Promociones</span><span>Contacto</span></div>
+                <div>© 2026 · Distribuidora de Bebidas</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SLIDE 5: TEMPLATE 2 — CLEAN MODERNO ===================== -->
+    <div class="slide" id="slide-5" style="padding:1.25rem;">
+      <div style="max-width:880px; width:100%; display:flex; flex-direction:column; align-items:center;">
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-bottom:12px;">
+          <div>
+            <span class="tag" style="background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.1); margin-right:10px;">Estilo 2 de 3</span>
+            <span style="color:white; font-weight:700; font-size:17px;">Clean / Moderno</span>
+            <span style="color:rgba(255,255,255,0.3); font-size:13px; margin-left:10px;">— Claridad · Confianza · Profesional</span>
+          </div>
+          <span style="color:rgba(255,255,255,0.3); font-size:11px;">Scrolleá para ver más ↓</span>
+        </div>
+        <div class="browser-wrapper" style="width:100%;">
+          <div class="browser-bar">
+            <span class="b-dot" style="background:#FF5F57"></span>
+            <span class="b-dot" style="background:#FFBD2E"></span>
+            <span class="b-dot" style="background:#28CA41"></span>
+            <div class="browser-url-bar">
+              <i class="fas fa-lock" style="color:#2563EB; font-size:9px;"></i>
+              lacasadelasaberturas.com.uy
+            </div>
+          </div>
+          <div class="browser-content">
+            <div class="t2">
+              <div class="t2-nav">
+                <div class="t2-logo">La Destileria</div>
+                <ul class="t2-nav-links">
+                  <li>Bebidas</li><li>Ofertas</li><li>Nosotros</li><li>Contacto</li>
+                </ul>
+                <div class="t2-nav-icons">
+                  <i class="fas fa-search"></i>
+                  <i class="fas fa-shopping-bag"></i>
+                </div>
+              </div>
+              <div class="t2-hero">
+                <div class="t2-hero-text">
+                  <div class="t2-hero-eyebrow">Bebidas Premium · Distribuidora</div>
+                  <h1>Bebidas de calidad<br><em>para cada momento.</em></h1>
+                  <p>Vinos, cervezas y destilados premium. Distribuidora con amplio catálogo y atención personalizada.</p>
+                  <button class="t2-btn">Ver catálogo</button>
+                </div>
+                <div class="t2-hero-image">🍷</div>
+              </div>
+              <div class="t2-divider"></div>
+              <div class="t2-featured">
+                <div class="t2-featured-header">
+                  <div class="t2-featured-title">Productos destacados</div>
+                  <div class="t2-featured-link">Ver todo →</div>
+                </div>
+                <div class="t2-grid">
+                  <div class="t2-card">
+                    <div class="t2-card-img">🍷</div>
+                    <div class="t2-card-body">
+                      <div class="t2-card-cat">Vino · Tinto</div>
+                      <div class="t2-card-name">Vino Tinto Reserva Especial</div>
+                      <div class="t2-card-price">$950</div>
+                      <button class="t2-card-btn">Comprar</button>
+                    </div>
+                  </div>
+                  <div class="t2-card">
+                    <div class="t2-card-img">🍺</div>
+                    <div class="t2-card-body">
+                      <div class="t2-card-cat">Cerveza · Artesanal</div>
+                      <div class="t2-card-name">Cerveza Craft Premium</div>
+                      <div class="t2-card-price">$320</div>
+                      <button class="t2-card-btn">Comprar</button>
+                    </div>
+                  </div>
+                  <div class="t2-card">
+                    <div class="t2-card-img">🥃</div>
+                    <div class="t2-card-body">
+                      <div class="t2-card-cat">Destilado · Whisky</div>
+                      <div class="t2-card-name">Whisky Importado 15 años</div>
+                      <div class="t2-card-price">$1.650</div>
+                      <button class="t2-card-btn">Comprar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="t2-divider"></div>
+              <div class="t2-journal">
+                <div class="t2-journal-title">Consejos y novedades</div>
+                <div class="t2-journal-grid">
+                  <div class="t2-article">
+                    <div class="t2-article-img">🍷</div>
+                    <div class="t2-article-date">Mayo 2026</div>
+                    <div class="t2-article-title">Cómo elegir el vino perfecto para cada ocasión</div>
+                  </div>
+                  <div class="t2-article">
+                    <div class="t2-article-img">🍺</div>
+                    <div class="t2-article-date">Abril 2026</div>
+                    <div class="t2-article-title">Las mejores cervezas artesanales del mundo</div>
+                  </div>
+                  <div class="t2-article">
+                    <div class="t2-article-img">🥃</div>
+                    <div class="t2-article-date">Abril 2026</div>
+                    <div class="t2-article-title">Guía completa de destilados premium importados</div>
+                  </div>
+                </div>
+              </div>
+              <div class="t2-footer">
+                <div>La Destileria © 2026</div>
+                <div>Distribuidora de Bebidas Premium</div>
+                <div>Instagram · WhatsApp · Facebook</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SLIDE 6: TEMPLATE 3 — PREMIUM ELEGANTE ===================== -->
+    <div class="slide" id="slide-6" style="padding:1.25rem;">
+      <div style="max-width:880px; width:100%; display:flex; flex-direction:column; align-items:center;">
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-bottom:12px;">
+          <div>
+            <span class="tag" style="background:rgba(245,158,11,0.1); color:#F59E0B; border:1px solid rgba(245,158,11,0.2); margin-right:10px;">Estilo 3 de 3</span>
+            <span style="color:white; font-weight:700; font-size:17px;">Premium / Elegante</span>
+            <span style="color:rgba(255,255,255,0.3); font-size:13px; margin-left:10px;">— Calidad · Distinción · Exclusividad</span>
+          </div>
+          <span style="color:rgba(255,255,255,0.3); font-size:11px;">Scrolleá para ver más ↓</span>
+        </div>
+        <div class="browser-wrapper" style="width:100%;">
+          <div class="browser-bar">
+            <span class="b-dot" style="background:#FF5F57"></span>
+            <span class="b-dot" style="background:#FFBD2E"></span>
+            <span class="b-dot" style="background:#28CA41"></span>
+            <div class="browser-url-bar">
+              <i class="fas fa-lock" style="color:#2563EB; font-size:9px;"></i>
+              lacasadelasaberturas.com.uy
+            </div>
+          </div>
+          <div class="browser-content">
+            <div class="t3">
+              <div class="t3-topbar"><strong>Envío rápido</strong> a todo el país · Distribuidora de Bebidas Premium</div>
+              <div class="t3-nav">
+                <ul class="t3-nav-left">
+                  <li>Vinos</li><li>Destilados</li><li>Ofertas</li>
+                </ul>
+                <div class="t3-logo">
+                  <div class="t3-logo-name">LA DESTILERIA</div>
+                  <div class="t3-logo-sub">Bebidas Premium</div>
+                </div>
+                <div class="t3-nav-right">
+                  <i class="fas fa-search"></i>
+                  <i class="fas fa-heart"></i>
+                  <i class="fas fa-shopping-bag"></i>
+                </div>
+              </div>
+              <div class="t3-hero">
+                <div class="t3-hero-bg">🍷</div>
+                <div class="t3-hero-text">
+                  <div class="t3-hero-tag">Calidad Premium · 2026</div>
+                  <h1>Elegancia y sabor<br><em>en cada botella.</em></h1>
+                  <div style="margin-top:18px;">
+                    <button class="t3-btn-white">Ver catálogo</button>
+                    <button class="t3-btn-outline">Consultar mayorista</button>
+                  </div>
+                </div>
+              </div>
+              <div class="t3-selection">
+                <div class="t3-selection-header">
+                  <div class="t3-selection-eyebrow">La Destileria · Bebidas Premium</div>
+                  <div class="t3-selection-title">Nuestra selección exclusiva</div>
+                </div>
+                <div class="t3-grid">
+                  <div class="t3-card">
+                    <div class="t3-card-img">🍷</div>
+                    <div class="t3-card-body">
+                      <div class="t3-card-collection">Vinos · Tinto Reserva</div>
+                      <div class="t3-card-name">Vino Gran Reserva 2015</div>
+                      <div class="t3-card-price">$1.200</div>
+                      <div class="t3-card-btn">Solicitar detalle →</div>
+                    </div>
+                  </div>
+                  <div class="t3-card">
+                    <div class="t3-card-img">🥃</div>
+                    <div class="t3-card-body">
+                      <div class="t3-card-collection">Destilados · Whisky</div>
+                      <div class="t3-card-name">Whisky Single Malt 18 años</div>
+                      <div class="t3-card-price">$2.500</div>
+                      <div class="t3-card-btn">Solicitar detalle →</div>
+                    </div>
+                  </div>
+                  <div class="t3-card">
+                    <div class="t3-card-img">🍾</div>
+                    <div class="t3-card-body">
+                      <div class="t3-card-collection">Champagne · Premium</div>
+                      <div class="t3-card-name">Champagne Brut Prestige</div>
+                      <div class="t3-card-price">$890</div>
+                      <div class="t3-card-btn">Solicitar detalle →</div>
+                    </div>
+                  </div>
+                  <div class="t3-card">
+                    <div class="t3-card-img">🍺</div>
+                    <div class="t3-card-body">
+                      <div class="t3-card-collection">Cervezas · Artesanal</div>
+                      <div class="t3-card-name">Cerveza Craft Limited Edition</div>
+                      <div class="t3-card-price">$450</div>
+                      <div class="t3-card-btn">Solicitar detalle →</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="t3-lifestyle">
+                <div class="t3-lifestyle-panel t3-lp-1">
+                  <div class="t3-lp-bg">🍷</div>
+                  <div class="t3-lifestyle-text">
+                    <div class="t3-lp-cat">Catálogo completo</div>
+                    <div class="t3-lp-title">Vinos y Destilados</div>
+                  </div>
+                </div>
+                <div class="t3-lifestyle-panel t3-lp-2">
+                  <div class="t3-lp-bg">🍺</div>
+                  <div class="t3-lifestyle-text">
+                    <div class="t3-lp-cat">Bebidas artesanales</div>
+                    <div class="t3-lp-title">Cervezas Premium</div>
+                  </div>
+                </div>
+              </div>
+              <div class="t3-trust">
+                <div class="t3-trust-item">
+                  <div class="t3-trust-icon"><i class="fas fa-truck"></i></div>
+                  <div class="t3-trust-label">Envío a todo el país</div>
+                  <div class="t3-trust-sub">Rápido y asegurado</div>
+                </div>
+                <div class="t3-trust-item">
+                  <div class="t3-trust-icon"><i class="fas fa-shield-alt"></i></div>
+                  <div class="t3-trust-label">Autenticidad garantizada</div>
+                  <div class="t3-trust-sub">Productos importados certificados</div>
+                </div>
+                <div class="t3-trust-item">
+                  <div class="t3-trust-icon"><i class="fas fa-headset"></i></div>
+                  <div class="t3-trust-label">Soporte especializado</div>
+                  <div class="t3-trust-sub">Equipo profesional</div>
+                </div>
+              </div>
+              <div class="t3-footer">
+                <div>
+                  <div class="t3-footer-col-title">Bebidas</div>
+                  <div class="t3-footer-col-item">Vinos</div>
+                  <div class="t3-footer-col-item">Cervezas</div>
+                  <div class="t3-footer-col-item">Destilados</div>
+                </div>
+                <div>
+                  <div class="t3-footer-col-title">Categorías</div>
+                  <div class="t3-footer-col-item">Ofertas</div>
+                  <div class="t3-footer-col-item">Premium</div>
+                  <div class="t3-footer-col-item">Sin Alcohol</div>
+                </div>
+                <div>
+                  <div class="t3-footer-col-title">Ayuda</div>
+                  <div class="t3-footer-col-item">Consultas</div>
+                  <div class="t3-footer-col-item">Envíos</div>
+                  <div class="t3-footer-col-item">Contacto</div>
+                </div>
+                <div>
+                  <div class="t3-footer-col-title">Seguinos</div>
+                  <div class="t3-footer-col-item">Instagram</div>
+                  <div class="t3-footer-col-item">WhatsApp</div>
+                  <div class="t3-footer-col-item">Facebook</div>
+                </div>
+              </div>
+              <div class="t3-footer-bottom">
+                <span>LA DESTILERIA © 2026 · Todos los derechos reservados</span>
+                <span>Distribuidora de Bebidas Premium</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SLIDE 7: SEO ===================== -->
+    <div class="slide" id="slide-7">
+      <div style="max-width:860px; width:100%;">
+        <div class="tag" style="background:rgba(37,99,235,0.08); color:#60a5fa; border:1px solid rgba(37,99,235,0.15); margin-bottom:28px;">Posicionamiento en Google</div>
+        <h2 style="font-size:clamp(34px,5vw,52px); font-weight:800; margin-bottom:14px; line-height:1.1;">
+          El SEO no es opcional.<br><span class="grad-yellow">Es tu vendedor gratuito.</span>
+        </h2>
+        <p style="color:rgba(255,255,255,0.4); font-size:16px; margin-bottom:36px; max-width:560px; line-height:1.75;">
+          Cada página de producto es una oportunidad de aparecer en Google cuando alguien busca "vinos premium" o "distribuidor de bebidas". Lo hacemos bien desde el día 1.
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="glass-blue" style="padding:24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+              <div style="width:32px; height:32px; background:rgba(20,184,166,0.15); border-radius:8px; display:flex; align-items:center; justify-content:center; color:#14B8A6; font-size:14px;"><i class="fab fa-google"></i></div>
+              <span style="font-weight:700; color:white; font-size:15px;">SEO Técnico</span>
+            </div>
+            <ul style="font-size:13px; color:rgba(255,255,255,0.5); line-height:2.2;">
+              <li>✓ &nbsp;URLs amigables por producto</li>
+              <li>✓ &nbsp;Metadatos únicos para cada bebida</li>
+              <li>✓ &nbsp;Velocidad de carga optimizada</li>
+              <li>✓ &nbsp;Schema markup de productos</li>
+            </ul>
+          </div>
+          <div class="glass-blue" style="padding:24px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+              <div style="width:32px; height:32px; background:rgba(20,184,166,0.15); border-radius:8px; display:flex; align-items:center; justify-content:center; color:#14B8A6; font-size:14px;"><i class="fas fa-pen"></i></div>
+              <span style="font-weight:700; color:white; font-size:15px;">Contenido Optimizado</span>
+            </div>
+            <ul style="font-size:13px; color:rgba(255,255,255,0.5); line-height:2.2;">
+              <li>✓ &nbsp;Descripciones únicas por producto</li>
+              <li>✓ &nbsp;Palabras clave para bebidas premium</li>
+              <li>✓ &nbsp;Títulos H1/H2 estratégicos</li>
+              <li>✓ &nbsp;Google Search Console activo</li>
+            </ul>
+          </div>
+          <div class="glass" style="padding:24px; grid-column:span 2; display:flex; align-items:center; gap:20px;">
+            <div style="font-size:44px; flex-shrink:0;">🔍</div>
+            <div>
+              <div style="font-weight:700; font-size:15px; color:white; margin-bottom:6px;">Ejemplo real: lo que busca tu cliente</div>
+              <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">
+                <span style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); padding:5px 12px; border-radius:999px; font-size:12px; color:rgba(255,255,255,0.6);">vino tinto premium</span>
+                <span style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); padding:5px 12px; border-radius:999px; font-size:12px; color:rgba(255,255,255,0.6);">cerveza artesanal distribuidor</span>
+                <span style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); padding:5px 12px; border-radius:999px; font-size:12px; color:rgba(255,255,255,0.6);">whisky importado precio</span>
+                <span style="background:rgba(20,184,166,0.35); border:1px solid rgba(20,184,166,0.4); padding:5px 12px; border-radius:999px; font-size:12px; color:white;">comprar bebidas online mayorista</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="slide" id="slide-9">
+      <div style="max-width:920px; width:100%; text-align:center;">
+        <div class="tag" style="background:rgba(37,99,235,0.1); color:#60A5FA; border:1px solid rgba(37,99,235,0.2); margin-bottom:22px;">Inversión</div>
+        <h2 style="font-size:clamp(30px,4.5vw,50px); font-weight:800; margin-bottom:10px; line-height:1.1;">Sin letra chica. Sin porcentaje sobre ventas.</h2>
+        <p style="color:rgba(255,255,255,0.4); font-size:15px; margin-bottom:28px;">Una inversión única. Todo lo que vendás es tuyo. Siempre.</p>
+
+        <div style="display:flex; gap:12px; justify-content:center; align-items:stretch; flex-wrap:wrap;">
+          <!-- Setup -->
+          <div class="glass-blue" style="padding:26px; flex:1; min-width:200px; max-width:240px; text-align:left; position:relative; overflow:hidden;">
+            <div class="tag" style="background:rgba(20,184,166,0.1); color:#A7F3D0; border:1px solid rgba(20,184,166,0.2); margin-bottom:14px;">Pago único</div>
+            <div style="font-size:44px; font-weight:800; color:white; margin-bottom:4px; line-height:1;">U$S 490</div>
+            <div style="font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:18px;">Instalación y configuración total</div>
+            <ul style="font-size:12px; color:rgba(255,255,255,0.6); line-height:2.1;">
+              <li style="display:flex; align-items:center; gap:7px;"><i class="fas fa-check" style="color:#06B6D4; font-size:9px;"></i> Diseño a medida de tu marca</li>
+              <li style="display:flex; align-items:center; gap:7px;"><i class="fas fa-check" style="color:#06B6D4; font-size:9px;"></i> Carga de bebidas y promos</li>
+              <li style="display:flex; align-items:center; gap:7px;"><i class="fas fa-check" style="color:#06B6D4; font-size:9px;"></i> Pagos y envíos configurados</li>
+              <li style="display:flex; align-items:center; gap:7px;"><i class="fas fa-check" style="color:#06B6D4; font-size:9px;"></i> SEO inicial y Google</li>
+              <li style="display:flex; align-items:center; gap:7px;"><i class="fas fa-check" style="color:#06B6D4; font-size:9px;"></i> Capacitación incluida</li>
+            </ul>
+          </div>
+          <!-- Mantenimiento -->
+          <div class="glass" style="padding:26px; flex:1; min-width:180px; max-width:210px; text-align:left; position:relative; overflow:hidden;">
+            <div class="tag" style="background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.1); margin-bottom:14px;">Mensual</div>
+            <div style="font-size:44px; font-weight:800; color:white; margin-bottom:4px; line-height:1;">U$S 25</div>
+            <div style="font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:18px;">Mantenimiento y soporte</div>
+            <ul style="font-size:12px; color:rgba(255,255,255,0.6); line-height:2.1;">
+              <li style="display:flex; align-items:center; gap:7px;"><i class="fas fa-check" style="color:#14B8A6; font-size:9px;"></i> Hosting incluido</li>
+              <li style="display:flex; align-items:center; gap:7px;"><i class="fas fa-check" style="color:#14B8A6; font-size:9px;"></i> Actualizaciones de seguridad</li>
+              <li style="display:flex; align-items:center; gap:7px;"><i class="fas fa-check" style="color:#14B8A6; font-size:9px;"></i> Soporte WhatsApp prioritario</li>
+              <li style="display:flex; align-items:center; gap:7px;"><i class="fas fa-check" style="color:#14B8A6; font-size:9px;"></i> Ajustes y modificaciones</li>
+            </ul>
+          </div>
+          <!-- Columna info -->
+          <div style="flex:1; min-width:160px; max-width:190px; display:flex; flex-direction:column; gap:10px;">
+            <div class="glass" style="padding:18px; text-align:center; flex:1; display:flex; flex-direction:column; justify-content:center; border-color:rgba(6,182,212,0.15); background:rgba(6,182,212,0.03);">
+              <div style="font-size:22px; margin-bottom:8px;">🚫</div>
+              <div style="color:white; font-weight:700; font-size:12px;">Sin % sobre ventas</div>
+              <div style="color:rgba(255,255,255,0.35); font-size:11px; margin-top:5px; line-height:1.5;">Todo lo que vendás es tuyo.</div>
+            </div>
+            <div class="glass" style="padding:18px; text-align:center; flex:1; display:flex; flex-direction:column; justify-content:center;">
+              <div style="font-size:20px; margin-bottom:8px;">📅</div>
+              <div style="color:white; font-weight:700; font-size:12px;">Sin contrato mínimo</div>
+              <div style="color:rgba(255,255,255,0.35); font-size:11px; margin-top:5px; line-height:1.5;">Cancelás cuando querés.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SLIDE 10: CIERRE ===================== -->
+    <div class="slide" id="slide-10">
+      <div style="max-width:760px; text-align:center;">
+        <h2 style="font-size:clamp(40px,6vw,70px); font-weight:800; margin-bottom:20px; line-height:1.05;">
+          Próximos<br><span class="grad-yellow">pasos.</span>
+        </h2>
+        <p style="color:rgba(255,255,255,0.4); font-size:17px; margin-bottom:36px; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.75;">
+          Confirmás hoy y en pocos días tenés tu tienda online activa — con el estilo de distribuidora que necesitás.
+        </p>
+
+        <div class="glass-blue" style="padding:32px; text-align:left; max-width:520px; margin:0 auto 36px; border-left:3px solid #06B6D4;">
+          <div style="display:flex; flex-direction:column; gap:22px;">
+            <div style="display:flex; align-items:start; gap:16px;">
+              <div style="width:32px; height:32px; border-radius:50%; background:#06B6D4; display:flex; align-items:center; justify-content:center; color:#0D1520; font-weight:800; font-size:14px; flex-shrink:0;">1</div>
+              <div>
+                <div style="font-weight:700; color:white; font-size:15px; margin-bottom:4px;">Confirmás esta semana</div>
+                <div style="color:rgba(255,255,255,0.4); font-size:13px; line-height:1.65;">Nos mandás el catálogo de bebidas y datos de tu distribuidora. Nosotros hacemos el resto.</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:start; gap:16px;">
+              <div style="width:32px; height:32px; border-radius:50%; background:#06B6D4; display:flex; align-items:center; justify-content:center; color:#0D1520; font-weight:800; font-size:14px; flex-shrink:0;">2</div>
+              <div>
+                <div style="font-weight:700; color:white; font-size:15px; margin-bottom:4px;">Primera versión en 5 días hábiles</div>
+                <div style="color:rgba(255,255,255,0.4); font-size:13px; line-height:1.65;">Tu tienda online, en el estilo que elegiste, lista para que la revises y apruebes.</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:start; gap:16px;">
+              <div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#06B6D4,#0D9488); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:14px; flex-shrink:0;">3</div>
+              <div>
+                <div style="font-weight:700; color:white; font-size:15px; margin-bottom:4px;">Empezás a vender online</div>
+                <div style="color:rgba(255,255,255,0.4); font-size:13px; line-height:1.65;">Tu tienda activa y posicionada en Google, vendiendo bebidas las 24 horas, sin parar.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:24px;">
+          <a href="https://wa.me/59895330773" style="text-decoration:none;">
+            <div style="display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.4); font-size:14px; cursor:pointer;">
+              <i class="fab fa-whatsapp" style="color:#4ade80;"></i>
+              WhatsApp: +598 95 330 773
+            </div>
+          </a>
+          <div style="color:rgba(255,255,255,0.15);">|</div>
+          <a href="https://scalerics.com/" style="display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.4); font-size:14px; text-decoration:none;">
+            <i class="fas fa-globe" style="color:#60A5FA;"></i>
+            www.scalerics.com
+          </a>
+        </div>
+
+        <div style="margin-top:36px; color:rgba(255,255,255,0.12); font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">Scalerics © 2026 · Tecnología que entiende de negocios</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- NAVIGATION -->
+  <div style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:50; display:flex; align-items:center; gap:14px;">
+    <button onclick="prev()" style="width:42px; height:42px; border-radius:50%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; font-size:12px;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="nav-dots-row" id="nav-dots"></div>
+    <button onclick="next()" style="width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#0D9488,#06B6D4); border:none; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; font-size:12px; font-weight:800;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+
+  <script>
+    let cur = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const currEl = document.getElementById('curr');
+    const totalEl = document.getElementById('total');
+    const bar = document.getElementById('progress-bar');
+    const dotsContainer = document.getElementById('nav-dots');
+
+    totalEl.textContent = total;
+
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(dot);
+    }
+
+    function update() {
+      slides.forEach((s, i) => {
+        s.classList.remove('active', 'prev');
+        if (i === cur) s.classList.add('active');
+        else if (i < cur) s.classList.add('prev');
+      });
+      currEl.textContent = cur + 1;
+      bar.style.width = ((cur + 1) / total * 100) + '%';
+      document.querySelectorAll('.nav-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === cur);
+      });
+    }
+
+    function next() { if (cur < total - 1) { cur++; update(); } }
+    function prev() { if (cur > 0) { cur--; update(); } }
+    function goTo(i) { cur = i; update(); }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') next();
+      if (e.key === 'ArrowLeft') prev();
+    });
+
+    let tx = 0;
+    document.addEventListener('touchstart', e => { tx = e.changedTouches[0].screenX; });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].screenX - tx;
+      if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
+    });
+  </script>
+</body>
+</html>
