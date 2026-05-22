@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu negocio online · Scalerics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #070D1A;
+      --text: #e2e8f0;
+      --blue: #0EA5E9;
+      --blue-lt: #7DD3FC;
+      --blue-dk: #0369A1;
+      --slate: #64748b;
+      --ff-body: 'Inter', sans-serif;
+      --ff-disp: 'Playfair Display', serif;
+    }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--ff-body); }
+    #progress { position: fixed; top: 0; left: 0; height: 3px; width: 14.28%; background: linear-gradient(90deg, #0EA5E9, #38BDF8); z-index: 100; transition: width .5s ease; box-shadow: 0 0 8px rgba(14,165,233,.5); }
+    #counter { position: fixed; top: 16px; right: 20px; z-index: 100; font-size: 11px; color: var(--slate); letter-spacing: .06em; font-weight: 300; }
+    #deck { position: relative; width: 100%; height: 100vh; }
+    .slide { position: absolute; inset: 0; opacity: 0; transform: translateX(60px); pointer-events: none; z-index: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 64px 52px 110px; transition: opacity .5s ease, transform .5s ease; }
+    .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; z-index: 2; }
+    #nav { position: fixed; bottom: 24px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 14px; z-index: 100; }
+    .nbtn { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: background .2s, border-color .2s; }
+    .nbtn:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2); }
+    .nbtn.nxt { background: linear-gradient(135deg, #0369A1, #0EA5E9); border: none; }
+    .nbtn.nxt:hover { opacity: .88; }
+    #dots { display: flex; gap: 7px; align-items: center; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.2); cursor: pointer; transition: background .3s, width .3s, border-radius .3s; }
+    .dot.on { background: var(--blue); width: 20px; border-radius: 3px; }
+    #wm { position: fixed; bottom: 74px; left: 22px; font-size: 10px; color: rgba(255,255,255,.1); letter-spacing: .1em; text-transform: uppercase; font-weight: 600; z-index: 99; }
+    .s-label { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--blue); font-weight: 600; margin-bottom: 16px; }
+    .s-title { font-family: var(--ff-disp); font-size: clamp(30px, 4.5vw, 54px); font-weight: 700; line-height: 1.1; text-align: center; margin-bottom: 44px; }
+    .s-title em { font-style: italic; color: var(--blue); }
+    .glass { background: rgba(255,255,255,.04); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.08); border-radius: 1.25rem; }
+
+    /* S1 — PORTADA */
+    #s1 { background: var(--bg); overflow: hidden; }
+    #s1::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 65% 55% at 80% 50%, rgba(14,165,233,.1) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 10% 90%, rgba(56,189,248,.05) 0%, transparent 60%); }
+    .s1-inner { position: relative; z-index: 1; max-width: 760px; width: 100%; }
+    .s1-logo { width: 180px; margin-bottom: 32px; opacity: .85; }
+    .s1-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(14,165,233,.1); border: 1px solid rgba(14,165,233,.3); border-radius: 100px; padding: 5px 15px; font-size: 11px; color: var(--blue); letter-spacing: .08em; font-weight: 500; text-transform: uppercase; margin-bottom: 28px; }
+    .s1-h1 { font-family: var(--ff-disp); font-size: clamp(58px, 8.5vw, 100px); font-weight: 700; line-height: .94; letter-spacing: -.02em; color: var(--text); margin-bottom: 12px; }
+    .s1-h1 em { font-style: italic; color: var(--blue); }
+    .s1-sub { font-size: 16px; color: var(--slate); font-weight: 300; margin-bottom: 44px; }
+    .s1-bullets { display: flex; flex-direction: column; gap: 14px; }
+    .s1-b { display: flex; align-items: center; gap: 14px; font-size: 14.5px; font-weight: 300; color: rgba(226,232,240,.72); }
+    .s1-ico { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; background: rgba(14,165,233,.1); border: 1px solid rgba(14,165,233,.2); display: flex; align-items: center; justify-content: center; color: var(--blue); font-size: 13px; }
+
+    /* S2 — PROBLEMA */
+    #s2 { background: var(--bg); }
+    .prob-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; max-width: 920px; width: 100%; }
+    .pcard { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07); border-radius: 18px; padding: 30px 22px; transition: border-color .3s, transform .3s; }
+    .pcard:hover { border-color: rgba(14,165,233,.28); transform: translateY(-2px); }
+    .pcard-ico { width: 48px; height: 48px; border-radius: 12px; background: rgba(14,165,233,.08); border: 1px solid rgba(14,165,233,.15); display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px; color: var(--blue); }
+    .pcard-h { font-family: var(--ff-disp); font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+    .pcard-p { font-size: 13.5px; color: rgba(226,232,240,.48); line-height: 1.7; font-weight: 300; }
+
+    /* S3 — SOLUCIÓN */
+    #s3 { background: var(--bg); }
+    .sol-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 44px; max-width: 740px; width: 100%; margin-bottom: 44px; }
+    .sol-row { display: flex; align-items: flex-start; gap: 14px; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .sol-chk { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; background: rgba(14,165,233,.12); border: 1px solid rgba(14,165,233,.3); display: flex; align-items: center; justify-content: center; }
+    .sol-chk i { font-size: 9px; color: var(--blue); }
+    .sol-txt { font-size: 14.5px; color: rgba(226,232,240,.82); line-height: 1.5; }
+    .stats { display: flex; gap: 40px; max-width: 740px; width: 100%; }
+    .stat { flex: 1; background: rgba(255,255,255,.03); border: 1px solid rgba(14,165,233,.13); border-radius: 14px; padding: 24px; text-align: center; }
+    .stat-n { font-family: var(--ff-disp); font-size: 52px; font-weight: 700; color: var(--blue); line-height: 1; margin-bottom: 8px; }
+    .stat-l { font-size: 13px; color: var(--slate); font-weight: 300; line-height: 1.5; }
+
+    /* MOCKUP SLIDES */
+    .mslide { background: var(--bg); padding: 28px 52px 100px; }
+    .mhead { display: flex; justify-content: space-between; align-items: flex-end; max-width: 870px; width: 100%; margin-bottom: 12px; }
+    .mhead-label { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--blue); font-weight: 600; }
+    .mhead-hint { font-size: 11px; color: rgba(255,255,255,.25); }
+    .browser { width: 100%; max-width: 870px; border-radius: 14px; overflow: hidden; box-shadow: 0 28px 80px rgba(0,0,0,.85), 0 0 0 1px rgba(255,255,255,.06), 0 0 60px rgba(14,165,233,.05); }
+    .bbar { background: #0d1117; padding: 10px 14px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .bdot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+    .burl { flex: 1; background: #161b22; border: 1px solid rgba(255,255,255,.08); border-radius: 6px; padding: 4px 12px; font-size: 11px; font-family: monospace; color: #64748b; display: flex; align-items: center; gap: 6px; }
+    .bcontent { height: 450px; overflow-y: auto; }
+    .bcontent::-webkit-scrollbar { width: 4px; }
+    .bcontent::-webkit-scrollbar-track { background: #0d0d0d; }
+    .bcontent::-webkit-scrollbar-thumb { background: rgba(14,165,233,.3); border-radius: 2px; }
+
+    /* S7 — CTA */
+    #s7 { background: var(--bg); overflow: hidden; }
+    #s7::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(14,165,233,.08) 0%, transparent 70%); }
+    .cta-inner { position: relative; z-index: 1; max-width: 680px; width: 100%; text-align: center; }
+    .cta-h { font-family: var(--ff-disp); font-size: clamp(36px, 5vw, 64px); font-weight: 700; line-height: 1.05; margin-bottom: 20px; }
+    .cta-h em { font-style: italic; color: var(--blue); }
+    .cta-sub { font-size: 16px; color: var(--slate); font-weight: 300; margin-bottom: 40px; line-height: 1.6; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #0369A1, #0EA5E9); color: #fff; border: none; border-radius: 100px; padding: 16px 36px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--ff-body); transition: opacity .2s, transform .2s; margin-bottom: 32px; }
+    .cta-btn:hover { opacity: .88; transform: translateY(-2px); }
+    .cta-trust { display: flex; justify-content: center; gap: 32px; }
+    .cta-ti { font-size: 12px; color: var(--slate); display: flex; align-items: center; gap: 6px; }
+    .cta-ti i { color: var(--blue); }
+
+    /* MOCKUP: HOME */
+    .web-nav { background: #fff; height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid #e5e7eb; }
+    .web-logo { font-size: 14px; font-weight: 800; color: #1e293b; font-family: 'Inter', sans-serif; }
+    .web-links { display: flex; gap: 16px; }
+    .web-links a { font-size: 10px; color: #64748b; text-decoration: none; font-weight: 500; }
+    .web-cta-btn { background: #0EA5E9; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer; }
+    .web-hero { background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); padding: 32px 20px; display: flex; align-items: center; gap: 20px; }
+    .web-hero-text { flex: 1; }
+    .web-hero-tag { display: inline-block; background: rgba(14,165,233,.1); color: #0EA5E9; padding: 3px 10px; border-radius: 99px; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+    .web-hero-h { font-size: 22px; font-weight: 800; color: #1e293b; line-height: 1.2; margin-bottom: 8px; font-family: 'Inter', sans-serif; }
+    .web-hero-p { font-size: 11px; color: #64748b; line-height: 1.6; margin-bottom: 14px; }
+    .web-hero-btns { display: flex; gap: 8px; }
+    .web-btn-p { background: #0EA5E9; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer; }
+    .web-btn-s { background: transparent; color: #0EA5E9; border: 1px solid #0EA5E9; padding: 8px 14px; border-radius: 6px; font-size: 10px; cursor: pointer; }
+    .web-hero-img { width: 160px; height: 110px; border-radius: 10px; background: linear-gradient(135deg, #BAE6FD, #7DD3FC); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .web-hero-img i { font-size: 36px; color: #0EA5E9; opacity: .6; }
+    .web-services { padding: 20px; background: #fff; }
+    .web-services-title { font-size: 14px; font-weight: 800; color: #1e293b; margin-bottom: 3px; font-family: 'Inter', sans-serif; }
+    .web-services-sub { font-size: 10px; color: #94a3b8; margin-bottom: 14px; }
+    .web-services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .web-svc { background: #F8FAFC; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 12px; }
+    .web-svc-ico { font-size: 18px; margin-bottom: 6px; }
+    .web-svc-name { font-size: 11px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
+    .web-svc-p { font-size: 9.5px; color: #94a3b8; line-height: 1.5; }
+
+    /* MOCKUP: NOSOTROS */
+    .web-about { background: #F8FAFC; }
+    .web-about-hero { padding: 24px 20px; background: linear-gradient(135deg, #1e293b, #0f172a); display: flex; gap: 20px; align-items: center; }
+    .web-about-img { width: 140px; height: 100px; border-radius: 10px; background: linear-gradient(135deg, #1e40af, #1d4ed8); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .web-about-img i { font-size: 32px; color: #93c5fd; }
+    .web-about-text {}
+    .web-about-label { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #7DD3FC; font-weight: 600; margin-bottom: 6px; }
+    .web-about-h { font-size: 18px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 8px; }
+    .web-about-p { font-size: 10px; color: #94a3b8; line-height: 1.6; }
+    .web-values { padding: 20px; display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .web-val { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; }
+    .web-val-ico { font-size: 16px; color: #0EA5E9; margin-bottom: 6px; }
+    .web-val-h { font-size: 11px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
+    .web-val-p { font-size: 9.5px; color: #94a3b8; line-height: 1.5; }
+    .web-team { padding: 0 20px 20px; }
+    .web-team-title { font-size: 12px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
+    .web-team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .web-member { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-align: center; }
+    .web-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #BAE6FD, #7DD3FC); margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; }
+    .web-avatar i { font-size: 16px; color: #0EA5E9; }
+    .web-member-name { font-size: 10px; font-weight: 700; color: #1e293b; }
+    .web-member-role { font-size: 9px; color: #94a3b8; }
+
+    /* MOCKUP: CONTACTO */
+    .web-contact { background: #F8FAFC; }
+    .web-contact-hero { background: linear-gradient(135deg, #0EA5E9, #0369A1); padding: 24px 20px; }
+    .web-contact-h { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .web-contact-p { font-size: 11px; color: rgba(255,255,255,.7); }
+    .web-contact-body { padding: 20px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; }
+    .web-contact-info { display: flex; flex-direction: column; gap: 12px; }
+    .web-ci { display: flex; align-items: center; gap: 10px; }
+    .web-ci-ico { width: 32px; height: 32px; border-radius: 8px; background: rgba(14,165,233,.1); border: 1px solid rgba(14,165,233,.2); display: flex; align-items: center; justify-content: center; color: #0EA5E9; font-size: 12px; flex-shrink: 0; }
+    .web-ci-text {}
+    .web-ci-label { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: .06em; }
+    .web-ci-val { font-size: 11px; font-weight: 600; color: #1e293b; }
+    .web-form { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
+    .web-form-title { font-size: 12px; font-weight: 700; color: #1e293b; margin-bottom: 12px; }
+    .web-input { width: 100%; background: #F8FAFC; border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 10px; font-size: 10px; color: #1e293b; margin-bottom: 8px; font-family: 'Inter', sans-serif; }
+    .web-textarea { width: 100%; background: #F8FAFC; border: 1px solid #e2e8f0; border-radius: 6px; padding: 7px 10px; font-size: 10px; color: #1e293b; margin-bottom: 8px; height: 60px; resize: none; font-family: 'Inter', sans-serif; }
+    .web-submit { width: 100%; background: #0EA5E9; color: #fff; border: none; padding: 9px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="progress"></div>
+  <div id="counter">1 / 7</div>
+  <div id="wm">Scalerics · Propuesta confidencial</div>
+
+  <div id="deck">
+
+    <!-- S1: PORTADA -->
+    <div class="slide active" id="s1">
+      <div class="s1-inner">
+        <img src="https://raw.githubusercontent.com/juantomasetti1/scalerics-assets/main/logo_full_alt.png" alt="Scalerics" class="s1-logo">
+        <div class="s1-tag"><i class="fa fa-globe"></i> Presencia digital profesional</div>
+        <div class="s1-h1">Tu negocio,<br><em>online.</em></div>
+        <div class="s1-sub">Diseñamos tu sitio web profesional, rápido y optimizado para que tus clientes te encuentren.</div>
+        <div class="s1-bullets">
+          <div class="s1-b"><div class="s1-ico"><i class="fa fa-bolt"></i></div>Sitio listo en 7 días, sin vueltas</div>
+          <div class="s1-b"><div class="s1-ico"><i class="fa fa-mobile-alt"></i></div>Funciona perfecto en celular y computadora</div>
+          <div class="s1-b"><div class="s1-ico"><i class="fa fa-search"></i></div>Optimizado para aparecer en Google</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2: PROBLEMA -->
+    <div class="slide" id="s2">
+      <div class="s-label">El problema</div>
+      <div class="s-title">¿Qué pasa sin<br><em>presencia digital?</em></div>
+      <div class="prob-grid">
+        <div class="pcard">
+          <div class="pcard-ico"><i class="fa fa-eye-slash"></i></div>
+          <div class="pcard-h">No te encuentran</div>
+          <div class="pcard-p">El 97% de los consumidores busca negocios locales en internet. Si no estás, perdés esos clientes.</div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-ico"><i class="fa fa-thumbs-down"></i></div>
+          <div class="pcard-h">Pierden confianza</div>
+          <div class="pcard-p">Un negocio sin web parece menos serio. Los clientes eligen a quien tiene presencia profesional.</div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-ico"><i class="fa fa-clock"></i></div>
+          <div class="pcard-h">Tiempo perdido</div>
+          <div class="pcard-p">Respondés las mismas preguntas por teléfono una y otra vez. Una web las responde por vos, 24/7.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3: SOLUCIÓN -->
+    <div class="slide" id="s3">
+      <div class="s-label">La solución</div>
+      <div class="s-title">Todo lo que necesitás,<br><em>en un solo lugar</em></div>
+      <div class="sol-grid">
+        <div class="sol-row"><div class="sol-chk"><i class="fa fa-check"></i></div><div class="sol-txt">Diseño moderno y personalizado para tu rubro</div></div>
+        <div class="sol-row"><div class="sol-chk"><i class="fa fa-check"></i></div><div class="sol-txt">Posicionamiento en Google (SEO básico incluido)</div></div>
+        <div class="sol-row"><div class="sol-chk"><i class="fa fa-check"></i></div><div class="sol-txt">Formulario de contacto con notificaciones</div></div>
+        <div class="sol-row"><div class="sol-chk"><i class="fa fa-check"></i></div><div class="sol-txt">Galería de fotos y sección de servicios</div></div>
+        <div class="sol-row"><div class="sol-chk"><i class="fa fa-check"></i></div><div class="sol-txt">Botón flotante de WhatsApp</div></div>
+        <div class="sol-row"><div class="sol-chk"><i class="fa fa-check"></i></div><div class="sol-txt">Hosting y dominio el primer año incluidos</div></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n">3×</div><div class="stat-l">más consultas reciben los negocios con sitio web</div></div>
+        <div class="stat"><div class="stat-n">94%</div><div class="stat-l">de las primeras impresiones son por el diseño web</div></div>
+        <div class="stat"><div class="stat-n">7d</div><div class="stat-l">promedio para tener tu sitio online funcionando</div></div>
+      </div>
+    </div>
+
+    <!-- S4: MOCKUP HOME -->
+    <div class="slide mslide" id="s4" style="justify-content:flex-start;padding-top:36px">
+      <div class="mhead">
+        <div><div class="mhead-label">Vista previa</div><div style="font-size:15px;font-weight:700;color:#f1f5f9;margin-top:2px">Página principal (Home)</div></div>
+        <div class="mhead-hint">↑ Scroll para explorar</div>
+      </div>
+      <div class="browser">
+        <div class="bbar">
+          <span class="bdot" style="background:#ff5f57"></span>
+          <span class="bdot" style="background:#febc2e"></span>
+          <span class="bdot" style="background:#28c840"></span>
+          <div class="burl"><i class="fa fa-lock" style="font-size:9px;color:#4ade80"></i> tu-negocio.com.uy</div>
+        </div>
+        <div class="bcontent">
+          <div class="web-nav">
+            <div class="web-logo">Tu Negocio</div>
+            <div class="web-links"><a href="#">Inicio</a><a href="#">Servicios</a><a href="#">Nosotros</a><a href="#">Contacto</a></div>
+            <button class="web-cta-btn">Consultá gratis</button>
+          </div>
+          <div class="web-hero">
+            <div class="web-hero-text">
+              <div class="web-hero-tag">⚡ Abierto las 24hs online</div>
+              <div class="web-hero-h">Calidad y confianza en cada trabajo</div>
+              <div class="web-hero-p">Somos especialistas con más de 10 años de experiencia. Pedí tu presupuesto gratis hoy.</div>
+              <div class="web-hero-btns">
+                <button class="web-btn-p">Pedir presupuesto</button>
+                <button class="web-btn-s">Ver trabajos</button>
+              </div>
+            </div>
+            <div class="web-hero-img"><i class="fa fa-store"></i></div>
+          </div>
+          <div class="web-services">
+            <div class="web-services-title">Nuestros servicios</div>
+            <div class="web-services-sub">Todo lo que necesitás en un solo lugar</div>
+            <div class="web-services-grid">
+              <div class="web-svc"><div class="web-svc-ico">⭐</div><div class="web-svc-name">Servicio 1</div><div class="web-svc-p">Descripción breve del servicio principal que ofrecés.</div></div>
+              <div class="web-svc"><div class="web-svc-ico">🔧</div><div class="web-svc-name">Servicio 2</div><div class="web-svc-p">Descripción breve del segundo servicio más importante.</div></div>
+              <div class="web-svc"><div class="web-svc-ico">💎</div><div class="web-svc-name">Servicio 3</div><div class="web-svc-p">Descripción breve del tercer servicio que ofrecés.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5: MOCKUP NOSOTROS -->
+    <div class="slide mslide" id="s5" style="justify-content:flex-start;padding-top:36px">
+      <div class="mhead">
+        <div><div class="mhead-label">Vista previa</div><div style="font-size:15px;font-weight:700;color:#f1f5f9;margin-top:2px">Sobre nosotros</div></div>
+        <div class="mhead-hint">↑ Scroll para explorar</div>
+      </div>
+      <div class="browser">
+        <div class="bbar">
+          <span class="bdot" style="background:#ff5f57"></span>
+          <span class="bdot" style="background:#febc2e"></span>
+          <span class="bdot" style="background:#28c840"></span>
+          <div class="burl"><i class="fa fa-lock" style="font-size:9px;color:#4ade80"></i> tu-negocio.com.uy/nosotros</div>
+        </div>
+        <div class="bcontent">
+          <div class="web-nav">
+            <div class="web-logo">Tu Negocio</div>
+            <div class="web-links"><a href="#">Inicio</a><a href="#" style="color:#0EA5E9;font-weight:700">Nosotros</a><a href="#">Servicios</a><a href="#">Contacto</a></div>
+            <button class="web-cta-btn">Consultá gratis</button>
+          </div>
+          <div class="web-about">
+            <div class="web-about-hero">
+              <div class="web-about-img"><i class="fa fa-building"></i></div>
+              <div class="web-about-text">
+                <div class="web-about-label">Nuestra historia</div>
+                <div class="web-about-h">Más de 10 años haciendo lo que nos apasiona</div>
+                <div class="web-about-p">Somos un equipo comprometido con la calidad y la satisfacción de nuestros clientes. Trabajamos con dedicación para superar expectativas.</div>
+              </div>
+            </div>
+            <div class="web-values">
+              <div class="web-val"><div class="web-val-ico"><i class="fa fa-medal"></i></div><div class="web-val-h">Calidad garantizada</div><div class="web-val-p">Cada trabajo lo entregamos con los más altos estándares.</div></div>
+              <div class="web-val"><div class="web-val-ico"><i class="fa fa-handshake"></i></div><div class="web-val-h">Compromiso real</div><div class="web-val-p">Nos involucramos con cada proyecto como si fuera nuestro.</div></div>
+              <div class="web-val"><div class="web-val-ico"><i class="fa fa-clock"></i></div><div class="web-val-h">Puntualidad</div><div class="web-val-p">Cumplimos los plazos, siempre. Sin excusas.</div></div>
+              <div class="web-val"><div class="web-val-ico"><i class="fa fa-star"></i></div><div class="web-val-h">Experiencia probada</div><div class="web-val-p">Más de 200 clientes satisfechos avalan nuestro trabajo.</div></div>
+            </div>
+            <div class="web-team">
+              <div class="web-team-title">Nuestro equipo</div>
+              <div class="web-team-grid">
+                <div class="web-member"><div class="web-avatar"><i class="fa fa-user"></i></div><div class="web-member-name">Juan García</div><div class="web-member-role">Fundador</div></div>
+                <div class="web-member"><div class="web-avatar"><i class="fa fa-user"></i></div><div class="web-member-name">María López</div><div class="web-member-role">Ventas</div></div>
+                <div class="web-member"><div class="web-avatar"><i class="fa fa-user"></i></div><div class="web-member-name">Carlos Pérez</div><div class="web-member-role">Operaciones</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6: MOCKUP CONTACTO -->
+    <div class="slide mslide" id="s6" style="justify-content:flex-start;padding-top:36px">
+      <div class="mhead">
+        <div><div class="mhead-label">Vista previa</div><div style="font-size:15px;font-weight:700;color:#f1f5f9;margin-top:2px">Página de contacto</div></div>
+        <div class="mhead-hint">↑ Scroll para explorar</div>
+      </div>
+      <div class="browser">
+        <div class="bbar">
+          <span class="bdot" style="background:#ff5f57"></span>
+          <span class="bdot" style="background:#febc2e"></span>
+          <span class="bdot" style="background:#28c840"></span>
+          <div class="burl"><i class="fa fa-lock" style="font-size:9px;color:#4ade80"></i> tu-negocio.com.uy/contacto</div>
+        </div>
+        <div class="bcontent">
+          <div class="web-nav">
+            <div class="web-logo">Tu Negocio</div>
+            <div class="web-links"><a href="#">Inicio</a><a href="#">Nosotros</a><a href="#">Servicios</a><a href="#" style="color:#0EA5E9;font-weight:700">Contacto</a></div>
+            <button class="web-cta-btn">Consultá gratis</button>
+          </div>
+          <div class="web-contact">
+            <div class="web-contact-hero">
+              <div class="web-contact-h">¿Hablamos?</div>
+              <div class="web-contact-p">Respondemos en menos de 2 horas en horario de oficina</div>
+            </div>
+            <div class="web-contact-body">
+              <div class="web-contact-info">
+                <div style="font-size:11px;font-weight:700;color:#1e293b;margin-bottom:4px">Datos de contacto</div>
+                <div class="web-ci"><div class="web-ci-ico"><i class="fab fa-whatsapp"></i></div><div><div class="web-ci-label">WhatsApp</div><div class="web-ci-val">+598 XX XXX XXX</div></div></div>
+                <div class="web-ci"><div class="web-ci-ico"><i class="fa fa-envelope"></i></div><div><div class="web-ci-label">Email</div><div class="web-ci-val">hola@tu-negocio.com.uy</div></div></div>
+                <div class="web-ci"><div class="web-ci-ico"><i class="fa fa-map-marker-alt"></i></div><div><div class="web-ci-label">Ubicación</div><div class="web-ci-val">Montevideo, Uruguay</div></div></div>
+                <div class="web-ci"><div class="web-ci-ico"><i class="fa fa-clock"></i></div><div><div class="web-ci-label">Horario</div><div class="web-ci-val">Lun–Vie 9:00–18:00</div></div></div>
+              </div>
+              <div class="web-form">
+                <div class="web-form-title">Envianos un mensaje</div>
+                <input class="web-input" placeholder="Tu nombre">
+                <input class="web-input" placeholder="Tu teléfono o email">
+                <textarea class="web-textarea" placeholder="¿En qué podemos ayudarte?"></textarea>
+                <button class="web-submit">Enviar mensaje →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S7: CTA -->
+    <div class="slide" id="s7">
+      <div class="cta-inner">
+        <img src="https://raw.githubusercontent.com/juantomasetti1/scalerics-assets/main/logo_full_alt.png" alt="Scalerics" style="width:150px;margin:0 auto 32px;display:block;opacity:.85">
+        <div class="cta-h">¿Empezamos<br>con tu <em>web?</em></div>
+        <div class="cta-sub">Diseño a medida · Entrega en 7 días · Hosting incluido el primer año.<br>Sin costos ocultos, sin letra chica.</div>
+        <button class="cta-btn"><i class="fab fa-whatsapp"></i> Hablar con Scalerics</button>
+        <div class="cta-trust">
+          <div class="cta-ti"><i class="fa fa-check-circle"></i> Sin compromiso</div>
+          <div class="cta-ti"><i class="fa fa-shield-alt"></i> Garantía de calidad</div>
+          <div class="cta-ti"><i class="fa fa-headset"></i> Soporte incluido</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NAVIGATION -->
+  <div id="nav">
+    <button class="nbtn" onclick="go(-1)"><i class="fa fa-arrow-left"></i></button>
+    <div id="dots"></div>
+    <button class="nbtn nxt" onclick="go(1)"><i class="fa fa-arrow-right"></i></button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const total  = slides.length;
+    let cur = 0;
+    const dotsEl = document.getElementById('dots');
+    for (let i = 0; i < total; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 0 ? ' on' : '');
+      d.onclick = () => goTo(i);
+      dotsEl.appendChild(d);
+    }
+    function goTo(n) {
+      slides[cur].classList.remove('active');
+      slides[cur].style.transform = n > cur ? 'translateX(-60px)' : 'translateX(60px)';
+      setTimeout(() => { slides[cur].style.transform = ''; }, 10);
+      cur = Math.max(0, Math.min(total - 1, n));
+      slides[cur].classList.add('active');
+      document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('on', i === cur));
+      document.getElementById('progress').style.width = ((cur + 1) / total * 100) + '%';
+      document.getElementById('counter').textContent = (cur + 1) + ' / ' + total;
+    }
+    function go(d) { goTo(cur + d); }
+    document.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1); if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1); });
+  </script>
+</body>
+</html>
