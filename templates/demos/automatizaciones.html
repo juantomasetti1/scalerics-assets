@@ -83,7 +83,14 @@
     .bdot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
     .burl { flex: 1; background: #1c2133; border: 1px solid rgba(255,255,255,.07); border-radius: 5px; padding: 3px 10px; font-size: 11px; font-family: monospace; color: var(--muted); }
     .burl i { font-size: 9px; color: var(--green); margin-right: 4px; }
-    .brow-body { height: 380px; overflow: hidden; }
+    .brow-body { height: 460px; overflow-y: auto; overflow-x: hidden; }
+    .brow-body::-webkit-scrollbar { width: 5px; }
+    .brow-body::-webkit-scrollbar-track { background: rgba(255,255,255,.04); }
+    .brow-body::-webkit-scrollbar-thumb { background: rgba(0,136,204,.4); border-radius: 3px; }
+    .brow-body::-webkit-scrollbar-thumb:hover { background: rgba(0,136,204,.65); }
+    .slide.mock { padding: 28px 40px 80px; }
+    .mwrap { width: 100%; max-width: 920px; }
+    .mlabel { font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 8px; letter-spacing: .1em; text-transform: uppercase; }
 
     .price-card { background: var(--surface); border: 1px solid rgba(16,185,129,.28); border-radius: 20px; padding: 38px 42px; max-width: 520px; width: 100%; text-align: center; position: relative; }
     .price-glow { position: absolute; inset: -1px; border-radius: 20px; background: linear-gradient(135deg, rgba(16,185,129,.15), transparent 60%); pointer-events: none; }
@@ -223,9 +230,9 @@
   </section>
 
   <!-- S5: DEMO — Dashboard de mensajes -->
-  <section class="slide" id="s5">
-    <div class="label">Demo · Panel de conversaciones</div>
-    <div style="width:100%;max-width:820px;">
+  <section class="slide mock" id="s5">
+    <div class="mlabel">Demo · Panel de conversaciones</div>
+    <div class="mwrap">
       <div class="browser">
         <div class="brow-bar">
           <span class="bdot" style="background:#FF5F57"></span>
@@ -233,48 +240,81 @@
           <span class="bdot" style="background:#28C840"></span>
           <div class="burl"><i class="fa fa-lock"></i> panel.tu-bot.com.uy</div>
         </div>
-        <div class="brow-body" style="background:#0d1117;display:flex;">
-          <!-- Sidebar: conversations -->
-          <div style="width:220px;background:#0a0d14;border-right:1px solid rgba(255,255,255,.06);overflow:hidden;">
-            <div style="padding:10px 12px;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.05);">Conversaciones <span style="background:rgba(16,185,129,.15);color:#10B981;border-radius:4px;padding:1px 6px;font-size:9px;margin-left:4px;">12 nuevas</span></div>
-            <div style="padding:10px 12px;background:rgba(0,136,204,.08);border-left:2px solid #0088CC;cursor:pointer;">
-              <div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#e2e8f0;font-weight:500;">Ana González</span><span style="font-size:9px;color:#64748b;">10:33</span></div>
-              <div style="font-size:10px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">¿Tienen para mañana a la tarde?</div>
-            </div>
-            <div style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;">
-              <div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#e2e8f0;font-weight:500;">Carlos M.</span><span style="font-size:9px;color:#64748b;">9:14</span></div>
-              <div style="font-size:10px;color:#64748b;">Confirmó turno para hoy 15hs</div>
-            </div>
-            <div style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;">
-              <div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#e2e8f0;font-weight:500;">Lucía P.</span><span style="font-size:9px;color:#64748b;">Ayer</span></div>
-              <div style="font-size:10px;color:#64748b;">Bot resolvió — presupuesto enviado</div>
-            </div>
-            <div style="padding:10px 12px;cursor:pointer;">
-              <div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:11px;color:#e2e8f0;font-weight:500;">Roberto H.</span><span style="font-size:9px;color:#64748b;">Ayer</span></div>
-              <div style="font-size:10px;color:#64748b;">Pago confirmado ✓</div>
-            </div>
+        <div class="brow-body" style="background:#0d1117;display:flex;flex-direction:column;">
+          <!-- Topbar -->
+          <div style="background:#0a0d14;border-bottom:1px solid rgba(255,255,255,.06);padding:0 16px;height:42px;display:flex;align-items:center;gap:12px;flex-shrink:0">
+            <div style="font-family:'Raleway',sans-serif;font-weight:800;font-size:13px;color:#0088CC">Bot Panel</div>
+            <div style="flex:1"></div>
+            <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:5px;padding:3px 9px;font-size:9px;color:#10B981;font-weight:600">🟢 Bot activo · 24/7</div>
+            <span style="font-size:11px;color:#64748b">Tu Negocio</span>
           </div>
-          <!-- Stats -->
-          <div style="flex:1;padding:14px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:10px;">
-            <div style="background:#131722;border-radius:8px;padding:14px;border:1px solid rgba(255,255,255,.06);">
-              <div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Mensajes hoy</div>
-              <div style="font-size:24px;font-weight:700;color:#e2e8f0;">147</div>
-              <div style="font-size:10px;color:#10B981;">↑ +23 vs ayer</div>
+          <!-- Main layout -->
+          <div style="display:flex;flex:1">
+            <!-- Sidebar: conversations -->
+            <div style="width:220px;background:#0a0d14;border-right:1px solid rgba(255,255,255,.06);flex-shrink:0">
+              <div style="padding:8px 12px;font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between">Conversaciones <span style="background:rgba(16,185,129,.15);color:#10B981;border-radius:4px;padding:1px 6px;font-size:9px">12 nuevas</span></div>
+              <div style="padding:9px 12px;background:rgba(0,136,204,.08);border-left:2px solid #0088CC">
+                <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:11px;color:#e2e8f0;font-weight:500">Ana González</span><span style="font-size:9px;color:#64748b">10:33</span></div>
+                <div style="font-size:10px;color:#64748b">¿Tienen para mañana a la tarde?</div>
+              </div>
+              <div style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:11px;color:#e2e8f0;font-weight:500">Carlos M.</span><span style="font-size:9px;color:#64748b">9:14</span></div>
+                <div style="font-size:10px;color:#64748b">Confirmó turno para hoy 15hs</div>
+              </div>
+              <div style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:11px;color:#e2e8f0;font-weight:500">Lucía P.</span><span style="font-size:9px;color:#64748b">Ayer</span></div>
+                <div style="font-size:10px;color:#64748b">Bot resolvió — presupuesto enviado</div>
+              </div>
+              <div style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:11px;color:#e2e8f0;font-weight:500">Roberto H.</span><span style="font-size:9px;color:#64748b">Ayer</span></div>
+                <div style="font-size:10px;color:#64748b">Pago confirmado ✓</div>
+              </div>
+              <div style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span style="font-size:11px;color:#e2e8f0;font-weight:500">Marta S.</span><span style="font-size:9px;color:#64748b">Lun</span></div>
+                <div style="font-size:10px;color:#64748b">Canceló — reagendó para el viernes</div>
+              </div>
             </div>
-            <div style="background:#131722;border-radius:8px;padding:14px;border:1px solid rgba(255,255,255,.06);">
-              <div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Resueltos por bot</div>
-              <div style="font-size:24px;font-weight:700;color:#0088CC;">82%</div>
-              <div style="font-size:10px;color:#64748b;">Sin intervención humana</div>
-            </div>
-            <div style="background:#131722;border-radius:8px;padding:14px;border:1px solid rgba(255,255,255,.06);">
-              <div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Turnos confirmados</div>
-              <div style="font-size:24px;font-weight:700;color:#10B981;">28</div>
-              <div style="font-size:10px;color:#64748b;">Solo hoy</div>
-            </div>
-            <div style="background:#131722;border-radius:8px;padding:14px;border:1px solid rgba(255,255,255,.06);">
-              <div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Tiempo resp. promedio</div>
-              <div style="font-size:24px;font-weight:700;color:#e2e8f0;">2s</div>
-              <div style="font-size:10px;color:#10B981;">vs 4hs antes</div>
+            <!-- Stats -->
+            <div style="flex:1;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start">
+              <div style="background:#131722;border-radius:8px;padding:13px;border:1px solid rgba(255,255,255,.06)">
+                <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Mensajes hoy</div>
+                <div style="font-size:22px;font-weight:700;color:#e2e8f0">147</div>
+                <div style="font-size:9px;color:#10B981">↑ +23 vs ayer</div>
+              </div>
+              <div style="background:#131722;border-radius:8px;padding:13px;border:1px solid rgba(255,255,255,.06)">
+                <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Resueltos por bot</div>
+                <div style="font-size:22px;font-weight:700;color:#0088CC">82%</div>
+                <div style="font-size:9px;color:#64748b">Sin intervención humana</div>
+              </div>
+              <div style="background:#131722;border-radius:8px;padding:13px;border:1px solid rgba(255,255,255,.06)">
+                <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Turnos confirmados</div>
+                <div style="font-size:22px;font-weight:700;color:#10B981">28</div>
+                <div style="font-size:9px;color:#64748b">Solo hoy</div>
+              </div>
+              <div style="background:#131722;border-radius:8px;padding:13px;border:1px solid rgba(255,255,255,.06)">
+                <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Tiempo resp. promedio</div>
+                <div style="font-size:22px;font-weight:700;color:#e2e8f0">2s</div>
+                <div style="font-size:9px;color:#10B981">vs 4hs antes</div>
+              </div>
+              <!-- Satisfaction bar (below fold) -->
+              <div style="grid-column:1/-1;background:#131722;border-radius:8px;padding:13px;border:1px solid rgba(255,255,255,.06)">
+                <div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Satisfacción de clientes (esta semana)</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+                  <span style="font-size:10px;color:#94a3b8;width:28px">⭐ 5</span>
+                  <div style="flex:1;background:#1a2030;border-radius:3px;height:8px"><div style="width:72%;background:#10B981;border-radius:3px;height:8px"></div></div>
+                  <span style="font-size:10px;color:#64748b">72%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+                  <span style="font-size:10px;color:#94a3b8;width:28px">⭐ 4</span>
+                  <div style="flex:1;background:#1a2030;border-radius:3px;height:8px"><div style="width:20%;background:#0088CC;border-radius:3px;height:8px"></div></div>
+                  <span style="font-size:10px;color:#64748b">20%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="font-size:10px;color:#94a3b8;width:28px">⭐ ≤3</span>
+                  <div style="flex:1;background:#1a2030;border-radius:3px;height:8px"><div style="width:8%;background:#64748b;border-radius:3px;height:8px"></div></div>
+                  <span style="font-size:10px;color:#64748b">8%</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -283,9 +323,9 @@
   </section>
 
   <!-- S6: DEMO — Flujos de automatización -->
-  <section class="slide" id="s6">
-    <div class="label">Demo · Flujos automáticos</div>
-    <div style="width:100%;max-width:820px;">
+  <section class="slide mock" id="s6">
+    <div class="mlabel">Demo · Flujos automáticos</div>
+    <div class="mwrap">
       <div class="browser">
         <div class="brow-bar">
           <span class="bdot" style="background:#FF5F57"></span>
@@ -293,40 +333,105 @@
           <span class="bdot" style="background:#28C840"></span>
           <div class="burl"><i class="fa fa-lock"></i> panel.tu-bot.com.uy/flujos</div>
         </div>
-        <div class="brow-body" style="background:#0d1117;padding:16px;">
-          <div style="font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:12px;">Flujos activos</div>
-          <!-- Flow 1 -->
-          <div style="background:#131722;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:32px;height:32px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fa fa-calendar" style="color:#10B981;font-size:12px"></i></div>
-              <div>
-                <div style="font-size:12px;font-weight:600;color:#e2e8f0;">Confirmar turno + recordatorio</div>
-                <div style="font-size:10px;color:#64748b;">Reserva → Confirmación → Recordatorio 2hs antes</div>
-              </div>
-            </div>
-            <span style="font-size:10px;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.25);border-radius:4px;padding:3px 8px;">Activo</span>
+        <div class="brow-body" style="background:#0d1117;display:flex;flex-direction:column;">
+          <!-- Topbar -->
+          <div style="background:#0a0d14;border-bottom:1px solid rgba(255,255,255,.06);padding:0 16px;height:42px;display:flex;align-items:center;gap:12px;flex-shrink:0">
+            <div style="font-family:'Raleway',sans-serif;font-weight:800;font-size:13px;color:#0088CC">Bot Panel</div>
+            <div style="flex:1"></div>
+            <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:5px;padding:3px 9px;font-size:9px;color:#10B981;font-weight:600">🟢 5 flujos activos</div>
+            <span style="font-size:11px;color:#64748b">Tu Negocio</span>
           </div>
-          <!-- Flow 2 -->
-          <div style="background:#131722;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:32px;height:32px;background:rgba(0,136,204,.12);border:1px solid rgba(0,136,204,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fa fa-receipt" style="color:#0088CC;font-size:12px"></i></div>
-              <div>
-                <div style="font-size:12px;font-weight:600;color:#e2e8f0;">Cobro y factura automática</div>
-                <div style="font-size:10px;color:#64748b;">Pago → Confirmación → PDF por WhatsApp</div>
+          <!-- Content -->
+          <div style="display:flex;flex:1">
+            <!-- Sidebar: flow list -->
+            <div style="width:200px;background:#0a0d14;border-right:1px solid rgba(255,255,255,.06);flex-shrink:0">
+              <div style="padding:8px 12px;font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.05)">Flujos</div>
+              <!-- Flow 1 active -->
+              <div style="padding:9px 12px;background:rgba(0,136,204,.08);border-left:2px solid #0088CC">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px">
+                  <div style="width:20px;height:20px;background:rgba(16,185,129,.15);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa fa-calendar" style="color:#10B981;font-size:8px"></i></div>
+                  <span style="font-size:10px;color:#e2e8f0;font-weight:500">Turno + recordatorio</span>
+                </div>
+                <div style="margin-left:27px;font-size:9px;color:#10B981">● Activo · 28/día</div>
+              </div>
+              <!-- Flow 2 -->
+              <div style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px">
+                  <div style="width:20px;height:20px;background:rgba(0,136,204,.12);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa fa-receipt" style="color:#0088CC;font-size:8px"></i></div>
+                  <span style="font-size:10px;color:#e2e8f0;font-weight:500">Cobro y factura</span>
+                </div>
+                <div style="margin-left:27px;font-size:9px;color:#10B981">● Activo · 14/día</div>
+              </div>
+              <!-- Flow 3 -->
+              <div style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px">
+                  <div style="width:20px;height:20px;background:rgba(0,136,204,.12);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa fa-star" style="color:#0088CC;font-size:8px"></i></div>
+                  <span style="font-size:10px;color:#e2e8f0;font-weight:500">Reseña post-servicio</span>
+                </div>
+                <div style="margin-left:27px;font-size:9px;color:#10B981">● Activo · 9/día</div>
+              </div>
+              <!-- Flow 4 -->
+              <div style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px">
+                  <div style="width:20px;height:20px;background:rgba(0,136,204,.12);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa fa-users" style="color:#0088CC;font-size:8px"></i></div>
+                  <span style="font-size:10px;color:#e2e8f0;font-weight:500">Bienvenida nuevos</span>
+                </div>
+                <div style="margin-left:27px;font-size:9px;color:#10B981">● Activo · 6/día</div>
+              </div>
+              <!-- Flow 5 -->
+              <div style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04)">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px">
+                  <div style="width:20px;height:20px;background:rgba(251,191,36,.1);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fa fa-tag" style="color:#fbbf24;font-size:8px"></i></div>
+                  <span style="font-size:10px;color:#e2e8f0;font-weight:500">Promo reactivación</span>
+                </div>
+                <div style="margin-left:27px;font-size:9px;color:#64748b">⏸ Pausado</div>
               </div>
             </div>
-            <span style="font-size:10px;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.25);border-radius:4px;padding:3px 8px;">Activo</span>
-          </div>
-          <!-- Flow 3 -->
-          <div style="background:#131722;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:32px;height:32px;background:rgba(0,136,204,.12);border:1px solid rgba(0,136,204,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;"><i class="fa fa-star" style="color:#0088CC;font-size:12px"></i></div>
-              <div>
-                <div style="font-size:12px;font-weight:600;color:#e2e8f0;">Pedido de reseña post-servicio</div>
-                <div style="font-size:10px;color:#64748b;">Servicio completado → Mensaje de reseña Google 24hs después</div>
+            <!-- Main: flow detail -->
+            <div style="flex:1;padding:12px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+                <div style="font-size:11px;font-weight:600;color:#e2e8f0">Turno + recordatorio automático</div>
+                <span style="font-size:9px;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.25);border-radius:4px;padding:2px 7px">Activo</span>
+              </div>
+              <!-- Steps -->
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="background:#131722;border-radius:7px;padding:9px 12px;border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px">
+                  <div style="width:22px;height:22px;background:rgba(0,136,204,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;color:#0088CC;font-weight:700">1</div>
+                  <div><div style="font-size:10px;font-weight:600;color:#e2e8f0">Cliente reserva turno vía WhatsApp</div><div style="font-size:9px;color:#64748b">Trigger: mensaje con keyword "turno" o "reservar"</div></div>
+                </div>
+                <div style="background:#131722;border-radius:7px;padding:9px 12px;border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px">
+                  <div style="width:22px;height:22px;background:rgba(0,136,204,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;color:#0088CC;font-weight:700">2</div>
+                  <div><div style="font-size:10px;font-weight:600;color:#e2e8f0">Bot consulta disponibilidad y confirma</div><div style="font-size:9px;color:#64748b">Respuesta automática en &lt; 2 segundos</div></div>
+                </div>
+                <div style="background:#131722;border-radius:7px;padding:9px 12px;border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px">
+                  <div style="width:22px;height:22px;background:rgba(16,185,129,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;color:#10B981;font-weight:700">3</div>
+                  <div><div style="font-size:10px;font-weight:600;color:#e2e8f0">Recordatorio 2hs antes del turno</div><div style="font-size:9px;color:#64748b">Mensaje automático con dirección y hora</div></div>
+                </div>
+              </div>
+              <!-- Stats row below fold -->
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px">
+                <div style="background:#131722;border-radius:7px;padding:10px;border:1px solid rgba(255,255,255,.06)">
+                  <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Ejecuciones hoy</div>
+                  <div style="font-size:19px;font-weight:700;color:#e2e8f0">28</div>
+                  <div style="font-size:9px;color:#10B981">↑ +6 vs ayer</div>
+                </div>
+                <div style="background:#131722;border-radius:7px;padding:10px;border:1px solid rgba(255,255,255,.06)">
+                  <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Tasa de éxito</div>
+                  <div style="font-size:19px;font-weight:700;color:#10B981">97%</div>
+                  <div style="font-size:9px;color:#64748b">Sin intervención</div>
+                </div>
+                <div style="background:#131722;border-radius:7px;padding:10px;border:1px solid rgba(255,255,255,.06)">
+                  <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Ausentismo evitado</div>
+                  <div style="font-size:19px;font-weight:700;color:#0088CC">↓ 68%</div>
+                  <div style="font-size:9px;color:#64748b">vs sin recordatorio</div>
+                </div>
+              </div>
+              <!-- WA CTA -->
+              <div style="background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(0,136,204,.08));border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+                <div><div style="font-size:10px;font-weight:600;color:#e2e8f0">¿Querés este sistema para tu negocio?</div><div style="font-size:9px;color:#64748b">Te lo activamos en 48hs · Sin compromisos</div></div>
+                <div style="background:#10B981;border-radius:6px;padding:5px 11px;font-size:9px;font-weight:700;color:#fff;white-space:nowrap">Hablar con nosotros →</div>
               </div>
             </div>
-            <span style="font-size:10px;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.25);border-radius:4px;padding:3px 8px;">Activo</span>
           </div>
         </div>
       </div>
@@ -388,6 +493,7 @@
     prog.style.width = ((cur + 1) / slides.length * 100) + '%';
     counter.textContent = (cur + 1) + ' / ' + slides.length;
     dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+    document.querySelectorAll('.brow-body').forEach(b => b.scrollTop = 0);
   }
 
   document.getElementById('next').onclick = () => { if (cur < slides.length - 1) goTo(cur + 1); };
@@ -398,6 +504,11 @@
   });
 
   buildDots();
+  document.querySelectorAll('.brow-body').forEach(el => {
+    el.addEventListener('wheel', e => e.stopPropagation(), { passive: true });
+    el.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+    el.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
+  });
 </script>
 </body>
 </html>
