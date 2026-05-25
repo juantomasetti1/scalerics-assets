@@ -83,7 +83,11 @@
     .bdot{width:11px;height:11px;border-radius:50%;display:inline-block}
     .burl{flex:1;background:#0f111a;border:1px solid rgba(255,255,255,.08);border-radius:5px;padding:4px 12px;font-size:11px;font-family:monospace;color:var(--muted);display:flex;align-items:center;gap:5px}
     .burl i{font-size:9px;color:var(--green)}
-    .bbody{height:460px;overflow:hidden}
+    .bbody{height:460px;overflow-y:auto;overflow-x:hidden}
+    .bbody::-webkit-scrollbar{width:5px}
+    .bbody::-webkit-scrollbar-track{background:rgba(255,255,255,.04)}
+    .bbody::-webkit-scrollbar-thumb{background:rgba(0,194,240,.35);border-radius:3px}
+    .bbody::-webkit-scrollbar-thumb:hover{background:rgba(0,194,240,.6)}
 
     /* S7 */
     .prc-card{background:var(--surface);border:1px solid var(--blue-border);border-radius:20px;padding:34px 40px;max-width:500px;width:100%;text-align:center;position:relative}
@@ -311,6 +315,49 @@
                 </div>
               </div>
             </div>
+            <!-- fila 3 -->
+            <div style="background:#141414;border:1px solid #1f1f1f;border-radius:8px;overflow:hidden">
+              <div style="background:#181818;height:72px;display:flex;align-items:center;justify-content:center;font-size:32px">⌨️</div>
+              <div style="padding:9px">
+                <div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:3px">Informática</div>
+                <div style="font-size:11px;color:#e2e8f0;font-weight:600;margin-bottom:5px;line-height:1.3">Teclado mecánico retroiluminado</div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:15px;font-weight:800;color:#00C2F0">$1.190</span>
+                  <div style="background:rgba(0,194,240,.12);border:1px solid rgba(0,194,240,.25);border-radius:5px;padding:4px 9px;font-size:10px;color:#00C2F0;font-weight:600">Consultar 💬</div>
+                </div>
+              </div>
+            </div>
+            <div style="background:#141414;border:1px solid rgba(0,194,240,.15);border-radius:8px;overflow:hidden;position:relative">
+              <div style="position:absolute;top:6px;left:6px;background:#00C2F0;color:#000;border-radius:4px;padding:2px 7px;font-size:8px;font-weight:800">NUEVO</div>
+              <div style="background:#181818;height:72px;display:flex;align-items:center;justify-content:center;font-size:32px">📷</div>
+              <div style="padding:9px">
+                <div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:3px">Accesorios</div>
+                <div style="font-size:11px;color:#e2e8f0;font-weight:600;margin-bottom:5px;line-height:1.3">Soporte ring light 26cm con trípode</div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:15px;font-weight:800;color:#00C2F0">$890</span>
+                  <div style="background:rgba(0,194,240,.12);border:1px solid rgba(0,194,240,.25);border-radius:5px;padding:4px 9px;font-size:10px;color:#00C2F0;font-weight:600">Consultar 💬</div>
+                </div>
+              </div>
+            </div>
+            <div style="background:#141414;border:1px solid #1f1f1f;border-radius:8px;overflow:hidden">
+              <div style="background:#181818;height:72px;display:flex;align-items:center;justify-content:center;font-size:32px">🎮</div>
+              <div style="padding:9px">
+                <div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:3px">Gaming</div>
+                <div style="font-size:11px;color:#e2e8f0;font-weight:600;margin-bottom:5px;line-height:1.3">Control inalámbrico compatible PS4/PC</div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:15px;font-weight:800;color:#00C2F0">$1.490</span>
+                  <div style="background:rgba(0,194,240,.12);border:1px solid rgba(0,194,240,.25);border-radius:5px;padding:4px 9px;font-size:10px;color:#00C2F0;font-weight:600">Consultar 💬</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Banner WhatsApp -->
+          <div style="margin:10px;background:linear-gradient(135deg,#005c1a,#003d12);border:1px solid rgba(37,211,102,.2);border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:#25D366;margin-bottom:3px">📲 ¿No encontrás lo que buscás?</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.55)">Escribinos y te conseguimos el producto que necesitás</div>
+            </div>
+            <div style="background:#25D366;color:#fff;border-radius:7px;padding:8px 16px;font-size:11px;font-weight:700;white-space:nowrap">Consultar por WhatsApp</div>
           </div>
         </div>
 
@@ -377,7 +424,7 @@
         </div>
 
         <!-- Products grid -->
-        <div style="flex:1;padding:12px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#f0f4f8;overflow:hidden">
+        <div style="padding:12px 16px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#f0f4f8;">
           <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)">
             <div style="background:#e0f7ff;height:76px;display:flex;align-items:center;justify-content:center;font-size:34px">🎧</div>
             <div style="padding:10px">
@@ -423,6 +470,60 @@
               </div>
             </div>
           </div>
+          <!-- Row 2 -->
+          <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+            <div style="background:#e0f7ff;height:76px;display:flex;align-items:center;justify-content:center;font-size:34px">🖥️</div>
+            <div style="padding:10px">
+              <div style="font-size:9px;color:#94a3b8;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Monitores</div>
+              <div style="font-size:11px;color:#0f172a;font-weight:600;margin-bottom:4px;line-height:1.3">Monitor LED 24" Full HD 75Hz</div>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:15px;font-weight:800;color:#00C2F0">$6.990</span>
+                <div style="background:#00C2F0;color:#fff;border-radius:5px;padding:4px 9px;font-size:10px;font-weight:600">Consultar 💬</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:10px;border:2px solid #00C2F0;overflow:hidden;position:relative;box-shadow:0 2px 10px rgba(0,194,240,.15)">
+            <div style="position:absolute;top:6px;right:6px;background:#00C2F0;color:#fff;border-radius:4px;padding:2px 7px;font-size:8px;font-weight:800">NUEVO</div>
+            <div style="background:#e0f7ff;height:76px;display:flex;align-items:center;justify-content:center;font-size:34px">🎮</div>
+            <div style="padding:10px">
+              <div style="font-size:9px;color:#94a3b8;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Gaming</div>
+              <div style="font-size:11px;color:#0f172a;font-weight:600;margin-bottom:4px;line-height:1.3">Control inalámbrico PS4/PC RGB</div>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:15px;font-weight:800;color:#00C2F0">$1.290</span>
+                <div style="background:#00C2F0;color:#fff;border-radius:5px;padding:4px 9px;font-size:10px;font-weight:600">Consultar 💬</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+            <div style="background:#e0f7ff;height:76px;display:flex;align-items:center;justify-content:center;font-size:34px">💡</div>
+            <div style="padding:10px">
+              <div style="font-size:9px;color:#94a3b8;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Streaming</div>
+              <div style="font-size:11px;color:#0f172a;font-weight:600;margin-bottom:4px;line-height:1.3">Ring Light 10" con trípode ajustable</div>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:15px;font-weight:800;color:#00C2F0">$1.490</span>
+                <div style="background:#00C2F0;color:#fff;border-radius:5px;padding:4px 9px;font-size:10px;font-weight:600">Consultar 💬</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+            <div style="background:#e0f7ff;height:76px;display:flex;align-items:center;justify-content:center;font-size:34px">🔗</div>
+            <div style="padding:10px">
+              <div style="font-size:9px;color:#94a3b8;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Cables</div>
+              <div style="font-size:11px;color:#0f172a;font-weight:600;margin-bottom:4px;line-height:1.3">Cable USB-C 1m 60W carga rápida</div>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:15px;font-weight:800;color:#00C2F0">$390</span>
+                <div style="background:#00C2F0;color:#fff;border-radius:5px;padding:4px 9px;font-size:10px;font-weight:600">Consultar 💬</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- WA CTA banner -->
+        <div style="background:linear-gradient(90deg,#25D366,#128C7E);margin:0 16px 16px;border-radius:10px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:3px">¿No encontrás lo que buscás?</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.85)">Consultanos por WhatsApp y te ayudamos al toque</div>
+          </div>
+          <div style="background:#fff;color:#25D366;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:800;display:flex;align-items:center;gap:6px;flex-shrink:0"><i class="fa-brands fa-whatsapp" style="font-size:14px"></i> Escribir</div>
         </div>
 
       </div>
@@ -476,7 +577,7 @@
         </div>
 
         <!-- Filter bar + content -->
-        <div style="flex:1;display:flex;overflow:hidden">
+        <div style="display:flex;">
 
           <!-- Left filters -->
           <div style="width:150px;background:#111;border-right:1px solid #1e1e1e;padding:12px;flex-shrink:0;overflow:hidden">
@@ -496,7 +597,7 @@
           </div>
 
           <!-- Products -->
-          <div style="flex:1;padding:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-content:start;overflow:hidden">
+          <div style="flex:1;padding:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-content:start;">
             <div style="background:#161616;border:1px solid #1f1f1f;border-radius:7px;overflow:hidden">
               <div style="background:#1c1c1c;height:68px;display:flex;align-items:center;justify-content:center;font-size:30px">🎧</div>
               <div style="padding:8px">
@@ -531,7 +632,50 @@
                 </div>
               </div>
             </div>
+            <!-- Row 2 -->
+            <div style="background:#161616;border:1px solid #1f1f1f;border-radius:7px;overflow:hidden">
+              <div style="background:#1c1c1c;height:68px;display:flex;align-items:center;justify-content:center;font-size:30px">🔌</div>
+              <div style="padding:8px">
+                <div style="font-size:8px;color:rgba(255,255,255,.3);margin-bottom:2px">SKU: CG-GAN20 · GaN Tech</div>
+                <div style="font-size:10px;color:#e2e8f0;font-weight:600;margin-bottom:5px;line-height:1.3">Cargador pared GaN 20W USB-C</div>
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <span style="font-size:14px;font-weight:800;color:#00C2F0">$790</span>
+                  <div style="background:rgba(0,194,240,.12);border:1px solid rgba(0,194,240,.25);border-radius:5px;padding:4px 8px;font-size:9px;color:#00C2F0;font-weight:600">Consultar 💬</div>
+                </div>
+              </div>
+            </div>
+            <div style="background:#161616;border:1px solid #1f1f1f;border-radius:7px;overflow:hidden">
+              <div style="background:#1c1c1c;height:68px;display:flex;align-items:center;justify-content:center;font-size:30px">📱</div>
+              <div style="padding:8px">
+                <div style="font-size:8px;color:rgba(255,255,255,.3);margin-bottom:2px">SKU: FND-AG · Genérico</div>
+                <div style="font-size:10px;color:#e2e8f0;font-weight:600;margin-bottom:5px;line-height:1.3">Funda antigolpe iPhone / Samsung</div>
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <span style="font-size:14px;font-weight:800;color:#00C2F0">$390</span>
+                  <div style="background:rgba(0,194,240,.12);border:1px solid rgba(0,194,240,.25);border-radius:5px;padding:4px 8px;font-size:9px;color:#00C2F0;font-weight:600">Consultar 💬</div>
+                </div>
+              </div>
+            </div>
+            <div style="background:#161616;border:1px solid rgba(0,194,240,.2);border-radius:7px;overflow:hidden;position:relative">
+              <div style="position:absolute;top:5px;right:5px;background:#00C2F0;color:#000;border-radius:3px;padding:1px 6px;font-size:8px;font-weight:800">100W</div>
+              <div style="background:#1c1c1c;height:68px;display:flex;align-items:center;justify-content:center;font-size:30px">🔗</div>
+              <div style="padding:8px">
+                <div style="font-size:8px;color:rgba(255,255,255,.3);margin-bottom:2px">SKU: CBL-CC100 · Baseus</div>
+                <div style="font-size:10px;color:#e2e8f0;font-weight:600;margin-bottom:5px;line-height:1.3">Cable USB-C a USB-C 1m 100W PD</div>
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <span style="font-size:14px;font-weight:800;color:#00C2F0">$490</span>
+                  <div style="background:rgba(0,194,240,.12);border:1px solid rgba(0,194,240,.25);border-radius:5px;padding:4px 8px;font-size:9px;color:#00C2F0;font-weight:600">Consultar 💬</div>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+        <!-- WA CTA dark -->
+        <div style="margin:0 10px 10px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.25);border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#4ade80;margin-bottom:2px">¿Buscás algo específico?</div>
+            <div style="font-size:9px;color:rgba(255,255,255,.45)">Consultanos por WhatsApp — respondemos en minutos</div>
+          </div>
+          <div style="background:#25D366;color:#fff;border-radius:7px;padding:7px 14px;font-size:10px;font-weight:800;display:flex;align-items:center;gap:5px;flex-shrink:0"><i class="fa-brands fa-whatsapp" style="font-size:13px"></i> Consultar</div>
         </div>
 
       </div>
@@ -580,10 +724,17 @@
   const dotsEl=document.getElementById('dots');
   let cur=0;
   function buildDots(){dotsEl.innerHTML='';slides.forEach((_,i)=>{const d=document.createElement('span');d.className='dot'+(i===0?' on':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d)})}
-  function goTo(n){slides[cur].classList.remove('active');slides[cur].classList.add('out');setTimeout(()=>slides[cur].classList.remove('out'),450);cur=Math.max(0,Math.min(n,slides.length-1));slides[cur].classList.add('active');prog.style.width=((cur+1)/slides.length*100)+'%';counter.textContent=(cur+1)+' / '+slides.length;dotsEl.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur))}
+  function goTo(n){slides[cur].classList.remove('active');slides[cur].classList.add('out');setTimeout(()=>slides[cur].classList.remove('out'),450);cur=Math.max(0,Math.min(n,slides.length-1));slides[cur].classList.add('active');prog.style.width=((cur+1)/slides.length*100)+'%';counter.textContent=(cur+1)+' / '+slides.length;dotsEl.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur));// reset scroll on mock slides
+    document.querySelectorAll('.bbody').forEach(b=>b.scrollTop=0)}
   document.getElementById('next').onclick=()=>{if(cur<slides.length-1)goTo(cur+1)};
   document.getElementById('prev').onclick=()=>{if(cur>0)goTo(cur-1)};
   document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&cur<slides.length-1)goTo(cur+1);if(e.key==='ArrowLeft'&&cur>0)goTo(cur-1)});
+  // Prevent wheel inside mockup from changing slide
+  document.querySelectorAll('.bbody').forEach(el=>{
+    el.addEventListener('wheel',e=>e.stopPropagation(),{passive:true});
+    el.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
+    el.addEventListener('touchmove',e=>e.stopPropagation(),{passive:true});
+  });
   buildDots();
 </script>
 </body>
