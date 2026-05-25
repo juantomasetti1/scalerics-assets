@@ -83,7 +83,14 @@
     .bdot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
     .burl { flex: 1; background: #1c2133; border: 1px solid rgba(255,255,255,.07); border-radius: 5px; padding: 3px 10px; font-size: 11px; font-family: monospace; color: var(--muted); }
     .burl i { font-size: 9px; color: var(--green); margin-right: 4px; }
-    .brow-body { height: 380px; overflow: hidden; }
+    .brow-body { height: 460px; overflow-y: auto; overflow-x: hidden; }
+    .brow-body::-webkit-scrollbar { width: 5px; }
+    .brow-body::-webkit-scrollbar-track { background: rgba(255,255,255,.04); }
+    .brow-body::-webkit-scrollbar-thumb { background: rgba(0,136,204,.4); border-radius: 3px; }
+    .brow-body::-webkit-scrollbar-thumb:hover { background: rgba(0,136,204,.65); }
+    .slide.mock { padding: 28px 40px 80px; }
+    .mwrap { width: 100%; max-width: 920px; }
+    .mlabel { font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 8px; letter-spacing: .1em; text-transform: uppercase; }
 
     .price-card { background: var(--surface); border: 1px solid var(--blue-border); border-radius: 20px; padding: 38px 42px; max-width: 520px; width: 100%; text-align: center; position: relative; }
     .price-glow { position: absolute; inset: -1px; border-radius: 20px; background: linear-gradient(135deg, rgba(0,136,204,.2), transparent 60%); pointer-events: none; }
@@ -169,9 +176,9 @@
   </section>
 
   <!-- S4: DEMO — Estilo moderno oscuro -->
-  <section class="slide" id="s4">
-    <div class="mock-label">Estilo · Moderno y profesional</div>
-    <div style="width:100%;max-width:820px;">
+  <section class="slide mock" id="s4">
+    <div class="mlabel">Estilo 1 · Moderno y profesional</div>
+    <div class="mwrap">
       <div class="browser">
         <div class="brow-bar">
           <span class="bdot" style="background:#FF5F57"></span>
@@ -179,45 +186,76 @@
           <span class="bdot" style="background:#28C840"></span>
           <div class="burl"><i class="fa fa-lock"></i> www.tu-negocio.com.uy</div>
         </div>
-        <div class="brow-body" style="background:#0a0f1a;">
+        <div class="brow-body" style="background:#0a0f1a;display:flex;flex-direction:column;">
+          <!-- Announcement bar -->
+          <div style="background:#0088CC;padding:5px 20px;display:flex;justify-content:space-between;flex-shrink:0">
+            <span style="font-size:10px;color:#fff;font-weight:600">📍 Atendemos Montevideo y todo el interior · Presupuesto gratis</span>
+            <span style="font-size:10px;color:rgba(255,255,255,.8)">L–V 9–18hs</span>
+          </div>
           <!-- Navbar -->
-          <div style="background:#0d1420;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);">
-            <span style="font-weight:700;color:#e2e8f0;font-size:14px;">Tu Negocio</span>
-            <div style="display:flex;gap:16px;font-size:11px;color:#94a3b8;">
-              <span>Inicio</span><span>Servicios</span><span>Nosotros</span><span>Contacto</span>
+          <div style="background:#0d1420;padding:0 20px;display:flex;align-items:center;gap:12px;height:50px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0">
+            <div style="font-family:'Raleway',sans-serif;font-weight:900;font-size:16px;color:#fff;white-space:nowrap;margin-right:10px">TU <span style="color:#0088CC">NEGOCIO</span></div>
+            <div style="display:flex;gap:16px;font-size:11px;color:#94a3b8;white-space:nowrap">
+              <span>Inicio</span><span>Servicios</span><span>Nosotros</span><span>Galería</span><span>Contacto</span>
             </div>
-            <div style="background:#0088CC;color:#fff;border-radius:6px;padding:5px 14px;font-size:11px;font-weight:600;">Contactanos</div>
+            <div style="margin-left:auto;display:flex;gap:8px">
+              <div style="background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.25);color:#25D366;border-radius:7px;padding:5px 12px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px"><i class="fa-brands fa-whatsapp" style="font-size:12px"></i> WhatsApp</div>
+              <div style="background:#0088CC;color:#fff;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:600">Contactanos</div>
+            </div>
           </div>
           <!-- Hero -->
-          <div style="background:linear-gradient(135deg,#0a0f1a 40%,#0d2040);padding:30px 28px;display:flex;justify-content:space-between;align-items:center;">
-            <div style="max-width:340px;">
-              <div style="font-size:10px;color:#0088CC;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;font-weight:600;">Bienvenidos</div>
-              <div style="font-size:22px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:10px;">La solución que<br>tu negocio necesita</div>
-              <div style="font-size:12px;color:rgba(255,255,255,.55);margin-bottom:16px;line-height:1.6;">Más de 10 años de experiencia ofreciendo el mejor servicio en Montevideo.</div>
-              <div style="display:flex;gap:8px;">
-                <div style="background:#0088CC;color:#fff;border-radius:6px;padding:8px 16px;font-size:11px;font-weight:600;">Ver servicios</div>
-                <div style="background:transparent;color:#e2e8f0;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 16px;font-size:11px;">WhatsApp</div>
+          <div style="background:linear-gradient(135deg,#0a0f1a 40%,#0d2040);padding:26px 28px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
+            <div style="max-width:340px">
+              <div style="font-size:10px;color:#0088CC;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;font-weight:600">Bienvenidos</div>
+              <div style="font-family:'Raleway',sans-serif;font-size:22px;font-weight:900;color:#fff;line-height:1.15;margin-bottom:10px">La solución que<br>tu negocio necesita</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:16px;line-height:1.6">Más de 10 años de experiencia ofreciendo el mejor servicio en Montevideo y el interior.</div>
+              <div style="display:flex;gap:8px">
+                <div style="background:#0088CC;color:#fff;border-radius:7px;padding:8px 16px;font-size:11px;font-weight:700">Ver servicios →</div>
+                <div style="background:transparent;color:#e2e8f0;border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:8px 16px;font-size:11px">Más info</div>
               </div>
             </div>
-            <div style="font-size:72px;opacity:.4;">🏢</div>
+            <div style="font-size:72px;opacity:.35">🏢</div>
           </div>
           <!-- Services -->
-          <div style="padding:14px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
-            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px;text-align:center;">
-              <div style="font-size:22px;margin-bottom:6px;">⭐</div>
-              <div style="font-size:11px;font-weight:600;color:#e2e8f0;margin-bottom:4px;">Servicio 1</div>
-              <div style="font-size:10px;color:#64748b;">Descripción breve del servicio principal</div>
+          <div style="padding:14px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:14px;text-align:center">
+              <div style="font-size:26px;margin-bottom:7px">⭐</div>
+              <div style="font-size:11px;font-weight:600;color:#e2e8f0;margin-bottom:5px">Servicio principal</div>
+              <div style="font-size:10px;color:#64748b;line-height:1.5">Descripción breve del servicio más importante de tu negocio</div>
             </div>
-            <div style="background:rgba(0,136,204,.06);border:1px solid rgba(0,136,204,.15);border-radius:8px;padding:12px;text-align:center;">
-              <div style="font-size:22px;margin-bottom:6px;">🎯</div>
-              <div style="font-size:11px;font-weight:600;color:#0088CC;margin-bottom:4px;">Servicio 2</div>
-              <div style="font-size:10px;color:#64748b;">Tu diferencial principal del negocio</div>
+            <div style="background:rgba(0,136,204,.07);border:1px solid rgba(0,136,204,.15);border-radius:10px;padding:14px;text-align:center">
+              <div style="font-size:26px;margin-bottom:7px">🎯</div>
+              <div style="font-size:11px;font-weight:600;color:#0088CC;margin-bottom:5px">Tu diferencial</div>
+              <div style="font-size:10px;color:#64748b;line-height:1.5">Lo que hace único a tu negocio frente a la competencia</div>
             </div>
-            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px;text-align:center;">
-              <div style="font-size:22px;margin-bottom:6px;">🚀</div>
-              <div style="font-size:11px;font-weight:600;color:#e2e8f0;margin-bottom:4px;">Servicio 3</div>
-              <div style="font-size:10px;color:#64748b;">Propuesta de valor adicional</div>
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:14px;text-align:center">
+              <div style="font-size:26px;margin-bottom:7px">🚀</div>
+              <div style="font-size:11px;font-weight:600;color:#e2e8f0;margin-bottom:5px">Propuesta de valor</div>
+              <div style="font-size:10px;color:#64748b;line-height:1.5">Beneficio adicional que reciben tus clientes al elegirte</div>
             </div>
+          </div>
+          <!-- Trust bar (below fold) -->
+          <div style="padding:12px 20px;display:flex;gap:10px;border-top:1px solid rgba(255,255,255,.05)">
+            <div style="flex:1;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border-radius:8px;padding:10px 14px">
+              <div style="font-size:20px">⭐</div>
+              <div><div style="font-size:11px;font-weight:600;color:#e2e8f0">+500 clientes</div><div style="font-size:9px;color:#64748b">en todo el país</div></div>
+            </div>
+            <div style="flex:1;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border-radius:8px;padding:10px 14px">
+              <div style="font-size:20px">✅</div>
+              <div><div style="font-size:11px;font-weight:600;color:#e2e8f0">10 años</div><div style="font-size:9px;color:#64748b">de trayectoria</div></div>
+            </div>
+            <div style="flex:1;display:flex;align-items:center;gap:10px;background:rgba(0,136,204,.05);border-radius:8px;padding:10px 14px;border:1px solid rgba(0,136,204,.1)">
+              <div style="font-size:20px">📞</div>
+              <div><div style="font-size:11px;font-weight:600;color:#0088CC">Respuesta rápida</div><div style="font-size:9px;color:#64748b">en menos de 2 horas</div></div>
+            </div>
+          </div>
+          <!-- WA CTA -->
+          <div style="margin:10px;background:linear-gradient(90deg,#005c1a,#003d12);border:1px solid rgba(37,211,102,.2);border-radius:8px;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#25D366;margin-bottom:2px">¿Listo para dar el paso?</div>
+              <div style="font-size:9px;color:rgba(255,255,255,.5)">Consultanos sin compromiso y recibí tu presupuesto gratis</div>
+            </div>
+            <div style="background:#25D366;color:#fff;border-radius:7px;padding:7px 14px;font-size:10px;font-weight:800;display:flex;align-items:center;gap:5px"><i class="fa-brands fa-whatsapp" style="font-size:13px"></i> Escribinos</div>
           </div>
         </div>
       </div>
@@ -225,9 +263,9 @@
   </section>
 
   <!-- S5: DEMO — Estilo claro y limpio -->
-  <section class="slide" id="s5">
-    <div class="mock-label">Estilo · Claro y confiable</div>
-    <div style="width:100%;max-width:820px;">
+  <section class="slide mock" id="s5">
+    <div class="mlabel">Estilo 2 · Limpio y confiable</div>
+    <div class="mwrap">
       <div class="browser">
         <div class="brow-bar">
           <span class="bdot" style="background:#FF5F57"></span>
@@ -235,38 +273,75 @@
           <span class="bdot" style="background:#28C840"></span>
           <div class="burl"><i class="fa fa-lock"></i> www.tu-negocio.com.uy</div>
         </div>
-        <div class="brow-body" style="background:#fff;">
+        <div class="brow-body" style="background:#f8fafc;display:flex;flex-direction:column;">
           <!-- Navbar -->
-          <div style="background:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.06);">
-            <span style="font-weight:700;color:#0f172a;font-size:14px;">Tu Negocio</span>
-            <div style="display:flex;gap:16px;font-size:11px;color:#475569;">
-              <span>Inicio</span><span>Servicios</span><span>Nosotros</span><span>Contacto</span>
+          <div style="background:#fff;padding:0 20px;display:flex;align-items:center;gap:12px;height:54px;box-shadow:0 1px 6px rgba(0,0,0,.08);flex-shrink:0">
+            <div style="font-family:'Raleway',sans-serif;font-weight:900;font-size:16px;color:#0f172a;white-space:nowrap">TU <span style="color:#0088CC">NEGOCIO</span></div>
+            <div style="display:flex;gap:14px;font-size:11px;color:#475569;margin-left:14px;white-space:nowrap">
+              <span style="color:#0088CC;font-weight:600;border-bottom:2px solid #0088CC;padding-bottom:2px">Inicio</span>
+              <span>Servicios</span><span>Nosotros</span><span>Galería</span><span>Contacto</span>
             </div>
-            <div style="background:#0088CC;color:#fff;border-radius:6px;padding:5px 14px;font-size:11px;font-weight:600;">Contactanos</div>
+            <div style="margin-left:auto;display:flex;gap:8px">
+              <div style="background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);color:#059669;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px"><i class="fa-brands fa-whatsapp" style="font-size:12px"></i> WhatsApp</div>
+              <div style="background:#0088CC;color:#fff;border-radius:7px;padding:6px 14px;font-size:11px;font-weight:600">Pedir turno</div>
+            </div>
           </div>
           <!-- Hero -->
-          <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);padding:28px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);padding:26px 28px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
             <div>
-              <div style="font-size:10px;color:#0088CC;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600;">Montevideo, Uruguay</div>
-              <div style="font-size:20px;font-weight:800;color:#0f172a;margin-bottom:8px;line-height:1.2;">La mejor opción<br>de la ciudad</div>
-              <div style="background:#0088CC;color:#fff;border-radius:6px;padding:7px 16px;font-size:11px;font-weight:600;display:inline-block;">Pedir turno →</div>
+              <div style="font-size:10px;color:#0088CC;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;font-weight:600">Montevideo · Uruguay</div>
+              <div style="font-family:'Raleway',sans-serif;font-size:22px;font-weight:900;color:#0f172a;margin-bottom:10px;line-height:1.15">La mejor opción<br>de la ciudad</div>
+              <div style="font-size:11px;color:#64748b;margin-bottom:16px;line-height:1.6">Más de 10 años brindando el mejor servicio.<br>Atendemos a todo el país.</div>
+              <div style="display:flex;gap:8px">
+                <div style="background:#0088CC;color:#fff;border-radius:7px;padding:8px 16px;font-size:11px;font-weight:700">Solicitar turno →</div>
+                <div style="background:rgba(0,136,204,.07);border:1px solid rgba(0,136,204,.2);color:#0088CC;border-radius:7px;padding:8px 14px;font-size:11px">Ver servicios</div>
+              </div>
             </div>
-            <div style="font-size:60px;opacity:.5;">🏪</div>
+            <div style="font-size:64px;opacity:.4">🏪</div>
           </div>
           <!-- Features -->
-          <div style="padding:14px 20px;display:flex;gap:12px;">
-            <div style="flex:1;display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border-radius:8px;padding:12px;">
-              <div style="width:32px;height:32px;background:#dbeafe;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✅</div>
-              <div><div style="font-size:11px;font-weight:600;color:#0f172a;margin-bottom:3px;">Garantía de calidad</div><div style="font-size:10px;color:#64748b;">Más de 10 años en el mercado</div></div>
+          <div style="padding:14px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;background:#fff;border-top:1px solid #e2e8f0">
+            <div style="display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border-radius:10px;padding:13px">
+              <div style="width:34px;height:34px;background:#dbeafe;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">✅</div>
+              <div><div style="font-size:11px;font-weight:700;color:#0f172a;margin-bottom:4px">Garantía de calidad</div><div style="font-size:10px;color:#64748b;line-height:1.4">Más de 10 años en el mercado</div></div>
             </div>
-            <div style="flex:1;display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border-radius:8px;padding:12px;">
-              <div style="width:32px;height:32px;background:#dcfce7;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">⚡</div>
-              <div><div style="font-size:11px;font-weight:600;color:#0f172a;margin-bottom:3px;">Respuesta rápida</div><div style="font-size:10px;color:#64748b;">Te contactamos en menos de 2hs</div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border-radius:10px;padding:13px">
+              <div style="width:34px;height:34px;background:#dcfce7;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">⚡</div>
+              <div><div style="font-size:11px;font-weight:700;color:#0f172a;margin-bottom:4px">Respuesta rápida</div><div style="font-size:10px;color:#64748b;line-height:1.4">Contactamos en menos de 2hs</div></div>
             </div>
-            <div style="flex:1;display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border-radius:8px;padding:12px;">
-              <div style="width:32px;height:32px;background:#dbeafe;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📍</div>
-              <div><div style="font-size:11px;font-weight:600;color:#0f172a;margin-bottom:3px;">A domicilio</div><div style="font-size:10px;color:#64748b;">Servicio en todo Montevideo</div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;background:#f8fafc;border-radius:10px;padding:13px">
+              <div style="width:34px;height:34px;background:#dbeafe;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">📍</div>
+              <div><div style="font-size:11px;font-weight:700;color:#0f172a;margin-bottom:4px">A domicilio</div><div style="font-size:10px;color:#64748b;line-height:1.4">Servicio en todo Montevideo</div></div>
             </div>
+          </div>
+          <!-- Testimonials (below fold) -->
+          <div style="padding:12px 20px;background:#f8fafc;border-top:1px solid #e2e8f0">
+            <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Lo que dicen nuestros clientes</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+              <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px">
+                <div style="font-size:11px;color:#f59e0b;margin-bottom:5px">★★★★★</div>
+                <div style="font-size:10px;color:#475569;line-height:1.5;margin-bottom:8px">"Excelente servicio, muy rápidos y profesionales."</div>
+                <div style="font-size:9px;font-weight:600;color:#0f172a">— María G.</div>
+              </div>
+              <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px">
+                <div style="font-size:11px;color:#f59e0b;margin-bottom:5px">★★★★★</div>
+                <div style="font-size:10px;color:#475569;line-height:1.5;margin-bottom:8px">"Los recomiendo 100%. Resolvieron todo rápido."</div>
+                <div style="font-size:9px;font-weight:600;color:#0f172a">— Carlos R.</div>
+              </div>
+              <div style="background:#fff;border:1px solid rgba(0,136,204,.2);border-radius:10px;padding:12px">
+                <div style="font-size:11px;color:#f59e0b;margin-bottom:5px">★★★★★</div>
+                <div style="font-size:10px;color:#475569;line-height:1.5;margin-bottom:8px">"Gran calidad y muy buena atención al cliente."</div>
+                <div style="font-size:9px;font-weight:600;color:#0f172a">— Ana P.</div>
+              </div>
+            </div>
+          </div>
+          <!-- WA CTA -->
+          <div style="margin:10px;background:#0088CC;border-radius:8px;padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:2px">¿Querés saber más?</div>
+              <div style="font-size:9px;color:rgba(255,255,255,.8)">Pedí tu turno o consultanos por WhatsApp ahora mismo</div>
+            </div>
+            <div style="background:#fff;color:#0088CC;border-radius:7px;padding:7px 14px;font-size:10px;font-weight:800;display:flex;align-items:center;gap:5px"><i class="fa-brands fa-whatsapp" style="font-size:13px;color:#25D366"></i> Contactar</div>
           </div>
         </div>
       </div>
@@ -274,9 +349,9 @@
   </section>
 
   <!-- S6: DEMO — Estilo vibrante -->
-  <section class="slide" id="s6">
-    <div class="mock-label">Estilo · Vibrante y cercano</div>
-    <div style="width:100%;max-width:820px;">
+  <section class="slide mock" id="s6">
+    <div class="mlabel">Estilo 3 · Vibrante y cercano</div>
+    <div class="mwrap">
       <div class="browser">
         <div class="brow-bar">
           <span class="bdot" style="background:#FF5F57"></span>
@@ -284,41 +359,64 @@
           <span class="bdot" style="background:#28C840"></span>
           <div class="burl"><i class="fa fa-lock"></i> www.tu-negocio.com.uy</div>
         </div>
-        <div class="brow-body" style="background:#f0f9ff;">
+        <div class="brow-body" style="background:#f0f9ff;display:flex;flex-direction:column;">
           <!-- Navbar -->
-          <div style="background:#0088CC;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-weight:800;color:#fff;font-size:15px;">Tu Negocio</span>
-            <div style="display:flex;gap:14px;font-size:11px;color:rgba(255,255,255,.8);">
-              <span>Inicio</span><span>Servicios</span><span>Galería</span><span>Contacto</span>
+          <div style="background:#0088CC;padding:0 20px;display:flex;align-items:center;height:50px;flex-shrink:0">
+            <div style="font-family:'Raleway',sans-serif;font-weight:900;font-size:16px;color:#fff;white-space:nowrap;margin-right:16px">TU <span style="color:#bfdbfe">NEGOCIO</span></div>
+            <div style="display:flex;gap:14px;font-size:11px;color:rgba(255,255,255,.85);white-space:nowrap">
+              <span style="border-bottom:2px solid rgba(255,255,255,.5);padding-bottom:2px">Inicio</span>
+              <span>Servicios</span><span>Galería</span><span>Contacto</span>
             </div>
-            <div style="background:#fff;color:#0088CC;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;">📞 Llamanos</div>
+            <div style="margin-left:auto;display:flex;gap:8px">
+              <div style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:5px"><i class="fa-brands fa-whatsapp" style="font-size:12px;color:#4ade80"></i> WhatsApp</div>
+              <div style="background:#fff;color:#0088CC;border-radius:20px;padding:5px 16px;font-size:11px;font-weight:700">📞 Llamanos</div>
+            </div>
           </div>
           <!-- Hero -->
-          <div style="background:linear-gradient(135deg,#0088CC,#005f8e);padding:28px;text-align:center;color:#fff;">
-            <div style="font-size:11px;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 14px;display:inline-block;margin-bottom:10px;letter-spacing:.06em;">⭐ Más de 500 clientes satisfechos</div>
-            <div style="font-size:22px;font-weight:800;margin-bottom:8px;line-height:1.2;">¡Somos los mejores<br>en lo nuestro!</div>
-            <div style="display:flex;justify-content:center;gap:10px;">
-              <div style="background:#10B981;color:#fff;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:700;">¡Consultá ahora!</div>
-              <div style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 18px;font-size:12px;">Ver precios</div>
+          <div style="background:linear-gradient(135deg,#0088CC,#005f8e);padding:26px 28px;text-align:center;color:#fff;flex-shrink:0">
+            <div style="font-size:11px;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 16px;display:inline-block;margin-bottom:10px;letter-spacing:.06em">⭐ Más de 500 clientes satisfechos en Uruguay</div>
+            <div style="font-family:'Raleway',sans-serif;font-size:22px;font-weight:900;margin-bottom:8px;line-height:1.15">Somos los mejores<br>en lo nuestro</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.75);margin-bottom:16px">Calidad, rapidez y atención personalizada en todo el país</div>
+            <div style="display:flex;justify-content:center;gap:10px">
+              <div style="background:#10B981;color:#fff;border-radius:8px;padding:8px 20px;font-size:12px;font-weight:700">¡Consultá ahora! →</div>
+              <div style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 18px;font-size:12px">Ver servicios</div>
             </div>
           </div>
-          <!-- Cards -->
-          <div style="padding:14px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
-            <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(0,136,204,.1);">
-              <div style="font-size:28px;margin-bottom:6px;">⭐</div>
-              <div style="font-size:12px;font-weight:700;color:#0f172a;margin-bottom:3px;">Calidad premium</div>
-              <div style="font-size:10px;color:#64748b;">Los mejores materiales</div>
+          <!-- Service cards -->
+          <div style="padding:14px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;background:#fff">
+            <div style="background:#f0f9ff;border-radius:12px;padding:15px;text-align:center;border:1px solid #bae6fd">
+              <div style="font-size:28px;margin-bottom:8px">⭐</div>
+              <div style="font-size:11px;font-weight:700;color:#0f172a;margin-bottom:5px">Calidad premium</div>
+              <div style="font-size:10px;color:#64748b;line-height:1.5">Los mejores materiales y procesos del mercado</div>
             </div>
-            <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;border:2px solid #0088CC;box-shadow:0 2px 12px rgba(0,136,204,.15);">
-              <div style="font-size:28px;margin-bottom:6px;">🎯</div>
-              <div style="font-size:12px;font-weight:700;color:#0088CC;margin-bottom:3px;">Oferta especial</div>
-              <div style="font-size:10px;color:#64748b;">Solo esta semana</div>
+            <div style="background:#fff;border-radius:12px;padding:15px;text-align:center;border:2px solid #0088CC;box-shadow:0 4px 14px rgba(0,136,204,.15)">
+              <div style="font-size:28px;margin-bottom:8px">🎯</div>
+              <div style="font-size:11px;font-weight:700;color:#0088CC;margin-bottom:5px">Nuestro diferencial</div>
+              <div style="font-size:10px;color:#64748b;line-height:1.5">Lo que nos hace únicos frente a la competencia</div>
             </div>
-            <div style="background:#fff;border-radius:10px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(0,136,204,.1);">
-              <div style="font-size:28px;margin-bottom:6px;">🚀</div>
-              <div style="font-size:12px;font-weight:700;color:#0f172a;margin-bottom:3px;">Envío rápido</div>
-              <div style="font-size:10px;color:#64748b;">En todo Montevideo</div>
+            <div style="background:#f0fdf4;border-radius:12px;padding:15px;text-align:center;border:1px solid #bbf7d0">
+              <div style="font-size:28px;margin-bottom:8px">🚀</div>
+              <div style="font-size:11px;font-weight:700;color:#0f172a;margin-bottom:5px">Respuesta rápida</div>
+              <div style="font-size:10px;color:#64748b;line-height:1.5">Atendemos en menos de 2 horas todos los días</div>
             </div>
+          </div>
+          <!-- Gallery row (below fold) -->
+          <div style="padding:12px 20px;background:#f8fafc;border-top:1px solid #e2e8f0">
+            <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Galería de trabajos</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+              <div style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-radius:8px;height:54px;display:flex;align-items:center;justify-content:center;font-size:22px">🏆</div>
+              <div style="background:linear-gradient(135deg,#dcfce7,#bbf7d0);border-radius:8px;height:54px;display:flex;align-items:center;justify-content:center;font-size:22px">🎨</div>
+              <div style="background:linear-gradient(135deg,#fce7f3,#fbcfe8);border-radius:8px;height:54px;display:flex;align-items:center;justify-content:center;font-size:22px">✨</div>
+              <div style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:8px;height:54px;display:flex;align-items:center;justify-content:center;font-size:22px">🌟</div>
+            </div>
+          </div>
+          <!-- WA CTA -->
+          <div style="margin:10px;background:linear-gradient(90deg,#059669,#047857);border-radius:8px;padding:12px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:2px">¡Consultá sin compromiso!</div>
+              <div style="font-size:9px;color:rgba(255,255,255,.8)">Te respondemos por WhatsApp en minutos</div>
+            </div>
+            <div style="background:#fff;color:#059669;border-radius:7px;padding:7px 14px;font-size:10px;font-weight:800;display:flex;align-items:center;gap:5px"><i class="fa-brands fa-whatsapp" style="font-size:13px"></i> Escribir ahora</div>
           </div>
         </div>
       </div>
@@ -380,6 +478,7 @@
     prog.style.width = ((cur + 1) / slides.length * 100) + '%';
     counter.textContent = (cur + 1) + ' / ' + slides.length;
     dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+    document.querySelectorAll('.brow-body').forEach(b => b.scrollTop = 0);
   }
 
   document.getElementById('next').onclick = () => { if (cur < slides.length - 1) goTo(cur + 1); };
@@ -390,6 +489,11 @@
   });
 
   buildDots();
+  document.querySelectorAll('.brow-body').forEach(el => {
+    el.addEventListener('wheel', e => e.stopPropagation(), { passive: true });
+    el.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+    el.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
+  });
 </script>
 </body>
 </html>
