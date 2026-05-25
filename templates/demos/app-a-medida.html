@@ -90,7 +90,14 @@
     .bdot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
     .burl { flex: 1; background: #1c2133; border: 1px solid rgba(255,255,255,.07); border-radius: 5px; padding: 3px 10px; font-size: 11px; font-family: monospace; color: var(--muted); }
     .burl i { font-size: 9px; color: var(--green); margin-right: 4px; }
-    .brow-body { height: 380px; overflow: hidden; }
+    .brow-body { height: 460px; overflow-y: auto; overflow-x: hidden; }
+    .brow-body::-webkit-scrollbar { width: 5px; }
+    .brow-body::-webkit-scrollbar-track { background: rgba(255,255,255,.04); }
+    .brow-body::-webkit-scrollbar-thumb { background: rgba(0,136,204,.4); border-radius: 3px; }
+    .brow-body::-webkit-scrollbar-thumb:hover { background: rgba(0,136,204,.65); }
+    .slide.mock { padding: 28px 40px 80px; }
+    .mwrap { width: 100%; max-width: 920px; }
+    .mlabel { font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 8px; letter-spacing: .1em; text-transform: uppercase; }
 
     /* S7 pricing */
     .price-card { background: var(--surface); border: 1px solid var(--blue-border); border-radius: 20px; padding: 38px 42px; max-width: 520px; width: 100%; text-align: center; position: relative; }
@@ -177,9 +184,9 @@
   </section>
 
   <!-- S4: DEMO — Panel Admin -->
-  <section class="slide" id="s4">
-    <div class="label">Demo · Panel de administración</div>
-    <div class="mock-wrap">
+  <section class="slide mock" id="s4">
+    <div class="mlabel">Demo · Panel de administración</div>
+    <div class="mwrap">
       <div class="browser">
         <div class="brow-bar">
           <span class="bdot" style="background:#FF5F57"></span>
@@ -187,48 +194,114 @@
           <span class="bdot" style="background:#28C840"></span>
           <div class="burl"><i class="fa fa-lock"></i> app.tu-sistema.com.uy/admin</div>
         </div>
-        <div class="brow-body" style="background:#0d1117; display:flex;">
-          <!-- Sidebar -->
-          <div style="width:200px;background:#0a0d14;border-right:1px solid rgba(255,255,255,.06);padding:16px 0;flex-shrink:0;">
-            <div style="padding:0 16px 16px;font-size:12px;font-weight:700;color:#0088CC;letter-spacing:.1em;text-transform:uppercase;">Mi Sistema</div>
-            <div style="padding:9px 16px;background:rgba(0,136,204,.1);border-right:2px solid #0088CC;font-size:12px;color:#e2e8f0;display:flex;align-items:center;gap:8px;"><i class="fa fa-gauge" style="color:#0088CC;font-size:11px"></i> Dashboard</div>
-            <div style="padding:9px 16px;font-size:12px;color:#64748b;display:flex;align-items:center;gap:8px;"><i class="fa fa-users" style="font-size:11px"></i> Clientes</div>
-            <div style="padding:9px 16px;font-size:12px;color:#64748b;display:flex;align-items:center;gap:8px;"><i class="fa fa-file-invoice" style="font-size:11px"></i> Pedidos</div>
-            <div style="padding:9px 16px;font-size:12px;color:#64748b;display:flex;align-items:center;gap:8px;"><i class="fa fa-chart-bar" style="font-size:11px"></i> Reportes</div>
-            <div style="padding:9px 16px;font-size:12px;color:#64748b;display:flex;align-items:center;gap:8px;"><i class="fa fa-gear" style="font-size:11px"></i> Configuración</div>
+        <div class="brow-body" style="background:#0d1117;display:flex;flex-direction:column;">
+          <!-- Topbar -->
+          <div style="background:#0a0d14;border-bottom:1px solid rgba(255,255,255,.06);padding:0 16px;height:42px;display:flex;align-items:center;gap:12px;flex-shrink:0">
+            <div style="font-family:'Raleway',sans-serif;font-weight:800;font-size:13px;color:#0088CC">Mi Sistema</div>
+            <div style="flex:1"></div>
+            <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:5px;padding:3px 9px;font-size:9px;color:#10B981;font-weight:600">🟢 Sistema activo</div>
+            <span style="font-size:11px;color:#64748b">Admin</span>
           </div>
-          <!-- Main -->
-          <div style="flex:1;padding:18px;overflow:hidden;">
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
-              <div style="background:#131722;border-radius:8px;padding:14px;border:1px solid rgba(255,255,255,.06);">
-                <div style="font-size:10px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em;">Ventas hoy</div>
-                <div style="font-size:22px;font-weight:700;color:#e2e8f0;">$84.200</div>
-                <div style="font-size:10px;color:#10B981;margin-top:3px;">↑ +12% vs ayer</div>
+          <!-- Layout -->
+          <div style="display:flex;flex:1">
+            <!-- Sidebar -->
+            <div style="width:170px;background:#0a0d14;border-right:1px solid rgba(255,255,255,.06);flex-shrink:0">
+              <div style="padding:8px 12px;font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.05)">Menú</div>
+              <div style="padding:9px 14px;background:rgba(0,136,204,.08);border-left:2px solid #0088CC;display:flex;align-items:center;gap:8px">
+                <i class="fa fa-gauge" style="color:#0088CC;font-size:10px;width:12px"></i>
+                <span style="font-size:11px;color:#e2e8f0">Dashboard</span>
               </div>
-              <div style="background:#131722;border-radius:8px;padding:14px;border:1px solid rgba(255,255,255,.06);">
-                <div style="font-size:10px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em;">Pedidos activos</div>
-                <div style="font-size:22px;font-weight:700;color:#e2e8f0;">47</div>
-                <div style="font-size:10px;color:#0088CC;margin-top:3px;">8 pendientes hoy</div>
+              <div style="padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:8px">
+                <i class="fa fa-users" style="color:#64748b;font-size:10px;width:12px"></i>
+                <span style="font-size:11px;color:#64748b">Clientes</span>
               </div>
-              <div style="background:#131722;border-radius:8px;padding:14px;border:1px solid rgba(255,255,255,.06);">
-                <div style="font-size:10px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em;">Clientes</div>
-                <div style="font-size:22px;font-weight:700;color:#e2e8f0;">1.204</div>
-                <div style="font-size:10px;color:#10B981;margin-top:3px;">↑ +5 esta semana</div>
+              <div style="padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:8px">
+                <i class="fa fa-file-invoice" style="color:#64748b;font-size:10px;width:12px"></i>
+                <span style="font-size:11px;color:#64748b">Pedidos</span>
+              </div>
+              <div style="padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:8px">
+                <i class="fa fa-chart-bar" style="color:#64748b;font-size:10px;width:12px"></i>
+                <span style="font-size:11px;color:#64748b">Reportes</span>
+              </div>
+              <div style="padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;justify-content:space-between">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <i class="fa fa-bell" style="color:#64748b;font-size:10px;width:12px"></i>
+                  <span style="font-size:11px;color:#64748b">Notificaciones</span>
+                </div>
+                <span style="background:rgba(16,185,129,.15);color:#10B981;border-radius:4px;padding:1px 5px;font-size:9px">5</span>
+              </div>
+              <div style="padding:9px 14px;display:flex;align-items:center;gap:8px">
+                <i class="fa fa-gear" style="color:#64748b;font-size:10px;width:12px"></i>
+                <span style="font-size:11px;color:#64748b">Configuración</span>
               </div>
             </div>
-            <div style="background:#131722;border-radius:8px;border:1px solid rgba(255,255,255,.06);overflow:hidden;">
-              <div style="padding:10px 14px;font-size:11px;font-weight:600;color:#94a3b8;border-bottom:1px solid rgba(255,255,255,.05);">Últimos pedidos</div>
-              <div style="padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.04);">
-                <span style="font-size:11px;color:#e2e8f0;">#2041 — Juan García</span>
-                <span style="font-size:10px;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.2);border-radius:4px;padding:2px 8px;">Completado</span>
+            <!-- Main -->
+            <div style="flex:1;padding:12px;display:flex;flex-direction:column;gap:10px">
+              <!-- 4 stat cards -->
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+                <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)">
+                  <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Ventas hoy</div>
+                  <div style="font-size:20px;font-weight:700;color:#e2e8f0">$84.200</div>
+                  <div style="font-size:9px;color:#10B981">↑ +12% vs ayer</div>
+                </div>
+                <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)">
+                  <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Pedidos activos</div>
+                  <div style="font-size:20px;font-weight:700;color:#0088CC">47</div>
+                  <div style="font-size:9px;color:#64748b">8 pendientes</div>
+                </div>
+                <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)">
+                  <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Clientes</div>
+                  <div style="font-size:20px;font-weight:700;color:#e2e8f0">1.204</div>
+                  <div style="font-size:9px;color:#10B981">↑ +5 esta semana</div>
+                </div>
+                <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)">
+                  <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Satisfacción</div>
+                  <div style="font-size:20px;font-weight:700;color:#10B981">4.8 ⭐</div>
+                  <div style="font-size:9px;color:#64748b">94 reseñas</div>
+                </div>
               </div>
-              <div style="padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.04);">
-                <span style="font-size:11px;color:#e2e8f0;">#2040 — María López</span>
-                <span style="font-size:10px;background:rgba(0,136,204,.12);color:#0088CC;border:1px solid rgba(0,136,204,.2);border-radius:4px;padding:2px 8px;">En proceso</span>
+              <!-- Orders table -->
+              <div style="background:#131722;border-radius:8px;border:1px solid rgba(255,255,255,.06);overflow:hidden">
+                <div style="padding:9px 14px;font-size:10px;font-weight:600;color:#94a3b8;border-bottom:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between">
+                  <span>Últimos pedidos</span>
+                  <span style="color:#0088CC;font-size:9px">Ver todos →</span>
+                </div>
+                <div style="padding:7px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <div style="display:flex;align-items:center;gap:10px"><span style="font-size:9px;color:#64748b">#2041</span><span style="font-size:11px;color:#e2e8f0">Juan García</span></div>
+                  <span style="font-size:10px;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.2);border-radius:4px;padding:2px 8px">Completado</span>
+                </div>
+                <div style="padding:7px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <div style="display:flex;align-items:center;gap:10px"><span style="font-size:9px;color:#64748b">#2040</span><span style="font-size:11px;color:#e2e8f0">María López</span></div>
+                  <span style="font-size:10px;background:rgba(0,136,204,.12);color:#0088CC;border:1px solid rgba(0,136,204,.2);border-radius:4px;padding:2px 8px">En proceso</span>
+                </div>
+                <div style="padding:7px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <div style="display:flex;align-items:center;gap:10px"><span style="font-size:9px;color:#64748b">#2039</span><span style="font-size:11px;color:#e2e8f0">Carlos Pérez</span></div>
+                  <span style="font-size:10px;background:rgba(100,116,139,.12);color:#94a3b8;border:1px solid rgba(100,116,139,.2);border-radius:4px;padding:2px 8px">Pendiente</span>
+                </div>
+                <div style="padding:7px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <div style="display:flex;align-items:center;gap:10px"><span style="font-size:9px;color:#64748b">#2038</span><span style="font-size:11px;color:#e2e8f0">Ana Martínez</span></div>
+                  <span style="font-size:10px;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.2);border-radius:4px;padding:2px 8px">Completado</span>
+                </div>
+                <div style="padding:7px 14px;display:flex;justify-content:space-between;align-items:center">
+                  <div style="display:flex;align-items:center;gap:10px"><span style="font-size:9px;color:#64748b">#2037</span><span style="font-size:11px;color:#e2e8f0">Roberto Suárez</span></div>
+                  <span style="font-size:10px;background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2);border-radius:4px;padding:2px 8px">Enviado</span>
+                </div>
               </div>
-              <div style="padding:8px 14px;display:flex;justify-content:space-between;align-items:center;">
-                <span style="font-size:11px;color:#e2e8f0;">#2039 — Carlos Pérez</span>
-                <span style="font-size:10px;background:rgba(100,116,139,.12);color:#94a3b8;border:1px solid rgba(100,116,139,.2);border-radius:4px;padding:2px 8px;">Pendiente</span>
+              <!-- Activity feed (below fold) -->
+              <div style="background:#131722;border-radius:8px;border:1px solid rgba(255,255,255,.06);overflow:hidden">
+                <div style="padding:9px 14px;font-size:10px;font-weight:600;color:#94a3b8;border-bottom:1px solid rgba(255,255,255,.05)">Actividad reciente</div>
+                <div style="padding:8px 14px;display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <div style="width:7px;height:7px;border-radius:50%;background:#10B981;margin-top:4px;flex-shrink:0"></div>
+                  <div><div style="font-size:10px;color:#e2e8f0">Pedido #2041 completado</div><div style="font-size:9px;color:#64748b">hace 5 min</div></div>
+                </div>
+                <div style="padding:8px 14px;display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <div style="width:7px;height:7px;border-radius:50%;background:#0088CC;margin-top:4px;flex-shrink:0"></div>
+                  <div><div style="font-size:10px;color:#e2e8f0">Nuevo cliente: Ana Martínez</div><div style="font-size:9px;color:#64748b">hace 18 min</div></div>
+                </div>
+                <div style="padding:8px 14px;display:flex;gap:10px;align-items:flex-start">
+                  <div style="width:7px;height:7px;border-radius:50%;background:#fbbf24;margin-top:4px;flex-shrink:0"></div>
+                  <div><div style="font-size:10px;color:#e2e8f0">Alerta: stock bajo en Producto B</div><div style="font-size:9px;color:#64748b">hace 42 min</div></div>
+                </div>
               </div>
             </div>
           </div>
@@ -238,69 +311,149 @@
   </section>
 
   <!-- S5: DEMO — App Mobile -->
-  <section class="slide" id="s5">
-    <div class="label">Demo · App mobile</div>
-    <div class="mock-wrap">
+  <section class="slide mock" id="s5">
+    <div class="mlabel">Demo · App mobile</div>
+    <div class="mwrap">
       <div class="browser">
         <div class="brow-bar">
           <span class="bdot" style="background:#FF5F57"></span>
           <span class="bdot" style="background:#FEBC2E"></span>
           <span class="bdot" style="background:#28C840"></span>
-          <div class="burl"><i class="fa fa-lock"></i> app.tu-sistema.com.uy/mobile</div>
+          <div class="burl"><i class="fa fa-lock"></i> app.tu-sistema.com.uy</div>
         </div>
-        <div class="brow-body" style="background:#0b0e17;display:flex;align-items:center;justify-content:center;gap:30px;padding:20px;">
-          <!-- Phone mockup 1 -->
-          <div style="width:160px;background:#131722;border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,.08);box-shadow:0 8px 30px rgba(0,0,0,.5);">
-            <div style="background:#0088CC;padding:14px 12px 10px;text-align:center;">
-              <div style="font-size:10px;color:rgba(255,255,255,.7);margin-bottom:4px;">Buenos días</div>
-              <div style="font-size:14px;font-weight:700;color:#fff;">Juan 👋</div>
+        <div class="brow-body" style="background:#0b0e17;display:flex;flex-direction:column;">
+          <!-- Announcement bar -->
+          <div style="background:linear-gradient(90deg,rgba(0,136,204,.15),rgba(16,185,129,.1));border-bottom:1px solid rgba(0,136,204,.2);padding:5px 16px;font-size:9px;color:#33aadd;text-align:center;flex-shrink:0">
+            📱 Disponible en iOS y Android · Funciona 100% offline · Datos en tiempo real
+          </div>
+          <!-- Phone frames row -->
+          <div style="display:flex;align-items:flex-start;justify-content:center;gap:24px;padding:18px 16px 0">
+            <!-- Phone 1: Dashboard -->
+            <div style="flex-shrink:0">
+              <div style="font-size:9px;color:#64748b;text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Dashboard</div>
+              <div style="width:155px;background:#131722;border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,.1);box-shadow:0 12px 40px rgba(0,0,0,.6)">
+                <div style="background:linear-gradient(135deg,#005f8e,#0088CC);padding:12px 12px 10px;text-align:center">
+                  <div style="font-size:9px;color:rgba(255,255,255,.7);margin-bottom:3px">Buenos días</div>
+                  <div style="font-size:13px;font-weight:700;color:#fff">Juan 👋</div>
+                </div>
+                <div style="padding:8px 9px">
+                  <div style="background:#1c2133;border-radius:7px;padding:9px;margin-bottom:7px">
+                    <div style="font-size:8px;color:#64748b;margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em">Ventas hoy</div>
+                    <div style="font-size:17px;font-weight:700;color:#0088CC">$84.200</div>
+                    <div style="font-size:8px;color:#10B981">↑ Meta: 87% alcanzada</div>
+                  </div>
+                  <div style="font-size:8px;font-weight:600;color:#64748b;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">Tareas de hoy</div>
+                  <div style="background:#1c2133;border-radius:5px;padding:7px;margin-bottom:4px;display:flex;gap:6px;align-items:center">
+                    <div style="width:5px;height:5px;border-radius:50%;background:#0088CC;flex-shrink:0"></div>
+                    <div style="font-size:8px;color:#e2e8f0">Entregar pedido #2041</div>
+                  </div>
+                  <div style="background:#1c2133;border-radius:5px;padding:7px;margin-bottom:4px;display:flex;gap:6px;align-items:center">
+                    <div style="width:5px;height:5px;border-radius:50%;background:#10B981;flex-shrink:0"></div>
+                    <div style="font-size:8px;color:#e2e8f0">Llamar a María López</div>
+                  </div>
+                  <div style="background:#1c2133;border-radius:5px;padding:7px;display:flex;gap:6px;align-items:center">
+                    <div style="width:5px;height:5px;border-radius:50%;background:#fbbf24;flex-shrink:0"></div>
+                    <div style="font-size:8px;color:#64748b;text-decoration:line-through">Enviar factura #2038</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div style="padding:10px 10px 6px;">
-              <div style="background:#1c2133;border-radius:8px;padding:10px;margin-bottom:8px;">
-                <div style="font-size:9px;color:#64748b;margin-bottom:3px;">HOY</div>
-                <div style="font-size:18px;font-weight:700;color:#0088CC;">$84.200</div>
-                <div style="font-size:9px;color:#10B981;">↑ Meta: 87%</div>
+            <!-- Phone 2: Pedidos -->
+            <div style="flex-shrink:0">
+              <div style="font-size:9px;color:#64748b;text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Pedidos</div>
+              <div style="width:155px;background:#131722;border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,.1);box-shadow:0 12px 40px rgba(0,0,0,.6)">
+                <div style="background:#0a0d14;padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.07)">
+                  <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div style="font-size:12px;font-weight:600;color:#e2e8f0">Pedidos</div>
+                    <span style="font-size:8px;background:rgba(16,185,129,.15);color:#10B981;border-radius:3px;padding:1px 5px">47 activos</span>
+                  </div>
+                </div>
+                <div style="padding:7px">
+                  <div style="background:#1c2133;border-radius:7px;padding:8px;margin-bottom:5px">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                      <span style="font-size:9px;color:#e2e8f0;font-weight:600">#2041</span>
+                      <span style="font-size:8px;color:#10B981;background:rgba(16,185,129,.1);border-radius:3px;padding:1px 5px">Listo</span>
+                    </div>
+                    <div style="font-size:8px;color:#64748b">Juan García</div>
+                  </div>
+                  <div style="background:#1c2133;border-radius:7px;padding:8px;margin-bottom:5px">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                      <span style="font-size:9px;color:#e2e8f0;font-weight:600">#2040</span>
+                      <span style="font-size:8px;color:#0088CC;background:rgba(0,136,204,.1);border-radius:3px;padding:1px 5px">En ruta</span>
+                    </div>
+                    <div style="font-size:8px;color:#64748b">María López</div>
+                  </div>
+                  <div style="background:#1c2133;border-radius:7px;padding:8px;margin-bottom:5px">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                      <span style="font-size:9px;color:#e2e8f0;font-weight:600">#2039</span>
+                      <span style="font-size:8px;color:#94a3b8;background:rgba(100,116,139,.1);border-radius:3px;padding:1px 5px">Pendiente</span>
+                    </div>
+                    <div style="font-size:8px;color:#64748b">Carlos Pérez</div>
+                  </div>
+                  <div style="background:#1c2133;border-radius:7px;padding:8px">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                      <span style="font-size:9px;color:#e2e8f0;font-weight:600">#2038</span>
+                      <span style="font-size:8px;color:#fbbf24;background:rgba(251,191,36,.1);border-radius:3px;padding:1px 5px">Enviado</span>
+                    </div>
+                    <div style="font-size:8px;color:#64748b">Ana Martínez</div>
+                  </div>
+                </div>
               </div>
-              <div style="font-size:9px;font-weight:600;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Próximas tareas</div>
-              <div style="background:#1c2133;border-radius:6px;padding:8px;margin-bottom:5px;display:flex;gap:7px;align-items:center;">
-                <div style="width:6px;height:6px;border-radius:50%;background:#0088CC;flex-shrink:0;"></div>
-                <div style="font-size:9px;color:#e2e8f0;">Entregar pedido #2041</div>
-              </div>
-              <div style="background:#1c2133;border-radius:6px;padding:8px;display:flex;gap:7px;align-items:center;">
-                <div style="width:6px;height:6px;border-radius:50%;background:#10B981;flex-shrink:0;"></div>
-                <div style="font-size:9px;color:#e2e8f0;">Llamar a María López</div>
+            </div>
+            <!-- Phone 3: Notificaciones -->
+            <div style="flex-shrink:0">
+              <div style="font-size:9px;color:#64748b;text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">Alertas</div>
+              <div style="width:155px;background:#131722;border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,.1);box-shadow:0 12px 40px rgba(0,0,0,.6)">
+                <div style="background:#0a0d14;padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center">
+                  <div style="font-size:12px;font-weight:600;color:#e2e8f0">Notificaciones</div>
+                  <span style="font-size:8px;background:rgba(0,136,204,.15);color:#0088CC;border-radius:3px;padding:1px 5px">5 nuevas</span>
+                </div>
+                <div style="padding:7px;display:flex;flex-direction:column;gap:4px">
+                  <div style="background:#1c2133;border-radius:7px;padding:7px;border-left:2px solid #10B981">
+                    <div style="font-size:9px;color:#e2e8f0;font-weight:600;margin-bottom:2px">Pedido completado</div>
+                    <div style="font-size:8px;color:#64748b">#2041 — Juan García</div>
+                    <div style="font-size:7px;color:#64748b;margin-top:2px">hace 5 min</div>
+                  </div>
+                  <div style="background:#1c2133;border-radius:7px;padding:7px;border-left:2px solid #0088CC">
+                    <div style="font-size:9px;color:#e2e8f0;font-weight:600;margin-bottom:2px">Nuevo cliente</div>
+                    <div style="font-size:8px;color:#64748b">Ana Martínez registrada</div>
+                    <div style="font-size:7px;color:#64748b;margin-top:2px">hace 18 min</div>
+                  </div>
+                  <div style="background:#1c2133;border-radius:7px;padding:7px;border-left:2px solid #fbbf24">
+                    <div style="font-size:9px;color:#e2e8f0;font-weight:600;margin-bottom:2px">Stock bajo</div>
+                    <div style="font-size:8px;color:#64748b">Producto B: 3 unidades</div>
+                    <div style="font-size:7px;color:#64748b;margin-top:2px">hace 42 min</div>
+                  </div>
+                  <div style="background:#1c2133;border-radius:7px;padding:7px;border-left:2px solid #0088CC">
+                    <div style="font-size:9px;color:#e2e8f0;font-weight:600;margin-bottom:2px">Reseña nueva ⭐⭐⭐⭐⭐</div>
+                    <div style="font-size:8px;color:#64748b">Carlos Pérez dejó 5 estrellas</div>
+                    <div style="font-size:7px;color:#64748b;margin-top:2px">hace 1hs</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <!-- Phone mockup 2 -->
-          <div style="width:160px;background:#131722;border-radius:20px;overflow:hidden;border:2px solid rgba(255,255,255,.08);box-shadow:0 8px 30px rgba(0,0,0,.5);">
-            <div style="background:#0a0d14;padding:12px;border-bottom:1px solid rgba(255,255,255,.06);">
-              <div style="font-size:13px;font-weight:600;color:#e2e8f0;">Pedidos</div>
-              <div style="font-size:9px;color:#64748b;">47 activos · 8 hoy</div>
+          <!-- Feature strip (below fold) -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px">
+            <div style="background:#131722;border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,.06);text-align:center">
+              <i class="fa fa-mobile-screen" style="color:#0088CC;font-size:16px;margin-bottom:5px;display:block"></i>
+              <div style="font-size:9px;font-weight:600;color:#e2e8f0;margin-bottom:2px">iOS y Android</div>
+              <div style="font-size:8px;color:#64748b">Nativa + web</div>
             </div>
-            <div style="padding:8px;">
-              <div style="background:#1c2133;border-radius:8px;padding:9px;margin-bottom:6px;">
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:10px;color:#e2e8f0;font-weight:600;">#2041</span><span style="font-size:9px;color:#10B981;background:rgba(16,185,129,.1);border-radius:3px;padding:1px 6px;">Listo</span></div>
-                <div style="font-size:9px;color:#64748b;">Juan García · $4.800</div>
-              </div>
-              <div style="background:#1c2133;border-radius:8px;padding:9px;margin-bottom:6px;">
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:10px;color:#e2e8f0;font-weight:600;">#2040</span><span style="font-size:9px;color:#0088CC;background:rgba(0,136,204,.1);border-radius:3px;padding:1px 6px;">En ruta</span></div>
-                <div style="font-size:9px;color:#64748b;">María López · $2.200</div>
-              </div>
-              <div style="background:#1c2133;border-radius:8px;padding:9px;">
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:10px;color:#e2e8f0;font-weight:600;">#2039</span><span style="font-size:9px;color:#94a3b8;background:rgba(100,116,139,.1);border-radius:3px;padding:1px 6px;">Pendiente</span></div>
-                <div style="font-size:9px;color:#64748b;">Carlos Pérez · $6.500</div>
-              </div>
+            <div style="background:#131722;border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,.06);text-align:center">
+              <i class="fa fa-wifi" style="color:#10B981;font-size:16px;margin-bottom:5px;display:block"></i>
+              <div style="font-size:9px;font-weight:600;color:#e2e8f0;margin-bottom:2px">Funciona offline</div>
+              <div style="font-size:8px;color:#64748b">Sin internet</div>
             </div>
-          </div>
-          <!-- Info -->
-          <div style="max-width:200px;">
-            <div style="font-size:22px;font-weight:800;color:#e2e8f0;margin-bottom:10px;font-family:'Raleway',sans-serif;">Tu negocio<br>en el bolsillo</div>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(226,232,240,.7);"><i class="fa fa-check" style="color:#10B981;font-size:10px;"></i> iOS y Android</div>
-              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(226,232,240,.7);"><i class="fa fa-check" style="color:#10B981;font-size:10px;"></i> Notificaciones en tiempo real</div>
-              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(226,232,240,.7);"><i class="fa fa-check" style="color:#10B981;font-size:10px;"></i> Funciona offline</div>
-              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(226,232,240,.7);"><i class="fa fa-check" style="color:#10B981;font-size:10px;"></i> Datos sincronizados</div>
+            <div style="background:#131722;border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,.06);text-align:center">
+              <i class="fa fa-bell" style="color:#fbbf24;font-size:16px;margin-bottom:5px;display:block"></i>
+              <div style="font-size:9px;font-weight:600;color:#e2e8f0;margin-bottom:2px">Push en tiempo real</div>
+              <div style="font-size:8px;color:#64748b">Al instante</div>
+            </div>
+            <div style="background:#131722;border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,.06);text-align:center">
+              <i class="fa fa-rotate" style="color:#0088CC;font-size:16px;margin-bottom:5px;display:block"></i>
+              <div style="font-size:9px;font-weight:600;color:#e2e8f0;margin-bottom:2px">Sincronizado</div>
+              <div style="font-size:8px;color:#64748b">Todos los usuarios</div>
             </div>
           </div>
         </div>
@@ -309,9 +462,9 @@
   </section>
 
   <!-- S6: DEMO — Reportes -->
-  <section class="slide" id="s6">
-    <div class="label">Demo · Reportes y análisis</div>
-    <div class="mock-wrap">
+  <section class="slide mock" id="s6">
+    <div class="mlabel">Demo · Reportes y análisis</div>
+    <div class="mwrap">
       <div class="browser">
         <div class="brow-bar">
           <span class="bdot" style="background:#FF5F57"></span>
@@ -319,40 +472,117 @@
           <span class="bdot" style="background:#28C840"></span>
           <div class="burl"><i class="fa fa-lock"></i> app.tu-sistema.com.uy/reportes</div>
         </div>
-        <div class="brow-body" style="background:#0d1117;padding:16px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-            <div style="font-size:14px;font-weight:600;color:#e2e8f0;">Reportes — Mayo 2026</div>
-            <div style="display:flex;gap:8px;">
-              <span style="font-size:11px;background:rgba(0,136,204,.12);color:#0088CC;border:1px solid rgba(0,136,204,.25);border-radius:5px;padding:4px 10px;">Exportar PDF</span>
-              <span style="font-size:11px;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.25);border-radius:5px;padding:4px 10px;">Compartir</span>
+        <div class="brow-body" style="background:#0d1117;display:flex;flex-direction:column;">
+          <!-- Topbar -->
+          <div style="background:#0a0d14;border-bottom:1px solid rgba(255,255,255,.06);padding:0 16px;height:42px;display:flex;align-items:center;gap:12px;flex-shrink:0">
+            <div style="font-family:'Raleway',sans-serif;font-weight:800;font-size:13px;color:#0088CC">Mi Sistema</div>
+            <div style="font-size:10px;color:#64748b;padding:4px 10px;background:rgba(255,255,255,.04);border-radius:5px;border:1px solid rgba(255,255,255,.06)">Reportes</div>
+            <div style="flex:1"></div>
+            <div style="display:flex;gap:7px">
+              <span style="font-size:9px;background:rgba(0,136,204,.12);color:#0088CC;border:1px solid rgba(0,136,204,.25);border-radius:5px;padding:3px 9px">Exportar PDF</span>
+              <span style="font-size:9px;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.25);border-radius:5px;padding:3px 9px">Compartir</span>
             </div>
           </div>
-          <!-- Chart area -->
-          <div style="background:#131722;border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,255,255,.06);">
-            <div style="font-size:11px;color:#64748b;margin-bottom:10px;">Ventas por semana (UYU)</div>
-            <div style="display:flex;align-items:flex-end;gap:8px;height:60px;">
-              <div style="flex:1;background:rgba(0,136,204,.25);border-radius:3px 3px 0 0;height:55%;position:relative;"><div style="position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:8px;color:#64748b;white-space:nowrap;">S1</div></div>
-              <div style="flex:1;background:rgba(0,136,204,.35);border-radius:3px 3px 0 0;height:72%"></div>
-              <div style="flex:1;background:rgba(0,136,204,.45);border-radius:3px 3px 0 0;height:65%"></div>
-              <div style="flex:1;background:rgba(0,136,204,.55);border-radius:3px 3px 0 0;height:80%"></div>
-              <div style="flex:1;background:#0088CC;border-radius:3px 3px 0 0;height:100%;position:relative;"><div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8px;color:#0088CC;white-space:nowrap;">S5</div></div>
+          <!-- Content -->
+          <div style="padding:12px;display:flex;flex-direction:column;gap:10px">
+            <!-- Period + summary cards -->
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:11px;font-weight:600;color:#e2e8f0">Resumen — Mayo 2026</div>
+              <div style="font-size:9px;color:#64748b">Actualizado hace 3 min</div>
             </div>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
-            <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06);">
-              <div style="font-size:9px;color:#64748b;margin-bottom:3px;">Mejor producto</div>
-              <div style="font-size:13px;font-weight:600;color:#0088CC;">Producto A</div>
-              <div style="font-size:10px;color:#10B981;">↑ 34% vs mes anterior</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+              <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)">
+                <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Ventas del mes</div>
+                <div style="font-size:20px;font-weight:700;color:#e2e8f0">$1.24M</div>
+                <div style="font-size:9px;color:#10B981">↑ +18% vs abril</div>
+              </div>
+              <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)">
+                <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Pedidos</div>
+                <div style="font-size:20px;font-weight:700;color:#0088CC">342</div>
+                <div style="font-size:9px;color:#64748b">+47 vs abril</div>
+              </div>
+              <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)">
+                <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Ticket promedio</div>
+                <div style="font-size:20px;font-weight:700;color:#e2e8f0">$3.840</div>
+                <div style="font-size:9px;color:#10B981">↑ +8%</div>
+              </div>
+              <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06)">
+                <div style="font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Clientes nuevos</div>
+                <div style="font-size:20px;font-weight:700;color:#10B981">94</div>
+                <div style="font-size:9px;color:#64748b">+22 vs mes ant.</div>
+              </div>
             </div>
-            <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06);">
-              <div style="font-size:9px;color:#64748b;margin-bottom:3px;">Ticket promedio</div>
-              <div style="font-size:13px;font-weight:600;color:#e2e8f0;">$3.840</div>
-              <div style="font-size:10px;color:#10B981;">↑ +8% vs mes anterior</div>
+            <!-- Chart -->
+            <div style="background:#131722;border-radius:8px;padding:12px 14px;border:1px solid rgba(255,255,255,.06)">
+              <div style="font-size:10px;color:#64748b;margin-bottom:10px;display:flex;justify-content:space-between">
+                <span>Ventas por semana (mayo)</span>
+                <span style="color:#0088CC">Ver detalle →</span>
+              </div>
+              <div style="display:flex;align-items:flex-end;gap:10px;height:64px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+                  <span style="font-size:8px;color:#64748b">$210k</span>
+                  <div style="width:100%;background:rgba(0,136,204,.25);border-radius:3px 3px 0 0;height:55%"></div>
+                  <span style="font-size:8px;color:#64748b">S1</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+                  <span style="font-size:8px;color:#64748b">$278k</span>
+                  <div style="width:100%;background:rgba(0,136,204,.38);border-radius:3px 3px 0 0;height:72%"></div>
+                  <span style="font-size:8px;color:#64748b">S2</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+                  <span style="font-size:8px;color:#64748b">$252k</span>
+                  <div style="width:100%;background:rgba(0,136,204,.48);border-radius:3px 3px 0 0;height:65%"></div>
+                  <span style="font-size:8px;color:#64748b">S3</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+                  <span style="font-size:8px;color:#64748b">$310k</span>
+                  <div style="width:100%;background:rgba(0,136,204,.62);border-radius:3px 3px 0 0;height:80%"></div>
+                  <span style="font-size:8px;color:#64748b">S4</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+                  <span style="font-size:8px;color:#0088CC;font-weight:600">$386k</span>
+                  <div style="width:100%;background:#0088CC;border-radius:3px 3px 0 0;height:100%"></div>
+                  <span style="font-size:8px;color:#0088CC;font-weight:600">S5 ↑</span>
+                </div>
+              </div>
             </div>
-            <div style="background:#131722;border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06);">
-              <div style="font-size:9px;color:#64748b;margin-bottom:3px;">Clientes nuevos</div>
-              <div style="font-size:13px;font-weight:600;color:#e2e8f0;">94</div>
-              <div style="font-size:10px;color:#0088CC;">+22 vs mes anterior</div>
+            <!-- Two col: top products + top clients (below fold) -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="background:#131722;border-radius:8px;border:1px solid rgba(255,255,255,.06);overflow:hidden">
+                <div style="padding:9px 12px;font-size:10px;font-weight:600;color:#94a3b8;border-bottom:1px solid rgba(255,255,255,.05)">Top productos</div>
+                <div style="padding:7px 12px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <span style="font-size:10px;color:#e2e8f0">Producto A</span>
+                  <span style="font-size:10px;color:#10B981">↑ 34%</span>
+                </div>
+                <div style="padding:7px 12px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <span style="font-size:10px;color:#e2e8f0">Producto C</span>
+                  <span style="font-size:10px;color:#10B981">↑ 21%</span>
+                </div>
+                <div style="padding:7px 12px;display:flex;justify-content:space-between">
+                  <span style="font-size:10px;color:#e2e8f0">Producto D</span>
+                  <span style="font-size:10px;color:#64748b">— 5%</span>
+                </div>
+              </div>
+              <div style="background:#131722;border-radius:8px;border:1px solid rgba(255,255,255,.06);overflow:hidden">
+                <div style="padding:9px 12px;font-size:10px;font-weight:600;color:#94a3b8;border-bottom:1px solid rgba(255,255,255,.05)">Mejores clientes</div>
+                <div style="padding:7px 12px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <span style="font-size:10px;color:#e2e8f0">Juan García</span>
+                  <span style="font-size:10px;color:#0088CC">18 pedidos</span>
+                </div>
+                <div style="padding:7px 12px;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04)">
+                  <span style="font-size:10px;color:#e2e8f0">María López</span>
+                  <span style="font-size:10px;color:#0088CC">14 pedidos</span>
+                </div>
+                <div style="padding:7px 12px;display:flex;justify-content:space-between">
+                  <span style="font-size:10px;color:#e2e8f0">Carlos Pérez</span>
+                  <span style="font-size:10px;color:#0088CC">11 pedidos</span>
+                </div>
+              </div>
+            </div>
+            <!-- WA CTA -->
+            <div style="background:linear-gradient(135deg,rgba(0,136,204,.12),rgba(16,185,129,.08));border:1px solid rgba(0,136,204,.2);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
+              <div><div style="font-size:10px;font-weight:600;color:#e2e8f0">¿Tu negocio necesita reportes como estos?</div><div style="font-size:9px;color:#64748b">Datos en tiempo real · Exportación automática · Sin planillas de Excel</div></div>
+              <div style="background:#0088CC;border-radius:6px;padding:5px 12px;font-size:9px;font-weight:700;color:#fff;white-space:nowrap">Hablemos →</div>
             </div>
           </div>
         </div>
@@ -416,6 +646,7 @@
     prog.style.width = ((cur + 1) / slides.length * 100) + '%';
     counter.textContent = (cur + 1) + ' / ' + slides.length;
     dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+    document.querySelectorAll('.brow-body').forEach(b => b.scrollTop = 0);
   }
 
   document.getElementById('next').onclick = () => { if (cur < slides.length - 1) goTo(cur + 1); };
@@ -426,6 +657,11 @@
   });
 
   buildDots();
+  document.querySelectorAll('.brow-body').forEach(el => {
+    el.addEventListener('wheel', e => e.stopPropagation(), { passive: true });
+    el.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+    el.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
+  });
 </script>
 </body>
 </html>
