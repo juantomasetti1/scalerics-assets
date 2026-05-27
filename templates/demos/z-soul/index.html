@@ -6,511 +6,549 @@
 <title>Z-Soul — Demo Scalerics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Raleway:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Raleway:ital,wght@0,700;0,800;0,900;1,700;1,900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
-    --bg:#090c12;
-    --surface:#111827;
-    --surface2:#1f2937;
-    --border:#1e2d40;
-    --blue:#0088CC;
-    --blue2:#006fa8;
-    --green:#10B981;
-    --red:#ef4444;
-    --yellow:#f59e0b;
-    --text:#e2e8f0;
-    --text2:#94a3b8;
-    --text3:#64748b;
-    --radius:12px;
-    --slide-w:900px;
-    --slide-h:506px;
+    --bg:#090c12;--surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);
+    --text:#e2e8f0;--muted:#64748b;
+    --blue:#0088CC;--blue-lt:#33aadd;--blue-dk:#005f8e;
+    --blue-glow:rgba(0,136,204,.14);--blue-border:rgba(0,136,204,.28);
+    --green:#10B981;--red:#ef4444;
+    --ff:'Inter',sans-serif;--ff-d:'Raleway',sans-serif;
   }
-  html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--ff)}
 
-  /* ── Progress ── */
-  #progress{position:fixed;top:0;left:0;height:3px;background:var(--blue);transition:width .4s ease;z-index:100}
+  #progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--blue-dk),var(--blue),var(--blue-lt));z-index:100;transition:width .5s cubic-bezier(.4,0,.2,1)}
+  #counter{position:fixed;top:16px;right:20px;z-index:100;font-size:11px;color:var(--muted);letter-spacing:.06em;font-weight:300}
+  #deck{position:relative;width:100%;height:100vh}
 
-  /* ── Counter ── */
-  #counter{position:fixed;top:16px;right:20px;font-size:12px;color:var(--text3);z-index:100;font-family:'Raleway',sans-serif;letter-spacing:.05em}
+  .slide{position:absolute;inset:0;opacity:0;transform:translateX(60px);pointer-events:none;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:56px 52px 90px;transition:opacity .45s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1)}
+  .slide.active{opacity:1;transform:translateX(0);pointer-events:auto;z-index:2}
+  .slide.out{opacity:0;transform:translateX(-60px)}
+  .slide.mock{padding:24px 40px 80px}
 
-  /* ── Deck ── */
-  #deck{width:100%;height:100%;position:relative;overflow:hidden}
+  #nav{position:fixed;bottom:22px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:14px;z-index:100}
+  .nbtn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:background .2s}
+  .nbtn:hover{background:rgba(255,255,255,.1)}
+  .nbtn.nxt{background:linear-gradient(135deg,var(--blue-dk),var(--blue));border:none;box-shadow:0 4px 16px rgba(0,136,204,.3)}
+  .nbtn.nxt:hover{opacity:.85}
+  #dots{display:flex;gap:7px;align-items:center}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);cursor:pointer;transition:all .3s}
+  .dot.on{background:var(--blue);width:20px;border-radius:3px}
+  #wm{position:fixed;bottom:66px;left:20px;font-size:10px;color:rgba(255,255,255,.07);letter-spacing:.12em;text-transform:uppercase;font-weight:600;z-index:99}
 
-  .slide{
-    position:absolute;inset:0;
-    display:flex;align-items:center;justify-content:center;
-    opacity:0;transform:translateX(60px);
-    transition:opacity .45s ease,transform .45s ease;
-    pointer-events:none;
-    padding:40px 60px;
-  }
-  .slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
-  .slide.exit{opacity:0;transform:translateX(-60px)}
+  /* ── Shared typography ── */
+  .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);font-weight:700;margin-bottom:12px}
+  .s-h{font-family:var(--ff-d);font-size:clamp(26px,3.6vw,44px);font-weight:800;line-height:1.12;margin-bottom:32px}
+  .s-h em{font-style:italic;color:var(--blue)}
 
-  /* ── Nav ── */
-  #nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:20px;z-index:100}
-  .nav-btn{background:var(--surface);border:1px solid var(--border);color:var(--text2);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-  .nav-btn:hover{background:var(--blue);border-color:var(--blue);color:#fff}
-  #dots{display:flex;gap:8px;align-items:center}
-  .dot{width:6px;height:6px;border-radius:50%;background:var(--text3);cursor:pointer;transition:all .2s}
-  .dot.active{background:var(--blue);width:20px;border-radius:3px}
+  /* ── S1: PORTADA ── */
+  #s1{align-items:flex-start;overflow:hidden}
+  #s1::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 88% 35%,rgba(0,136,204,.08) 0%,transparent 65%),radial-gradient(ellipse 30% 40% at 5% 80%,rgba(16,185,129,.06) 0%,transparent 60%)}
+  .s1-inner{position:relative;z-index:1;max-width:680px}
+  .s1-logo{height:30px;object-fit:contain;margin-bottom:38px;opacity:.9}
+  .s1-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,136,204,.1);border:1px solid var(--blue-border);border-radius:100px;padding:5px 16px;font-size:11px;color:var(--blue-lt);letter-spacing:.08em;font-weight:600;text-transform:uppercase;margin-bottom:24px}
+  .s1-h1{font-family:var(--ff-d);font-size:clamp(48px,7vw,82px);font-weight:900;line-height:.93;letter-spacing:-.025em;margin-bottom:14px}
+  .s1-h1 em{font-style:italic;color:var(--blue)}
+  .s1-sub{font-size:16px;color:rgba(226,232,240,.5);font-weight:300;margin-bottom:40px;max-width:480px;line-height:1.65}
+  .s1-pills{display:flex;gap:10px;flex-wrap:wrap}
+  .s1-pill{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 16px;font-size:13px;font-weight:500}
+  .s1-pill i{color:var(--blue);font-size:13px}
 
-  /* ── Watermark ── */
-  #wm{position:fixed;bottom:24px;right:24px;opacity:.35;z-index:100}
-  #wm img{height:18px;filter:brightness(0) invert(1)}
+  /* ── S2: PROBLEMA ── */
+  .prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:820px;width:100%}
+  .prob-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 22px;text-align:center}
+  .prob-icon{font-size:28px;margin-bottom:14px}
+  .prob-title{font-weight:700;font-size:14px;margin-bottom:8px}
+  .prob-desc{font-size:13px;color:rgba(226,232,240,.55);line-height:1.55}
 
-  /* ══════════════════════════════════════
-     SLIDE 1 — PORTADA
-  ══════════════════════════════════════ */
-  .s1-inner{text-align:center;max-width:640px}
-  .s1-logo{height:36px;margin-bottom:32px}
-  .s1-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,136,204,.12);border:1px solid rgba(0,136,204,.3);color:var(--blue);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:28px}
-  .s1-headline{font-family:'Raleway',sans-serif;font-size:52px;font-weight:900;line-height:1.08;letter-spacing:-.02em;margin-bottom:16px}
-  .s1-headline span{color:var(--blue)}
-  .s1-sub{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:36px}
-  .s1-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-  .pill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);color:var(--text2);font-size:12px;padding:7px 14px;border-radius:20px}
-  .pill i{color:var(--blue);font-size:11px}
+  /* ── S3: SOLUCIÓN ── */
+  .sol-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;width:100%;margin-bottom:28px}
+  .sol-row{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+  .sol-check{width:22px;height:22px;border-radius:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:11px;flex-shrink:0;margin-top:1px}
+  .sol-text{font-size:13px;line-height:1.5;color:rgba(226,232,240,.8)}
+  .sol-text strong{color:var(--text);font-weight:600}
+  .sol-stats{display:flex;gap:40px}
+  .sol-stat .num{font-family:var(--ff-d);font-size:38px;font-weight:900;color:var(--blue);line-height:1}
+  .sol-stat .desc{font-size:12px;color:var(--muted);margin-top:4px}
 
-  /* ══════════════════════════════════════
-     SLIDE 2 — PROBLEMA
-  ══════════════════════════════════════ */
-  .s2-inner{width:100%;max-width:820px}
-  .slide-title{font-family:'Raleway',sans-serif;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
-  .slide-heading{font-family:'Raleway',sans-serif;font-size:36px;font-weight:800;line-height:1.15;margin-bottom:40px}
-  .slide-heading em{color:var(--blue);font-style:normal}
-  .prob-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  .prob-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px}
-  .prob-icon{width:44px;height:44px;border-radius:10px;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
-  .prob-icon i{color:var(--red);font-size:18px}
-  .prob-card h3{font-size:15px;font-weight:700;margin-bottom:8px}
-  .prob-card p{font-size:13px;color:var(--text2);line-height:1.6}
-  .prob-card .prob-note{margin-top:14px;font-size:11px;color:var(--text3);font-style:italic}
+  /* ── BROWSER shared ── */
+  .mwrap{width:100%;max-width:980px}
+  .mlabel{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:8px;letter-spacing:.1em;text-transform:uppercase}
+  .browser{border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.06)}
+  .brow-bar{background:#131722;padding:9px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .bdot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .burl{flex:1;background:#1c2133;border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:3px 10px;font-size:11px;font-family:monospace;color:var(--muted)}
+  .burl i{font-size:9px;color:var(--green);margin-right:4px}
+  .brow-body{height:420px;overflow-y:auto;overflow-x:hidden;font-family:'Inter',sans-serif}
+  .brow-body::-webkit-scrollbar{width:4px}
+  .brow-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
 
-  /* ══════════════════════════════════════
-     SLIDE 3 — SOLUCIÓN
-  ══════════════════════════════════════ */
-  .s3-inner{width:100%;max-width:820px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-  .feat-list{display:flex;flex-direction:column;gap:20px}
-  .feat-row{display:flex;gap:14px;align-items:flex-start}
-  .feat-icon{width:36px;height:36px;border-radius:8px;background:rgba(0,136,204,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .feat-icon i{color:var(--blue);font-size:14px}
-  .feat-row h4{font-size:14px;font-weight:600;margin-bottom:3px}
-  .feat-row p{font-size:12px;color:var(--text2);line-height:1.5}
-  .stats-col{display:flex;flex-direction:column;gap:16px}
-  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px}
-  .stat-num{font-family:'Raleway',sans-serif;font-size:38px;font-weight:900;color:var(--blue);line-height:1}
-  .stat-label{font-size:12px;color:var(--text2);margin-top:4px}
-
-  /* ══════════════════════════════════════
-     SLIDE 4 — DEMO (browser mockup)
-  ══════════════════════════════════════ */
-  .s4-inner{width:100%;max-width:820px;display:grid;grid-template-columns:220px 1fr;gap:36px;align-items:center}
-  .s4-copy .slide-title{margin-bottom:10px}
-  .s4-copy .slide-heading{font-size:28px;margin-bottom:16px}
-  .s4-copy p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px}
-  .s4-tags{display:flex;flex-direction:column;gap:8px}
-  .tag{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)}
-  .tag i{color:var(--green);font-size:11px}
-
-  .browser{background:#1e293b;border-radius:10px;border:1px solid var(--border);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-  .browser-bar{background:#0f172a;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-  .browser-dots{display:flex;gap:5px}
-  .browser-dots span{width:9px;height:9px;border-radius:50%}
-  .browser-dots span:nth-child(1){background:#ef4444}
-  .browser-dots span:nth-child(2){background:#f59e0b}
-  .browser-dots span:nth-child(3){background:#10b981}
-  .browser-url{flex:1;background:#1e293b;border-radius:5px;padding:4px 10px;font-size:10px;color:var(--text3);font-family:monospace}
-  .browser-body{background:#f2f0eb;font-family:'Inter',sans-serif}
-
-  /* — Fake shop inside browser — */
-  .shop-nav{background:#1a1a1a;padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
-  .shop-brand{color:#fff;font-family:'Georgia',serif;font-style:italic;font-size:13px;font-weight:700;letter-spacing:.04em}
-  .shop-links{display:flex;gap:10px}
-  .shop-links a{color:rgba(255,255,255,.65);font-size:9px;text-decoration:none}
-  .shop-hero{background:#1a1a1a;padding:20px 14px;text-align:center}
-  .shop-hero h2{color:#fff;font-family:'Arial Black','Arial',sans-serif;font-size:15px;font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
-  .shop-hero p{color:rgba(255,255,255,.6);font-size:9px;margin-bottom:10px}
-  .shop-cta{background:#fff;color:#1a1a1a;font-size:9px;font-weight:700;padding:6px 14px;border:none;border-radius:2px;cursor:pointer;letter-spacing:.04em;text-transform:uppercase}
-  .shop-grid{padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .prod-card{background:#fff;border-radius:4px;overflow:hidden}
-  .prod-card img{width:100%;height:72px;object-fit:cover;display:block}
-  .prod-info{padding:6px 7px}
-  .prod-name{font-size:8px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
-  .prod-price{font-size:9px;font-weight:700;color:#1a1a1a}
-
-  /* ══════════════════════════════════════
-     SLIDE 5 — MODAL
-  ══════════════════════════════════════ */
-  .s5-inner{width:100%;max-width:820px;display:grid;grid-template-columns:220px 1fr;gap:36px;align-items:center}
-  .s5-copy .slide-heading{font-size:26px;margin-bottom:16px}
-  .s5-copy p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px}
-
-  /* modal inside browser */
-  .modal-overlay{background:rgba(0,0,0,.55);padding:12px;display:flex;align-items:center;justify-content:center}
-  .modal-box{background:#fff;border-radius:6px;overflow:hidden;width:100%}
-  .modal-img{width:100%;height:90px;object-fit:cover;display:block}
-  .modal-body{padding:10px 12px}
-  .modal-name{font-size:10px;font-weight:700;color:#1a1a1a;margin-bottom:2px}
-  .modal-price{font-size:12px;font-weight:900;color:#1a1a1a;margin-bottom:8px}
-  .modal-label{font-size:8px;font-weight:600;color:#555;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px}
-  .talle-row{display:flex;gap:4px;margin-bottom:10px}
-  .talle{width:20px;height:20px;border:1px solid #ccc;border-radius:3px;font-size:7px;font-weight:600;color:#555;display:flex;align-items:center;justify-content:center;cursor:pointer}
-  .talle.sel{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-  .wa-btn{background:#25D366;color:#fff;border:none;border-radius:4px;width:100%;padding:7px;font-size:9px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
-  .wa-btn i{font-size:10px}
-
-  /* ══════════════════════════════════════
-     SLIDE 6 — INVERSIÓN
-  ══════════════════════════════════════ */
-  .s6-inner{width:100%;max-width:820px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
-  .price-card{background:var(--surface);border:1px solid var(--blue);border-radius:var(--radius);padding:32px 28px;position:relative}
+  /* ── S7: INVERSIÓN ── */
+  .inv-wrap{display:grid;grid-template-columns:1fr 1fr;gap:28px;max-width:820px;width:100%;align-items:start}
+  .price-card{background:var(--surface);border:1px solid var(--blue-border);border-radius:18px;padding:32px 28px;position:relative}
   .price-card::before{content:'RECOMENDADO';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:9px;font-weight:700;letter-spacing:.1em;padding:4px 14px;border-radius:0 0 8px 8px}
-  .price-tier{font-size:11px;font-weight:600;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;margin-top:12px}
-  .price-main{font-family:'Raleway',sans-serif;font-size:48px;font-weight:900;line-height:1;margin-bottom:4px}
-  .price-sub{font-size:12px;color:var(--text3);margin-bottom:24px}
-  .feat-checks{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
-  .fc{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)}
-  .fc i{color:var(--green);font-size:12px;flex-shrink:0}
-  .price-divider{border:none;border-top:1px solid var(--border);margin:0 0 24px}
-  .price-alt{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px}
-  .price-alt .price-tier{color:var(--text2)}
-  .price-alt .price-main{font-size:38px;color:var(--text)}
-  .cond-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:12px}
-  .cond-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
-  .cond-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:5px;flex-shrink:0}
-  .cond-item p{font-size:12px;color:var(--text2);line-height:1.5}
+  .price-tier{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;margin-top:10px}
+  .price-num{font-family:var(--ff-d);font-size:50px;font-weight:900;line-height:1;margin-bottom:4px}
+  .price-sub{font-size:12px;color:var(--muted);margin-bottom:22px}
+  .inv-checks{display:flex;flex-direction:column;gap:9px;margin-bottom:24px}
+  .ic{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(226,232,240,.8)}
+  .ic i{color:var(--green);font-size:11px;flex-shrink:0}
+  .price-alt{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px 22px;margin-bottom:16px}
+  .price-alt .price-tier{color:rgba(226,232,240,.6)}
+  .price-alt .price-num{font-size:38px;color:var(--text)}
+  .cond-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 22px}
+  .cond-title{font-size:12px;font-weight:700;margin-bottom:12px;color:var(--text)}
+  .cond-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:9px}
+  .cond-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);margin-top:6px;flex-shrink:0}
+  .cond-item p{font-size:12px;color:rgba(226,232,240,.65);line-height:1.5}
 </style>
 </head>
 <body>
-
 <div id="progress"></div>
-<div id="counter">1 / 6</div>
-
+<div id="counter">1 / 7</div>
+<div id="wm">Scalerics</div>
 <div id="deck">
 
-  <!-- ═══════════════ SLIDE 1 — PORTADA ═══════════════ -->
-  <div class="slide active" data-index="0">
-    <div class="s1-inner">
-      <img class="s1-logo" src="https://raw.githubusercontent.com/juantomasetti1/scalerics-assets/main/logo_full_alt.png" alt="Scalerics">
-      <div class="s1-badge"><i class="fa-solid fa-shirt"></i> Tienda online de ropa</div>
-      <h1 class="s1-headline">Tu ropa,<br><span>vendiendo sola.</span></h1>
-      <p class="s1-sub">Una tienda online para Z-Soul: catálogo siempre disponible,<br>consultas por WhatsApp, pedidos desde cualquier lugar.</p>
-      <div class="s1-pills">
-        <span class="pill"><i class="fa-brands fa-whatsapp"></i> WhatsApp integrado</span>
-        <span class="pill"><i class="fa-solid fa-images"></i> Fotos de producto</span>
-        <span class="pill"><i class="fa-solid fa-location-dot"></i> Santa Lucía, Uruguay</span>
-        <span class="pill"><i class="fa-solid fa-mobile-screen"></i> Funciona en celular</span>
-      </div>
+<!-- ═══════════════ S1: PORTADA ═══════════════ -->
+<section class="slide active" id="s1">
+  <div class="s1-inner">
+    <img class="s1-logo" src="https://raw.githubusercontent.com/juantomasetti1/scalerics-assets/main/logo_full_alt.png" alt="Scalerics">
+    <div class="s1-badge"><i class="fa-solid fa-shirt"></i> Tienda online de ropa</div>
+    <h1 class="s1-h1">Tu ropa,<br><em>vendiendo sola.</em></h1>
+    <p class="s1-sub">Una tienda online para Z-Soul: catálogo siempre disponible, consultas por WhatsApp, pedidos desde cualquier lugar de Uruguay.</p>
+    <div class="s1-pills">
+      <div class="s1-pill"><i class="fa-brands fa-whatsapp"></i> WhatsApp integrado</div>
+      <div class="s1-pill"><i class="fa-solid fa-location-dot"></i> Santa Lucía, Uruguay</div>
+      <div class="s1-pill"><i class="fa-solid fa-mobile-screen"></i> 100% mobile</div>
+      <div class="s1-pill"><i class="fa-solid fa-palette"></i> 3 estilos a elegir</div>
     </div>
   </div>
+</section>
 
-  <!-- ═══════════════ SLIDE 2 — PROBLEMA ═══════════════ -->
-  <div class="slide" data-index="1">
-    <div class="s2-inner">
-      <div class="slide-title">El problema</div>
-      <h2 class="slide-heading">Sin tienda online,<br><em>perdés ventas todos los días.</em></h2>
-      <div class="prob-cards">
-        <div class="prob-card">
-          <div class="prob-icon"><i class="fa-solid fa-map-pin"></i></div>
-          <h3>Solo clientes locales</h3>
-          <p>Sin web, tu negocio existe solo para quien ya te conoce en Santa Lucía.</p>
-          <p class="prob-note">Clientes de Montevideo o del interior no te encuentran.</p>
-        </div>
-        <div class="prob-card">
-          <div class="prob-icon"><i class="fa-brands fa-whatsapp"></i></div>
-          <h3>Catálogo por chat</h3>
-          <p>Mandar fotos una por una por WhatsApp es lento, cansador y da imagen amateur.</p>
-          <p class="prob-note">El cliente se pierde o compra en otro lado mientras espera.</p>
-        </div>
-        <div class="prob-card">
-          <div class="prob-icon"><i class="fa-solid fa-clock"></i></div>
-          <h3>Vendés solo cuando estás</h3>
-          <p>Si estás dormida, en el trabajo o sin señal, esa venta no existe.</p>
-          <p class="prob-note">Una tienda online trabaja 24/7 aunque vos no estés.</p>
-        </div>
-      </div>
+<!-- ═══════════════ S2: PROBLEMA ═══════════════ -->
+<section class="slide" id="s2">
+  <div class="lbl">El problema</div>
+  <h2 class="s-h">Sin tienda online,<br><em>perdés ventas todos los días.</em></h2>
+  <div class="prob-grid">
+    <div class="prob-card">
+      <div class="prob-icon">📍</div>
+      <div class="prob-title">Solo clientes locales</div>
+      <p class="prob-desc">Sin web, tu negocio existe solo para quien ya te conoce en Santa Lucía. El resto ni sabe que existís.</p>
+    </div>
+    <div class="prob-card">
+      <div class="prob-icon">💬</div>
+      <div class="prob-title">Catálogo por chat</div>
+      <p class="prob-desc">Mandar fotos una por una por WhatsApp es lento, cansador y da imagen amateur.</p>
+    </div>
+    <div class="prob-card">
+      <div class="prob-icon">🕐</div>
+      <div class="prob-title">Vendés solo cuando estás</div>
+      <p class="prob-desc">Si estás ocupada o sin señal, esa venta no existe. Una tienda online trabaja 24/7.</p>
     </div>
   </div>
+</section>
 
-  <!-- ═══════════════ SLIDE 3 — SOLUCIÓN ═══════════════ -->
-  <div class="slide" data-index="2">
-    <div class="s3-inner">
-      <div>
-        <div class="slide-title">La solución</div>
-        <h2 class="slide-heading">Todo lo que Z-Soul<br><em>necesita para vender online.</em></h2>
-        <div class="feat-list">
-          <div class="feat-row">
-            <div class="feat-icon"><i class="fa-solid fa-store"></i></div>
-            <div>
-              <h4>Tienda con catálogo completo</h4>
-              <p>Fotos, talles, precios y descripción de cada prenda. El cliente ve todo solo.</p>
-            </div>
-          </div>
-          <div class="feat-row">
-            <div class="feat-icon"><i class="fa-brands fa-whatsapp"></i></div>
-            <div>
-              <h4>Consulta directa por WhatsApp</h4>
-              <p>Un botón en cada producto abre un chat con el texto listo: producto + talle.</p>
-            </div>
-          </div>
-          <div class="feat-row">
-            <div class="feat-icon"><i class="fa-solid fa-palette"></i></div>
-            <div>
-              <h4>Diseño que refleja la marca</h4>
-              <p>Tres opciones de estilo visual para elegir el que mejor va con Z-Soul.</p>
-            </div>
-          </div>
-          <div class="feat-row">
-            <div class="feat-icon"><i class="fa-solid fa-mobile-screen"></i></div>
-            <div>
-              <h4>100% responsive</h4>
-              <p>Se ve perfecto en el celular de cualquier cliente, sin esfuerzo.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="stats-col">
-        <div class="stat-box">
-          <div class="stat-num">24/7</div>
-          <div class="stat-label">Tu tienda abierta siempre, sin que vos estés</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num">3</div>
-          <div class="stat-label">Variantes de estilo visual incluidas en la demo</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num">0%</div>
-          <div class="stat-label">Comisión por venta — todo el dinero es tuyo</div>
-        </div>
-      </div>
+<!-- ═══════════════ S3: SOLUCIÓN ═══════════════ -->
+<section class="slide" id="s3">
+  <div class="lbl">La solución</div>
+  <h2 class="s-h">Todo lo que Z-Soul necesita<br><em>para vender online.</em></h2>
+  <div class="sol-grid">
+    <div class="sol-row">
+      <div class="sol-check"><i class="fa fa-check"></i></div>
+      <div class="sol-text"><strong>Catálogo completo</strong> — fotos, talles y precios, siempre actualizados</div>
+    </div>
+    <div class="sol-row">
+      <div class="sol-check"><i class="fa fa-check"></i></div>
+      <div class="sol-text"><strong>WhatsApp directo</strong> — botón en cada producto con el mensaje listo</div>
+    </div>
+    <div class="sol-row">
+      <div class="sol-check"><i class="fa fa-check"></i></div>
+      <div class="sol-text"><strong>Diseño de marca</strong> — 3 estilos visuales para que elijas el que más te gusta</div>
+    </div>
+    <div class="sol-row">
+      <div class="sol-check"><i class="fa fa-check"></i></div>
+      <div class="sol-text"><strong>Responsive</strong> — perfecto en el celular de cualquier clienta</div>
+    </div>
+    <div class="sol-row">
+      <div class="sol-check"><i class="fa fa-check"></i></div>
+      <div class="sol-text"><strong>Sin comisiones</strong> — cada peso de venta es tuyo</div>
+    </div>
+    <div class="sol-row">
+      <div class="sol-check"><i class="fa fa-check"></i></div>
+      <div class="sol-text"><strong>Modal de talle</strong> — selector XS/S/M/L/XL en cada prenda</div>
     </div>
   </div>
+  <div class="sol-stats">
+    <div class="sol-stat"><div class="num">24/7</div><div class="desc">Tienda abierta siempre</div></div>
+    <div class="sol-stat"><div class="num">3</div><div class="desc">Estilos visuales incluidos</div></div>
+    <div class="sol-stat"><div class="num">0%</div><div class="desc">Comisión por venta</div></div>
+  </div>
+</section>
 
-  <!-- ═══════════════ SLIDE 4 — DEMO SHOP ═══════════════ -->
-  <div class="slide" data-index="3">
-    <div class="s4-inner">
-      <div class="s4-copy">
-        <div class="slide-title">La tienda</div>
-        <h2 class="slide-heading">Tu catálogo,<br><em>siempre listo.</em></h2>
-        <p>El cliente entra, ve los productos con foto y precio, elige su talle y te escribe por WhatsApp. Sin intermediarios.</p>
-        <div class="s4-tags">
-          <span class="tag"><i class="fa-solid fa-check"></i> Navbar con logo Z-Soul</span>
-          <span class="tag"><i class="fa-solid fa-check"></i> Hero impactante</span>
-          <span class="tag"><i class="fa-solid fa-check"></i> Grilla 2×2 de productos</span>
-          <span class="tag"><i class="fa-solid fa-check"></i> Footer con redes e info</span>
-        </div>
+<!-- ═══════════════ S4: MOCKUP 1 — Editorial Bold ═══════════════ -->
+<section class="slide mock" id="s4">
+  <div class="mwrap">
+    <div class="mlabel">Opción 1 — Editorial Bold · Fondo crema · Tipografía grotesca bold · Sin color de acento</div>
+    <div class="browser">
+      <div class="brow-bar">
+        <span class="bdot" style="background:#FF5F57"></span>
+        <span class="bdot" style="background:#FEBC2E"></span>
+        <span class="bdot" style="background:#28C840"></span>
+        <div class="burl"><i class="fa fa-lock"></i>zsoul.com.uy</div>
       </div>
-      <div class="browser">
-        <div class="browser-bar">
-          <div class="browser-dots"><span></span><span></span><span></span></div>
-          <div class="browser-url">zsoul.com.uy</div>
+      <div class="brow-body" style="background:#f2f0eb">
+
+        <!-- Navbar -->
+        <div style="background:#1a1a1a;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:48px">
+          <span style="font-family:'Arial Black','Arial',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:-.01em">Z-SOUL</span>
+          <div style="display:flex;gap:20px">
+            <span style="font-size:10px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.06em;text-transform:uppercase">Tienda</span>
+            <span style="font-size:10px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.06em;text-transform:uppercase">Nosotros</span>
+            <span style="font-size:10px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.06em;text-transform:uppercase">Contacto</span>
+          </div>
         </div>
-        <div class="browser-body">
-          <div class="shop-nav">
-            <span class="shop-brand">Z-Soul</span>
-            <div class="shop-links">
-              <a href="#">Tienda</a><a href="#">Nosotros</a><a href="#">Contacto</a>
-            </div>
-          </div>
-          <div class="shop-hero">
-            <h2>NUEVA<br>COLECCIÓN</h2>
-            <p>Ropa con identidad · Santa Lucía, Uruguay</p>
-            <button class="shop-cta">Ver Colección ↓</button>
-          </div>
-          <div class="shop-grid">
-            <div class="prod-card">
-              <img src="img/buzo.jpeg" alt="Buzo Tejido con Trenzas">
-              <div class="prod-info">
-                <div class="prod-name">Buzo Tejido con Trenzas</div>
-                <div class="prod-price">$1.890</div>
+
+        <!-- Hero -->
+        <div style="background:#1a1a1a;padding:32px 28px;text-align:center">
+          <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px">Nueva colección · Otoño 2025</div>
+          <div style="font-family:'Arial Black','Arial',sans-serif;font-size:28px;font-weight:900;color:#fff;line-height:1;letter-spacing:-.02em;margin-bottom:10px">ROPA<br>CON ALMA.</div>
+          <p style="font-size:10px;color:rgba(255,255,255,.45);margin-bottom:16px">Santa Lucía, Uruguay · Envíos a todo el país</p>
+          <button style="background:#fff;color:#1a1a1a;border:none;padding:8px 20px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">VER COLECCIÓN ↓</button>
+        </div>
+
+        <!-- Products -->
+        <div style="padding:20px 28px">
+          <div style="font-family:'Arial Black','Arial',sans-serif;font-size:13px;font-weight:900;color:#1a1a1a;letter-spacing:-.01em;margin-bottom:16px;text-transform:uppercase">Colección</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="background:#fff">
+              <img src="img/buzo.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-size:9px;font-weight:900;color:#1a1a1a;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px">Buzo Tejido con Trenzas</div>
+                <div style="font-size:12px;font-weight:900;color:#1a1a1a">$1.890</div>
               </div>
             </div>
-            <div class="prod-card">
-              <img src="img/jean-oxford.jpeg" alt="Jean Oxford">
-              <div class="prod-info">
-                <div class="prod-name">Jean Oxford</div>
-                <div class="prod-price">$2.190</div>
+            <div style="background:#fff">
+              <img src="img/jean-oxford.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-size:9px;font-weight:900;color:#1a1a1a;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px">Jean Oxford</div>
+                <div style="font-size:12px;font-weight:900;color:#1a1a1a">$2.190</div>
               </div>
             </div>
-            <div class="prod-card">
-              <img src="img/jean-wide.jpeg" alt="Jean Wide Leg">
-              <div class="prod-info">
-                <div class="prod-name">Jean Wide Leg</div>
-                <div class="prod-price">$1.990</div>
+            <div style="background:#fff">
+              <img src="img/jean-wide.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-size:9px;font-weight:900;color:#1a1a1a;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px">Jean Wide Leg</div>
+                <div style="font-size:12px;font-weight:900;color:#1a1a1a">$1.990</div>
               </div>
             </div>
-            <div class="prod-card">
-              <img src="img/pantalon.jpeg" alt="Pantalón Wide Leg">
-              <div class="prod-info">
-                <div class="prod-name">Pantalón Wide Leg</div>
-                <div class="prod-price">$1.750</div>
+            <div style="background:#fff">
+              <img src="img/pantalon.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-size:9px;font-weight:900;color:#1a1a1a;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px">Pantalón Wide Leg</div>
+                <div style="font-size:12px;font-weight:900;color:#1a1a1a">$1.750</div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- ═══════════════ SLIDE 5 — MODAL ═══════════════ -->
-  <div class="slide" data-index="4">
-    <div class="s5-inner">
-      <div class="s5-copy">
-        <div class="slide-title">El modal</div>
-        <h2 class="slide-heading">Click en el producto<br><em>y a comprar.</em></h2>
-        <p>El cliente elige el talle y toca el botón verde. Se abre WhatsApp con el mensaje ya escrito: producto, talle y consulta lista.</p>
-        <div class="s4-tags">
-          <span class="tag"><i class="fa-solid fa-check"></i> Foto grande del producto</span>
-          <span class="tag"><i class="fa-solid fa-check"></i> Selector de talle XS–XL</span>
-          <span class="tag"><i class="fa-solid fa-check"></i> Botón directo a WhatsApp</span>
-        </div>
-      </div>
-      <div class="browser">
-        <div class="browser-bar">
-          <div class="browser-dots"><span></span><span></span><span></span></div>
-          <div class="browser-url">zsoul.com.uy</div>
-        </div>
-        <div class="browser-body">
-          <div class="shop-nav">
-            <span class="shop-brand">Z-Soul</span>
-            <div class="shop-links">
-              <a href="#">Tienda</a><a href="#">Nosotros</a><a href="#">Contacto</a>
-            </div>
-          </div>
-          <div class="modal-overlay">
-            <div class="modal-box">
-              <img src="img/buzo.jpeg" alt="Buzo Tejido con Trenzas" class="modal-img">
-              <div class="modal-body">
-                <div class="modal-name">Buzo Tejido con Trenzas</div>
-                <div class="modal-price">$1.890</div>
-                <div class="modal-label">Elegí tu talle</div>
-                <div class="talle-row">
-                  <div class="talle">XS</div>
-                  <div class="talle sel">S</div>
-                  <div class="talle">M</div>
-                  <div class="talle">L</div>
-                  <div class="talle">XL</div>
-                </div>
-                <button class="wa-btn"><i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp</button>
+        <!-- Modal overlay -->
+        <div style="position:sticky;bottom:0;background:rgba(0,0,0,.5);padding:12px;display:flex;align-items:flex-end;justify-content:center">
+          <div style="background:#fff;border-radius:4px;width:200px;overflow:hidden">
+            <img src="img/buzo.jpeg" style="width:100%;height:80px;object-fit:cover;display:block">
+            <div style="padding:10px 12px">
+              <div style="font-size:9px;font-weight:900;color:#1a1a1a;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em">Buzo Tejido con Trenzas</div>
+              <div style="font-size:11px;font-weight:900;color:#1a1a1a;margin-bottom:8px">$1.890</div>
+              <div style="font-size:7px;font-weight:700;color:#555;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">Talle</div>
+              <div style="display:flex;gap:3px;margin-bottom:8px">
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;font-weight:700;color:#555;display:flex;align-items:center;justify-content:center">XS</div>
+                <div style="width:18px;height:18px;border:1px solid #1a1a1a;background:#1a1a1a;font-size:6px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center">S</div>
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;font-weight:700;color:#555;display:flex;align-items:center;justify-content:center">M</div>
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;font-weight:700;color:#555;display:flex;align-items:center;justify-content:center">L</div>
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;font-weight:700;color:#555;display:flex;align-items:center;justify-content:center">XL</div>
+              </div>
+              <div style="background:#25D366;color:#fff;border:none;border-radius:3px;width:100%;padding:6px;font-size:8px;font-weight:700;text-align:center">
+                <i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- ═══════════════ SLIDE 6 — INVERSIÓN ═══════════════ -->
-  <div class="slide" data-index="5">
-    <div class="s6-inner">
-      <div>
-        <div class="slide-title">Inversión</div>
-        <h2 class="slide-heading" style="font-size:30px">Lo que incluye<br><em>y cuánto cuesta.</em></h2>
-        <br>
-        <div class="price-card">
-          <div class="price-tier">Ecommerce completo</div>
-          <div class="price-main">USD 490</div>
-          <div class="price-sub">pago único · sin comisiones</div>
-          <div class="feat-checks">
-            <div class="fc"><i class="fa-solid fa-check"></i> Tienda online con catálogo</div>
-            <div class="fc"><i class="fa-solid fa-check"></i> Modal con selector de talle</div>
-            <div class="fc"><i class="fa-solid fa-check"></i> Botón WhatsApp en cada producto</div>
-            <div class="fc"><i class="fa-solid fa-check"></i> Diseño responsive (celular y web)</div>
-            <div class="fc"><i class="fa-solid fa-check"></i> 3 variantes de estilo visual</div>
-            <div class="fc"><i class="fa-solid fa-check"></i> Subida y configuración incluida</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="price-alt">
-          <div class="price-tier">Solo página web</div>
-          <div class="price-main">USD 250</div>
-          <div class="price-sub">sin carrito · contacto por WhatsApp</div>
-          <div class="feat-checks" style="margin-top:16px">
-            <div class="fc"><i class="fa-solid fa-check"></i> Página de presentación</div>
-            <div class="fc"><i class="fa-solid fa-check"></i> Fotos y descripción de prendas</div>
-            <div class="fc"><i class="fa-solid fa-check"></i> Botón de contacto</div>
-          </div>
-        </div>
-        <br>
-        <div class="price-alt">
-          <div class="cond-title">Condiciones de pago</div>
-          <div class="cond-item">
-            <div class="cond-dot"></div>
-            <p><strong>Pago único</strong> para proyectos bajo USD 290</p>
-          </div>
-          <div class="cond-item">
-            <div class="cond-dot"></div>
-            <p><strong>50% inicio · 50% entrega</strong> para proyectos de USD 290 o más</p>
-          </div>
-          <div class="cond-item">
-            <div class="cond-dot"></div>
-            <p>Dominio y hosting <strong>aparte</strong> — te asesoramos sin costo extra</p>
-          </div>
-        </div>
       </div>
     </div>
   </div>
+</section>
+
+<!-- ═══════════════ S5: MOCKUP 2 — Crema + Grafito ═══════════════ -->
+<section class="slide mock" id="s5">
+  <div class="mwrap">
+    <div class="mlabel">Opción 2 — Crema + Grafito · Georgia serif itálica · Paleta monocromática cálida</div>
+    <div class="browser">
+      <div class="brow-bar">
+        <span class="bdot" style="background:#FF5F57"></span>
+        <span class="bdot" style="background:#FEBC2E"></span>
+        <span class="bdot" style="background:#28C840"></span>
+        <div class="burl"><i class="fa fa-lock"></i>zsoul.com.uy</div>
+      </div>
+      <div class="brow-body" style="background:#faf8f4">
+
+        <!-- Navbar -->
+        <div style="background:#3d3d3d;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:48px">
+          <span style="font-family:'Georgia',serif;font-style:italic;font-size:17px;font-weight:700;color:#fff;letter-spacing:.04em">Z-Soul</span>
+          <div style="display:flex;gap:20px">
+            <span style="font-size:10px;color:rgba(255,255,255,.55);letter-spacing:.04em">Tienda</span>
+            <span style="font-size:10px;color:rgba(255,255,255,.55);letter-spacing:.04em">Nosotros</span>
+            <span style="font-size:10px;color:rgba(255,255,255,.55);letter-spacing:.04em">Contacto</span>
+          </div>
+        </div>
+
+        <!-- Hero -->
+        <div style="background:#3d3d3d;padding:32px 28px;text-align:center">
+          <div style="font-size:9px;color:rgba(255,255,255,.35);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px">Colección Otoño 2025</div>
+          <div style="font-family:'Georgia',serif;font-style:italic;font-size:26px;font-weight:700;color:#f5f0e8;line-height:1.15;margin-bottom:10px">Ropa con<br>identidad propia.</div>
+          <p style="font-size:10px;color:rgba(255,255,255,.4);margin-bottom:18px">Santa Lucía, Uruguay</p>
+          <button style="background:transparent;color:#f5f0e8;border:1px solid rgba(255,255,255,.4);padding:8px 22px;font-size:10px;font-family:'Georgia',serif;font-style:italic;cursor:pointer">Ver Colección ↓</button>
+        </div>
+
+        <!-- Products -->
+        <div style="padding:22px 28px">
+          <div style="font-family:'Georgia',serif;font-style:italic;font-size:15px;color:#3d3d3d;margin-bottom:16px">Colección</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div style="background:#fff;border:1px solid #e8e4de">
+              <img src="img/buzo.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-family:'Georgia',serif;font-size:10px;color:#3d3d3d;margin-bottom:3px;font-style:italic">Buzo Tejido con Trenzas</div>
+                <div style="font-size:12px;font-weight:600;color:#3d3d3d">$1.890</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8e4de">
+              <img src="img/jean-oxford.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-family:'Georgia',serif;font-size:10px;color:#3d3d3d;margin-bottom:3px;font-style:italic">Jean Oxford</div>
+                <div style="font-size:12px;font-weight:600;color:#3d3d3d">$2.190</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8e4de">
+              <img src="img/jean-wide.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-family:'Georgia',serif;font-size:10px;color:#3d3d3d;margin-bottom:3px;font-style:italic">Jean Wide Leg</div>
+                <div style="font-size:12px;font-weight:600;color:#3d3d3d">$1.990</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8e4de">
+              <img src="img/pantalon.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-family:'Georgia',serif;font-size:10px;color:#3d3d3d;margin-bottom:3px;font-style:italic">Pantalón Wide Leg</div>
+                <div style="font-size:12px;font-weight:600;color:#3d3d3d">$1.750</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal overlay -->
+        <div style="position:sticky;bottom:0;background:rgba(0,0,0,.45);padding:12px;display:flex;align-items:flex-end;justify-content:center">
+          <div style="background:#faf8f4;border:1px solid #ddd8d0;border-radius:4px;width:200px;overflow:hidden">
+            <img src="img/buzo.jpeg" style="width:100%;height:80px;object-fit:cover;display:block">
+            <div style="padding:10px 12px">
+              <div style="font-family:'Georgia',serif;font-style:italic;font-size:10px;color:#3d3d3d;margin-bottom:2px">Buzo Tejido con Trenzas</div>
+              <div style="font-size:11px;font-weight:600;color:#3d3d3d;margin-bottom:8px">$1.890</div>
+              <div style="font-size:7px;font-weight:600;color:#888;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">Talle</div>
+              <div style="display:flex;gap:3px;margin-bottom:8px">
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;color:#888;display:flex;align-items:center;justify-content:center">XS</div>
+                <div style="width:18px;height:18px;border:1px solid #3d3d3d;background:#3d3d3d;font-size:6px;color:#fff;display:flex;align-items:center;justify-content:center">S</div>
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;color:#888;display:flex;align-items:center;justify-content:center">M</div>
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;color:#888;display:flex;align-items:center;justify-content:center">L</div>
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;color:#888;display:flex;align-items:center;justify-content:center">XL</div>
+              </div>
+              <div style="background:#25D366;color:#fff;border-radius:3px;width:100%;padding:6px;font-size:8px;font-weight:700;text-align:center">
+                <i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ S6: MOCKUP 3 — Blanco + Terracota ═══════════════ -->
+<section class="slide mock" id="s6">
+  <div class="mwrap">
+    <div class="mlabel">Opción 3 — Blanco + Terracota · Acento #b5451b en precios y botones · Badge "NUEVO"</div>
+    <div class="browser">
+      <div class="brow-bar">
+        <span class="bdot" style="background:#FF5F57"></span>
+        <span class="bdot" style="background:#FEBC2E"></span>
+        <span class="bdot" style="background:#28C840"></span>
+        <div class="burl"><i class="fa fa-lock"></i>zsoul.com.uy</div>
+      </div>
+      <div class="brow-body" style="background:#fff">
+
+        <!-- Navbar -->
+        <div style="background:#1a1a1a;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:48px">
+          <span style="font-family:'Arial Black','Arial',sans-serif;font-size:15px;font-weight:900;color:#fff;letter-spacing:-.01em">Z-SOUL</span>
+          <div style="display:flex;gap:20px">
+            <span style="font-size:10px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.06em;text-transform:uppercase">Tienda</span>
+            <span style="font-size:10px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.06em;text-transform:uppercase">Nosotros</span>
+            <span style="font-size:10px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.06em;text-transform:uppercase">Contacto</span>
+          </div>
+        </div>
+
+        <!-- Hero -->
+        <div style="background:#1a1a1a;padding:32px 28px;text-align:center">
+          <div style="font-size:9px;font-weight:700;color:#b5451b;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px">Nueva colección · Otoño 2025</div>
+          <div style="font-family:'Arial Black','Arial',sans-serif;font-size:28px;font-weight:900;color:#fff;line-height:1;letter-spacing:-.02em;margin-bottom:10px">ROPA<br>CON ALMA.</div>
+          <p style="font-size:10px;color:rgba(255,255,255,.45);margin-bottom:16px">Santa Lucía, Uruguay · Envíos a todo el país</p>
+          <button style="background:#b5451b;color:#fff;border:none;padding:8px 20px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:3px">VER COLECCIÓN ↓</button>
+        </div>
+
+        <!-- Products -->
+        <div style="padding:20px 28px">
+          <div style="font-family:'Arial Black','Arial',sans-serif;font-size:13px;font-weight:900;color:#1a1a1a;letter-spacing:-.01em;margin-bottom:16px;text-transform:uppercase">Colección</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="background:#fff;border:1px solid #eee;position:relative">
+              <div style="position:absolute;top:8px;left:8px;background:#b5451b;color:#fff;font-size:7px;font-weight:800;letter-spacing:.08em;padding:3px 7px;text-transform:uppercase">NUEVO</div>
+              <img src="img/buzo.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-size:9px;font-weight:700;color:#1a1a1a;letter-spacing:.02em;margin-bottom:3px">Buzo Tejido con Trenzas</div>
+                <div style="font-size:13px;font-weight:900;color:#b5451b">$1.890</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #eee">
+              <img src="img/jean-oxford.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-size:9px;font-weight:700;color:#1a1a1a;letter-spacing:.02em;margin-bottom:3px">Jean Oxford</div>
+                <div style="font-size:13px;font-weight:900;color:#b5451b">$2.190</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #eee">
+              <img src="img/jean-wide.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-size:9px;font-weight:700;color:#1a1a1a;letter-spacing:.02em;margin-bottom:3px">Jean Wide Leg</div>
+                <div style="font-size:13px;font-weight:900;color:#b5451b">$1.990</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #eee">
+              <img src="img/pantalon.jpeg" style="width:100%;height:110px;object-fit:cover;display:block">
+              <div style="padding:10px 12px">
+                <div style="font-size:9px;font-weight:700;color:#1a1a1a;letter-spacing:.02em;margin-bottom:3px">Pantalón Wide Leg</div>
+                <div style="font-size:13px;font-weight:900;color:#b5451b">$1.750</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal overlay -->
+        <div style="position:sticky;bottom:0;background:rgba(0,0,0,.5);padding:12px;display:flex;align-items:flex-end;justify-content:center">
+          <div style="background:#fff;border-radius:4px;width:200px;overflow:hidden;border:1px solid #eee">
+            <img src="img/buzo.jpeg" style="width:100%;height:80px;object-fit:cover;display:block">
+            <div style="padding:10px 12px">
+              <div style="font-size:9px;font-weight:700;color:#1a1a1a;margin-bottom:2px">Buzo Tejido con Trenzas</div>
+              <div style="font-size:13px;font-weight:900;color:#b5451b;margin-bottom:8px">$1.890</div>
+              <div style="font-size:7px;font-weight:700;color:#555;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">Talle</div>
+              <div style="display:flex;gap:3px;margin-bottom:8px">
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;color:#888;display:flex;align-items:center;justify-content:center">XS</div>
+                <div style="width:18px;height:18px;border:1px solid #b5451b;background:#b5451b;font-size:6px;color:#fff;display:flex;align-items:center;justify-content:center">S</div>
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;color:#888;display:flex;align-items:center;justify-content:center">M</div>
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;color:#888;display:flex;align-items:center;justify-content:center">L</div>
+                <div style="width:18px;height:18px;border:1px solid #ccc;font-size:6px;color:#888;display:flex;align-items:center;justify-content:center">XL</div>
+              </div>
+              <div style="background:#25D366;color:#fff;border-radius:3px;width:100%;padding:6px;font-size:8px;font-weight:700;text-align:center">
+                <i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ S7: INVERSIÓN ═══════════════ -->
+<section class="slide" id="s7">
+  <div class="lbl">Inversión</div>
+  <h2 class="s-h">Lo que incluye<br><em>y cuánto cuesta.</em></h2>
+  <div class="inv-wrap">
+    <div class="price-card">
+      <div class="price-tier">Ecommerce completo</div>
+      <div class="price-num">USD 490</div>
+      <div class="price-sub">pago único · sin comisiones</div>
+      <div class="inv-checks">
+        <div class="ic"><i class="fa fa-check"></i> Tienda online con catálogo</div>
+        <div class="ic"><i class="fa fa-check"></i> Modal con selector de talle XS–XL</div>
+        <div class="ic"><i class="fa fa-check"></i> Botón WhatsApp en cada producto</div>
+        <div class="ic"><i class="fa fa-check"></i> Diseño responsive (celular y web)</div>
+        <div class="ic"><i class="fa fa-check"></i> 3 variantes de estilo visual</div>
+        <div class="ic"><i class="fa fa-check"></i> Subida y configuración incluida</div>
+      </div>
+    </div>
+    <div>
+      <div class="price-alt">
+        <div class="price-tier">Solo página web</div>
+        <div class="price-num">USD 250</div>
+        <div class="price-sub">sin carrito · contacto por WhatsApp</div>
+        <div class="inv-checks" style="margin-top:14px">
+          <div class="ic"><i class="fa fa-check"></i> Página de presentación de marca</div>
+          <div class="ic"><i class="fa fa-check"></i> Fotos y descripción de prendas</div>
+          <div class="ic"><i class="fa fa-check"></i> Botón de contacto directo</div>
+        </div>
+      </div>
+      <div class="cond-box">
+        <div class="cond-title">Condiciones de pago</div>
+        <div class="cond-item"><div class="cond-dot"></div><p><strong>Pago único</strong> para proyectos bajo USD 290</p></div>
+        <div class="cond-item"><div class="cond-dot"></div><p><strong>50% inicio · 50% entrega</strong> para proyectos de USD 290 o más</p></div>
+        <div class="cond-item"><div class="cond-dot"></div><p>Dominio y hosting <strong>aparte</strong> — te asesoramos sin costo extra</p></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 </div><!-- /#deck -->
 
-<!-- Nav -->
 <div id="nav">
-  <button class="nav-btn" id="prev"><i class="fa-solid fa-chevron-left"></i></button>
+  <button class="nbtn" id="prev"><i class="fa fa-chevron-left"></i></button>
   <div id="dots"></div>
-  <button class="nav-btn" id="next"><i class="fa-solid fa-chevron-right"></i></button>
-</div>
-
-<!-- Watermark -->
-<div id="wm">
-  <img src="https://raw.githubusercontent.com/juantomasetti1/scalerics-assets/main/logo_full_alt.png" alt="Scalerics">
+  <button class="nbtn nxt" id="next"><i class="fa fa-chevron-right"></i></button>
 </div>
 
 <script>
-  const slides = document.querySelectorAll('.slide');
+  const slides = [...document.querySelectorAll('.slide')];
   const dotsEl = document.getElementById('dots');
   const counter = document.getElementById('counter');
   const progress = document.getElementById('progress');
   const total = slides.length;
-  let current = 0;
+  let cur = 0;
 
-  // Build dots
-  slides.forEach((_, i) => {
+  slides.forEach((_,i) => {
     const d = document.createElement('div');
-    d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.addEventListener('click', () => goTo(i));
+    d.className = 'dot' + (i===0?' on':'');
+    d.onclick = () => goTo(i);
     dotsEl.appendChild(d);
   });
 
   function update() {
-    slides.forEach((s, i) => {
-      s.classList.remove('active', 'exit');
-      if (i === current) s.classList.add('active');
-    });
-    document.querySelectorAll('.dot').forEach((d, i) => {
-      d.classList.toggle('active', i === current);
-    });
-    counter.textContent = (current + 1) + ' / ' + total;
-    progress.style.width = ((current + 1) / total * 100) + '%';
+    slides.forEach((s,i) => { s.classList.remove('active','out'); if(i===cur) s.classList.add('active'); });
+    document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('on', i===cur));
+    counter.textContent = (cur+1) + ' / ' + total;
+    progress.style.width = ((cur+1)/total*100) + '%';
   }
 
   function goTo(idx) {
-    if (idx < 0 || idx >= total) return;
-    slides[current].classList.add('exit');
-    setTimeout(() => slides[current < idx ? current : current].classList.remove('exit'), 450);
-    current = idx;
+    if(idx<0||idx>=total) return;
+    slides[cur].classList.add('out');
+    cur = idx;
     update();
   }
 
-  document.getElementById('prev').addEventListener('click', () => { if (current > 0) goTo(current - 1); });
-  document.getElementById('next').addEventListener('click', () => { if (current < total - 1) goTo(current + 1); });
-
+  document.getElementById('prev').onclick = () => { if(cur>0) goTo(cur-1); };
+  document.getElementById('next').onclick = () => { if(cur<total-1) goTo(cur+1); };
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); if (current < total - 1) goTo(current + 1); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); if (current > 0) goTo(current - 1); }
+    if(e.key==='ArrowRight'||e.key===' ') { e.preventDefault(); if(cur<total-1) goTo(cur+1); }
+    if(e.key==='ArrowLeft') { e.preventDefault(); if(cur>0) goTo(cur-1); }
   });
 
   update();
