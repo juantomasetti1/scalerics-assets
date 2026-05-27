@@ -1,652 +1,519 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Z-Soul — Ropa con identidad. Santa Lucía, Uruguay.">
-  <meta property="og:title" content="Z-Soul | Ropa con Alma">
-  <meta property="og:description" content="Ecommerce de ropa en Santa Lucía, Uruguay.">
-  <title>Z-Soul | Ropa con Alma</title>
-  <style>
-    /* === RESET === */
-    html { scroll-behavior: smooth; }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    img { display: block; max-width: 100%; }
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
-    button { cursor: pointer; border: none; background: none; font: inherit; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z-Soul — Demo Scalerics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Raleway:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#090c12;
+    --surface:#111827;
+    --surface2:#1f2937;
+    --border:#1e2d40;
+    --blue:#0088CC;
+    --blue2:#006fa8;
+    --green:#10B981;
+    --red:#ef4444;
+    --yellow:#f59e0b;
+    --text:#e2e8f0;
+    --text2:#94a3b8;
+    --text3:#64748b;
+    --radius:12px;
+    --slide-w:900px;
+    --slide-h:506px;
+  }
+  html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
 
-    /* === TEMA 1: Editorial Bold === */
-    body.theme-1 {
-      --bg:          #f2f0eb;
-      --bg-alt:      #1a1a1a;
-      --text:        #1a1a1a;
-      --text-alt:    #ffffff;
-      --text-muted:  #888888;
-      --accent:      #1a1a1a;
-      --accent-text: #ffffff;
-      --card-bg:     #ffffff;
-      --border:      #1a1a1a;
-      --font-title:  system-ui, "Arial Black", Arial, sans-serif;
-      --font-body:   system-ui, Arial, sans-serif;
-      --fw-title:    900;
-      --fs-title:    normal;
-    }
+  /* ── Progress ── */
+  #progress{position:fixed;top:0;left:0;height:3px;background:var(--blue);transition:width .4s ease;z-index:100}
 
-    /* === TEMA 2: Crema + Grafito === */
-    body.theme-2 {
-      --bg:          #faf8f4;
-      --bg-alt:      #3d3d3d;
-      --text:        #3d3d3d;
-      --text-alt:    #f5f0e8;
-      --text-muted:  #999999;
-      --accent:      #3d3d3d;
-      --accent-text: #faf8f4;
-      --card-bg:     #f2ede6;
-      --border:      #3d3d3d;
-      --font-title:  Georgia, "Times New Roman", serif;
-      --font-body:   Georgia, serif;
-      --fw-title:    400;
-      --fs-title:    italic;
-    }
+  /* ── Counter ── */
+  #counter{position:fixed;top:16px;right:20px;font-size:12px;color:var(--text3);z-index:100;font-family:'Raleway',sans-serif;letter-spacing:.05em}
 
-    /* === TEMA 3: Blanco + Terracota === */
-    body.theme-3 {
-      --bg:          #ffffff;
-      --bg-alt:      #1a1a1a;
-      --text:        #1a1a1a;
-      --text-alt:    #ffffff;
-      --text-muted:  #888888;
-      --accent:      #b5451b;
-      --accent-text: #ffffff;
-      --card-bg:     #f7f7f7;
-      --border:      #1a1a1a;
-      --font-title:  system-ui, "Arial Black", Arial, sans-serif;
-      --font-body:   system-ui, Arial, sans-serif;
-      --fw-title:    900;
-      --fs-title:    normal;
-    }
+  /* ── Deck ── */
+  #deck{width:100%;height:100%;position:relative;overflow:hidden}
 
-    /* === BASE === */
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      line-height: 1.5;
-      transition: background-color 0.3s, color 0.3s;
-    }
+  .slide{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;transform:translateX(60px);
+    transition:opacity .45s ease,transform .45s ease;
+    pointer-events:none;
+    padding:40px 60px;
+  }
+  .slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+  .slide.exit{opacity:0;transform:translateX(-60px)}
 
-    /* === NAVBAR === */
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--bg);
-      border-bottom: 2px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 40px;
-    }
-    .navbar__logo {
-      font-family: Georgia, serif;
-      font-style: italic;
-      font-size: 22px;
-      letter-spacing: 3px;
-      color: var(--text);
-      font-weight: 400;
-    }
-    .navbar__links {
-      display: flex;
-      gap: 32px;
-    }
-    .navbar__links a {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      transition: color 0.2s;
-    }
-    .navbar__links a:hover { color: var(--text); }
+  /* ── Nav ── */
+  #nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:20px;z-index:100}
+  .nav-btn{background:var(--surface);border:1px solid var(--border);color:var(--text2);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .nav-btn:hover{background:var(--blue);border-color:var(--blue);color:#fff}
+  #dots{display:flex;gap:8px;align-items:center}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--text3);cursor:pointer;transition:all .2s}
+  .dot.active{background:var(--blue);width:20px;border-radius:3px}
 
-    /* === HERO === */
-    .hero {
-      background: var(--bg-alt);
-      color: var(--text-alt);
-      padding: 100px 40px;
-    }
-    .hero__inner { max-width: 640px; }
-    .hero__tag {
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
-    .hero__title {
-      font-family: var(--font-title);
-      font-size: clamp(48px, 8vw, 96px);
-      font-weight: var(--fw-title);
-      font-style: var(--fs-title);
-      line-height: 1;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-    }
-    body.theme-2 .hero__title { text-transform: none; }
-    .hero__sub {
-      font-size: 15px;
-      color: var(--text-muted);
-      margin-bottom: 40px;
-      max-width: 380px;
-      line-height: 1.7;
-    }
-    .hero__cta {
-      display: inline-block;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      padding: 14px 32px;
-      transition: opacity 0.2s;
-    }
-    .hero__cta:hover { opacity: 0.8; }
+  /* ── Watermark ── */
+  #wm{position:fixed;bottom:24px;right:24px;opacity:.35;z-index:100}
+  #wm img{height:18px;filter:brightness(0) invert(1)}
 
-    /* === PRODUCTS === */
-    .products {
-      padding: 80px 40px;
-      background: var(--bg);
-    }
-    .products__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 40px;
-      border-bottom: 2px solid var(--border);
-      padding-bottom: 16px;
-    }
-    .products__title {
-      font-family: var(--font-title);
-      font-size: 13px;
-      font-weight: var(--fw-title);
-      font-style: var(--fs-title);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
-    body.theme-2 .products__title { text-transform: none; }
-    .products__count {
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 1px;
-    }
-    .products__grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
-    }
-    .product-card {
-      background: var(--card-bg);
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .product-card:hover { transform: translateY(-4px); }
-    .product-card__img-wrap { position: relative; overflow: hidden; }
-    .product-card__img {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      transition: transform 0.4s;
-    }
-    .product-card:hover .product-card__img { transform: scale(1.04); }
-    .product-card__badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: var(--accent);
-      color: var(--accent-text);
-      font-size: 9px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      padding: 4px 10px;
-    }
-    .product-card__info { padding: 16px; }
-    .product-card__name {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-    }
-    body.theme-2 .product-card__name { text-transform: none; font-style: italic; }
-    .product-card__price {
-      font-size: 15px;
-      font-weight: 900;
-      color: var(--accent);
-    }
-    body.theme-1 .product-card__price { color: var(--text); }
-    body.theme-2 .product-card__price { color: var(--text); }
+  /* ══════════════════════════════════════
+     SLIDE 1 — PORTADA
+  ══════════════════════════════════════ */
+  .s1-inner{text-align:center;max-width:640px}
+  .s1-logo{height:36px;margin-bottom:32px}
+  .s1-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,136,204,.12);border:1px solid rgba(0,136,204,.3);color:var(--blue);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:28px}
+  .s1-headline{font-family:'Raleway',sans-serif;font-size:52px;font-weight:900;line-height:1.08;letter-spacing:-.02em;margin-bottom:16px}
+  .s1-headline span{color:var(--blue)}
+  .s1-sub{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:36px}
+  .s1-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .pill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);color:var(--text2);font-size:12px;padding:7px 14px;border-radius:20px}
+  .pill i{color:var(--blue);font-size:11px}
 
-    /* === ABOUT === */
-    .about {
-      background: var(--bg-alt);
-      color: var(--text-alt);
-      padding: 100px 40px;
-    }
-    .about__inner { max-width: 640px; }
-    .about__tag {
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
-    .about__title {
-      font-family: var(--font-title);
-      font-size: clamp(32px, 5vw, 56px);
-      font-weight: var(--fw-title);
-      font-style: var(--fs-title);
-      text-transform: uppercase;
-      line-height: 1.1;
-      margin-bottom: 24px;
-    }
-    body.theme-2 .about__title { text-transform: none; }
-    .about__text {
-      font-size: 15px;
-      color: var(--text-muted);
-      max-width: 480px;
-      line-height: 1.8;
-    }
+  /* ══════════════════════════════════════
+     SLIDE 2 — PROBLEMA
+  ══════════════════════════════════════ */
+  .s2-inner{width:100%;max-width:820px}
+  .slide-title{font-family:'Raleway',sans-serif;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+  .slide-heading{font-family:'Raleway',sans-serif;font-size:36px;font-weight:800;line-height:1.15;margin-bottom:40px}
+  .slide-heading em{color:var(--blue);font-style:normal}
+  .prob-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .prob-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px}
+  .prob-icon{width:44px;height:44px;border-radius:10px;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+  .prob-icon i{color:var(--red);font-size:18px}
+  .prob-card h3{font-size:15px;font-weight:700;margin-bottom:8px}
+  .prob-card p{font-size:13px;color:var(--text2);line-height:1.6}
+  .prob-card .prob-note{margin-top:14px;font-size:11px;color:var(--text3);font-style:italic}
 
-    /* === FOOTER === */
-    .footer {
-      background: var(--bg);
-      border-top: 2px solid var(--border);
-      padding: 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 24px;
-    }
-    .footer__logo {
-      font-family: Georgia, serif;
-      font-style: italic;
-      font-size: 20px;
-      letter-spacing: 3px;
-      color: var(--text);
-      display: block;
-      margin-bottom: 8px;
-    }
-    .footer__location { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; }
-    .footer__right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-    }
-    .footer__link {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text);
-      transition: color 0.2s;
-    }
-    .footer__link:hover { color: var(--accent); }
-    .footer__copy { font-size: 10px; color: var(--text-muted); }
+  /* ══════════════════════════════════════
+     SLIDE 3 — SOLUCIÓN
+  ══════════════════════════════════════ */
+  .s3-inner{width:100%;max-width:820px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .feat-list{display:flex;flex-direction:column;gap:20px}
+  .feat-row{display:flex;gap:14px;align-items:flex-start}
+  .feat-icon{width:36px;height:36px;border-radius:8px;background:rgba(0,136,204,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .feat-icon i{color:var(--blue);font-size:14px}
+  .feat-row h4{font-size:14px;font-weight:600;margin-bottom:3px}
+  .feat-row p{font-size:12px;color:var(--text2);line-height:1.5}
+  .stats-col{display:flex;flex-direction:column;gap:16px}
+  .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px}
+  .stat-num{font-family:'Raleway',sans-serif;font-size:38px;font-weight:900;color:var(--blue);line-height:1}
+  .stat-label{font-size:12px;color:var(--text2);margin-top:4px}
 
-    /* === MODAL === */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-    }
-    .modal-overlay.is-open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .modal {
-      background: var(--bg);
-      width: 100%;
-      max-width: 440px;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      transform: translateY(24px);
-      transition: transform 0.25s;
-    }
-    .modal-overlay.is-open .modal { transform: translateY(0); }
-    .modal__close {
-      position: absolute;
-      top: 12px;
-      right: 16px;
-      font-size: 20px;
-      color: var(--text-muted);
-      z-index: 10;
-      transition: color 0.2s;
-    }
-    .modal__close:hover { color: var(--text); }
-    .modal__img {
-      width: 100%;
-      aspect-ratio: 4/5;
-      object-fit: cover;
-    }
-    .modal__body { padding: 24px; }
-    .modal__name {
-      font-size: 13px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 6px;
-    }
-    body.theme-2 .modal__name { text-transform: none; font-style: italic; }
-    .modal__price {
-      font-size: 22px;
-      font-weight: 900;
-      color: var(--accent);
-      margin-bottom: 20px;
-    }
-    body.theme-1 .modal__price,
-    body.theme-2 .modal__price { color: var(--text); }
-    .modal__size-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-    }
-    .modal__sizes { display: flex; gap: 8px; margin-bottom: 24px; }
-    .modal__size {
-      border: 1.5px solid #ddd;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 8px 14px;
-      color: var(--text-muted);
-      transition: border-color 0.15s, color 0.15s;
-    }
-    .modal__size.is-selected {
-      border-color: var(--text);
-      color: var(--text);
-    }
-    .modal__wa {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: #25D366;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 16px;
-      transition: opacity 0.2s;
-    }
-    .modal__wa:hover { opacity: 0.88; }
+  /* ══════════════════════════════════════
+     SLIDE 4 — DEMO (browser mockup)
+  ══════════════════════════════════════ */
+  .s4-inner{width:100%;max-width:820px;display:grid;grid-template-columns:220px 1fr;gap:36px;align-items:center}
+  .s4-copy .slide-title{margin-bottom:10px}
+  .s4-copy .slide-heading{font-size:28px;margin-bottom:16px}
+  .s4-copy p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+  .s4-tags{display:flex;flex-direction:column;gap:8px}
+  .tag{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)}
+  .tag i{color:var(--green);font-size:11px}
 
-    /* === THEME SWITCHER === */
-    .theme-switcher {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 300;
-      display: flex;
-      gap: 6px;
-      background: rgba(0,0,0,0.75);
-      padding: 8px 10px;
-      backdrop-filter: blur(4px);
-    }
-    .theme-switcher__btn {
-      width: 30px;
-      height: 30px;
-      font-size: 12px;
-      font-weight: 900;
-      color: rgba(255,255,255,0.5);
-      border: 1.5px solid rgba(255,255,255,0.2);
-      transition: color 0.2s, border-color 0.2s;
-    }
-    .theme-switcher__btn:hover { color: #fff; border-color: rgba(255,255,255,0.6); }
-    .theme-switcher__btn.is-active { color: #fff; border-color: #fff; }
+  .browser{background:#1e293b;border-radius:10px;border:1px solid var(--border);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .browser-bar{background:#0f172a;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+  .browser-dots{display:flex;gap:5px}
+  .browser-dots span{width:9px;height:9px;border-radius:50%}
+  .browser-dots span:nth-child(1){background:#ef4444}
+  .browser-dots span:nth-child(2){background:#f59e0b}
+  .browser-dots span:nth-child(3){background:#10b981}
+  .browser-url{flex:1;background:#1e293b;border-radius:5px;padding:4px 10px;font-size:10px;color:var(--text3);font-family:monospace}
+  .browser-body{background:#f2f0eb;font-family:'Inter',sans-serif}
 
-    /* === RESPONSIVE === */
-    @media (max-width: 640px) {
-      .navbar { padding: 12px 20px; }
-      .navbar__links { gap: 16px; }
-      .navbar__links a { font-size: 9px; letter-spacing: 1px; }
-      .navbar__logo { font-size: 18px; }
+  /* — Fake shop inside browser — */
+  .shop-nav{background:#1a1a1a;padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+  .shop-brand{color:#fff;font-family:'Georgia',serif;font-style:italic;font-size:13px;font-weight:700;letter-spacing:.04em}
+  .shop-links{display:flex;gap:10px}
+  .shop-links a{color:rgba(255,255,255,.65);font-size:9px;text-decoration:none}
+  .shop-hero{background:#1a1a1a;padding:20px 14px;text-align:center}
+  .shop-hero h2{color:#fff;font-family:'Arial Black','Arial',sans-serif;font-size:15px;font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+  .shop-hero p{color:rgba(255,255,255,.6);font-size:9px;margin-bottom:10px}
+  .shop-cta{background:#fff;color:#1a1a1a;font-size:9px;font-weight:700;padding:6px 14px;border:none;border-radius:2px;cursor:pointer;letter-spacing:.04em;text-transform:uppercase}
+  .shop-grid{padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .prod-card{background:#fff;border-radius:4px;overflow:hidden}
+  .prod-card img{width:100%;height:72px;object-fit:cover;display:block}
+  .prod-info{padding:6px 7px}
+  .prod-name{font-size:8px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
+  .prod-price{font-size:9px;font-weight:700;color:#1a1a1a}
 
-      .hero { padding: 64px 20px; }
-      .hero__title { font-size: clamp(40px, 12vw, 64px); }
+  /* ══════════════════════════════════════
+     SLIDE 5 — MODAL
+  ══════════════════════════════════════ */
+  .s5-inner{width:100%;max-width:820px;display:grid;grid-template-columns:220px 1fr;gap:36px;align-items:center}
+  .s5-copy .slide-heading{font-size:26px;margin-bottom:16px}
+  .s5-copy p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px}
 
-      .products { padding: 48px 20px; }
-      .products__grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      .product-card__img { aspect-ratio: 4/3; }
+  /* modal inside browser */
+  .modal-overlay{background:rgba(0,0,0,.55);padding:12px;display:flex;align-items:center;justify-content:center}
+  .modal-box{background:#fff;border-radius:6px;overflow:hidden;width:100%}
+  .modal-img{width:100%;height:90px;object-fit:cover;display:block}
+  .modal-body{padding:10px 12px}
+  .modal-name{font-size:10px;font-weight:700;color:#1a1a1a;margin-bottom:2px}
+  .modal-price{font-size:12px;font-weight:900;color:#1a1a1a;margin-bottom:8px}
+  .modal-label{font-size:8px;font-weight:600;color:#555;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px}
+  .talle-row{display:flex;gap:4px;margin-bottom:10px}
+  .talle{width:20px;height:20px;border:1px solid #ccc;border-radius:3px;font-size:7px;font-weight:600;color:#555;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .talle.sel{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+  .wa-btn{background:#25D366;color:#fff;border:none;border-radius:4px;width:100%;padding:7px;font-size:9px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
+  .wa-btn i{font-size:10px}
 
-      .about { padding: 64px 20px; }
-
-      .footer {
-        flex-direction: column;
-        padding: 28px 20px;
-        gap: 20px;
-      }
-      .footer__right { align-items: flex-start; }
-
-      .theme-switcher { bottom: 16px; right: 16px; }
-    }
-  </style>
+  /* ══════════════════════════════════════
+     SLIDE 6 — INVERSIÓN
+  ══════════════════════════════════════ */
+  .s6-inner{width:100%;max-width:820px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+  .price-card{background:var(--surface);border:1px solid var(--blue);border-radius:var(--radius);padding:32px 28px;position:relative}
+  .price-card::before{content:'RECOMENDADO';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:9px;font-weight:700;letter-spacing:.1em;padding:4px 14px;border-radius:0 0 8px 8px}
+  .price-tier{font-size:11px;font-weight:600;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;margin-top:12px}
+  .price-main{font-family:'Raleway',sans-serif;font-size:48px;font-weight:900;line-height:1;margin-bottom:4px}
+  .price-sub{font-size:12px;color:var(--text3);margin-bottom:24px}
+  .feat-checks{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+  .fc{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2)}
+  .fc i{color:var(--green);font-size:12px;flex-shrink:0}
+  .price-divider{border:none;border-top:1px solid var(--border);margin:0 0 24px}
+  .price-alt{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px}
+  .price-alt .price-tier{color:var(--text2)}
+  .price-alt .price-main{font-size:38px;color:var(--text)}
+  .cond-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:12px}
+  .cond-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+  .cond-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:5px;flex-shrink:0}
+  .cond-item p{font-size:12px;color:var(--text2);line-height:1.5}
+</style>
 </head>
-<body class="theme-1">
+<body>
 
-  <nav class="navbar">
-    <a href="#" class="navbar__logo">Z-Soul</a>
-    <ul class="navbar__links">
-      <li><a href="#coleccion">Tienda</a></li>
-      <li><a href="#nosotros">Nosotros</a></li>
-      <li><a href="#footer">Contacto</a></li>
-    </ul>
-  </nav>
+<div id="progress"></div>
+<div id="counter">1 / 6</div>
 
-  <section class="hero">
-    <div class="hero__inner">
-      <p class="hero__tag">Santa Lucía · Uruguay</p>
-      <h1 class="hero__title">Vestite<br>con alma.</h1>
-      <p class="hero__sub">Ropa con identidad para quienes saben lo que quieren.</p>
-      <a href="#coleccion" class="hero__cta">Ver Colección ↓</a>
-    </div>
-  </section>
+<div id="deck">
 
-  <section class="products" id="coleccion">
-    <div class="products__header">
-      <h2 class="products__title">Colección</h2>
-      <span class="products__count">4 productos</span>
-    </div>
-    <div class="products__grid">
-
-      <article class="product-card" tabindex="0" role="button" data-name="Buzo Tejido con Trenzas" data-price="$1.890" data-img="img/buzo.jpeg">
-        <div class="product-card__img-wrap">
-          <img src="img/buzo.jpeg" alt="Buzo Tejido con Trenzas" class="product-card__img">
-          <span class="product-card__badge">NUEVO</span>
-        </div>
-        <div class="product-card__info">
-          <p class="product-card__name">Buzo Tejido con Trenzas</p>
-          <p class="product-card__price">$1.890</p>
-        </div>
-      </article>
-
-      <article class="product-card" tabindex="0" role="button" data-name="Jean Oxford" data-price="$2.190" data-img="img/jean-oxford.jpeg">
-        <div class="product-card__img-wrap">
-          <img src="img/jean-oxford.jpeg" alt="Jean Oxford" class="product-card__img">
-        </div>
-        <div class="product-card__info">
-          <p class="product-card__name">Jean Oxford</p>
-          <p class="product-card__price">$2.190</p>
-        </div>
-      </article>
-
-      <article class="product-card" tabindex="0" role="button" data-name="Jean Wide Leg con Costuras" data-price="$1.990" data-img="img/jean-wide.jpeg">
-        <div class="product-card__img-wrap">
-          <img src="img/jean-wide.jpeg" alt="Jean Wide Leg con Costuras" class="product-card__img">
-        </div>
-        <div class="product-card__info">
-          <p class="product-card__name">Jean Wide Leg con Costuras</p>
-          <p class="product-card__price">$1.990</p>
-        </div>
-      </article>
-
-      <article class="product-card" tabindex="0" role="button" data-name="Pantalón Wide Leg" data-price="$1.750" data-img="img/pantalon.jpeg">
-        <div class="product-card__img-wrap">
-          <img src="img/pantalon.jpeg" alt="Pantalón Wide Leg" class="product-card__img">
-        </div>
-        <div class="product-card__info">
-          <p class="product-card__name">Pantalón Wide Leg</p>
-          <p class="product-card__price">$1.750</p>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <section class="about" id="nosotros">
-    <div class="about__inner">
-      <p class="about__tag">Quiénes somos</p>
-      <h2 class="about__title">Moda con<br>identidad propia</h2>
-      <p class="about__text">Z-Soul nació en Santa Lucía, Uruguay, con la convicción de que la ropa es una extensión de quien sos. Cada pieza está seleccionada para que te sientas vos.</p>
-    </div>
-  </section>
-
-  <footer class="footer" id="footer">
-    <div class="footer__left">
-      <span class="footer__logo">Z-Soul</span>
-      <p class="footer__location">Santa Lucía, Canelones · Uruguay</p>
-    </div>
-    <div class="footer__right">
-      <a href="#" class="footer__link">Instagram</a>
-      <a href="https://wa.me/598099000000" class="footer__link" target="_blank" rel="noopener">WhatsApp</a>
-      <p class="footer__copy">© 2025 Z-Soul</p>
-    </div>
-  </footer>
-
-  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalName">
-    <div class="modal">
-      <button class="modal__close" id="modalClose" aria-label="Cerrar">✕</button>
-      <img src="" alt="" class="modal__img" id="modalImg">
-      <div class="modal__body">
-        <h2 class="modal__name" id="modalName"></h2>
-        <p class="modal__price" id="modalPrice"></p>
-        <p class="modal__size-label">Talle</p>
-        <div class="modal__sizes" id="modalSizes">
-          <button type="button" class="modal__size" data-size="XS">XS</button>
-          <button type="button" class="modal__size" data-size="S">S</button>
-          <button type="button" class="modal__size" data-size="M">M</button>
-          <button type="button" class="modal__size" data-size="L">L</button>
-          <button type="button" class="modal__size" data-size="XL">XL</button>
-        </div>
-        <a href="#" class="modal__wa" id="modalWa" target="_blank" rel="noopener">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Consultar por WhatsApp
-        </a>
+  <!-- ═══════════════ SLIDE 1 — PORTADA ═══════════════ -->
+  <div class="slide active" data-index="0">
+    <div class="s1-inner">
+      <img class="s1-logo" src="https://raw.githubusercontent.com/juantomasetti1/scalerics-assets/main/logo_full_alt.png" alt="Scalerics">
+      <div class="s1-badge"><i class="fa-solid fa-shirt"></i> Tienda online de ropa</div>
+      <h1 class="s1-headline">Tu ropa,<br><span>vendiendo sola.</span></h1>
+      <p class="s1-sub">Una tienda online para Z-Soul: catálogo siempre disponible,<br>consultas por WhatsApp, pedidos desde cualquier lugar.</p>
+      <div class="s1-pills">
+        <span class="pill"><i class="fa-brands fa-whatsapp"></i> WhatsApp integrado</span>
+        <span class="pill"><i class="fa-solid fa-images"></i> Fotos de producto</span>
+        <span class="pill"><i class="fa-solid fa-location-dot"></i> Santa Lucía, Uruguay</span>
+        <span class="pill"><i class="fa-solid fa-mobile-screen"></i> Funciona en celular</span>
       </div>
     </div>
   </div>
 
-  <div class="theme-switcher" role="group" aria-label="Cambiar estilo">
-    <button class="theme-switcher__btn is-active" data-theme="theme-1" aria-label="Estilo 1">1</button>
-    <button class="theme-switcher__btn" data-theme="theme-2" aria-label="Estilo 2">2</button>
-    <button class="theme-switcher__btn" data-theme="theme-3" aria-label="Estilo 3">3</button>
+  <!-- ═══════════════ SLIDE 2 — PROBLEMA ═══════════════ -->
+  <div class="slide" data-index="1">
+    <div class="s2-inner">
+      <div class="slide-title">El problema</div>
+      <h2 class="slide-heading">Sin tienda online,<br><em>perdés ventas todos los días.</em></h2>
+      <div class="prob-cards">
+        <div class="prob-card">
+          <div class="prob-icon"><i class="fa-solid fa-map-pin"></i></div>
+          <h3>Solo clientes locales</h3>
+          <p>Sin web, tu negocio existe solo para quien ya te conoce en Santa Lucía.</p>
+          <p class="prob-note">Clientes de Montevideo o del interior no te encuentran.</p>
+        </div>
+        <div class="prob-card">
+          <div class="prob-icon"><i class="fa-brands fa-whatsapp"></i></div>
+          <h3>Catálogo por chat</h3>
+          <p>Mandar fotos una por una por WhatsApp es lento, cansador y da imagen amateur.</p>
+          <p class="prob-note">El cliente se pierde o compra en otro lado mientras espera.</p>
+        </div>
+        <div class="prob-card">
+          <div class="prob-icon"><i class="fa-solid fa-clock"></i></div>
+          <h3>Vendés solo cuando estás</h3>
+          <p>Si estás dormida, en el trabajo o sin señal, esa venta no existe.</p>
+          <p class="prob-note">Una tienda online trabaja 24/7 aunque vos no estés.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script>
-    // === MODAL ===
-    const overlay    = document.getElementById('modalOverlay');
-    const modalImg   = document.getElementById('modalImg');
-    const modalName  = document.getElementById('modalName');
-    const modalPrice = document.getElementById('modalPrice');
-    const modalWa    = document.getElementById('modalWa');
-    const sizes      = document.querySelectorAll('.modal__size');
+  <!-- ═══════════════ SLIDE 3 — SOLUCIÓN ═══════════════ -->
+  <div class="slide" data-index="2">
+    <div class="s3-inner">
+      <div>
+        <div class="slide-title">La solución</div>
+        <h2 class="slide-heading">Todo lo que Z-Soul<br><em>necesita para vender online.</em></h2>
+        <div class="feat-list">
+          <div class="feat-row">
+            <div class="feat-icon"><i class="fa-solid fa-store"></i></div>
+            <div>
+              <h4>Tienda con catálogo completo</h4>
+              <p>Fotos, talles, precios y descripción de cada prenda. El cliente ve todo solo.</p>
+            </div>
+          </div>
+          <div class="feat-row">
+            <div class="feat-icon"><i class="fa-brands fa-whatsapp"></i></div>
+            <div>
+              <h4>Consulta directa por WhatsApp</h4>
+              <p>Un botón en cada producto abre un chat con el texto listo: producto + talle.</p>
+            </div>
+          </div>
+          <div class="feat-row">
+            <div class="feat-icon"><i class="fa-solid fa-palette"></i></div>
+            <div>
+              <h4>Diseño que refleja la marca</h4>
+              <p>Tres opciones de estilo visual para elegir el que mejor va con Z-Soul.</p>
+            </div>
+          </div>
+          <div class="feat-row">
+            <div class="feat-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+            <div>
+              <h4>100% responsive</h4>
+              <p>Se ve perfecto en el celular de cualquier cliente, sin esfuerzo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stats-col">
+        <div class="stat-box">
+          <div class="stat-num">24/7</div>
+          <div class="stat-label">Tu tienda abierta siempre, sin que vos estés</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Variantes de estilo visual incluidas en la demo</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">0%</div>
+          <div class="stat-label">Comisión por venta — todo el dinero es tuyo</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    const WA_NUMBER = '598099000000'; // placeholder — cliente lo cambia
+  <!-- ═══════════════ SLIDE 4 — DEMO SHOP ═══════════════ -->
+  <div class="slide" data-index="3">
+    <div class="s4-inner">
+      <div class="s4-copy">
+        <div class="slide-title">La tienda</div>
+        <h2 class="slide-heading">Tu catálogo,<br><em>siempre listo.</em></h2>
+        <p>El cliente entra, ve los productos con foto y precio, elige su talle y te escribe por WhatsApp. Sin intermediarios.</p>
+        <div class="s4-tags">
+          <span class="tag"><i class="fa-solid fa-check"></i> Navbar con logo Z-Soul</span>
+          <span class="tag"><i class="fa-solid fa-check"></i> Hero impactante</span>
+          <span class="tag"><i class="fa-solid fa-check"></i> Grilla 2×2 de productos</span>
+          <span class="tag"><i class="fa-solid fa-check"></i> Footer con redes e info</span>
+        </div>
+      </div>
+      <div class="browser">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">zsoul.com.uy</div>
+        </div>
+        <div class="browser-body">
+          <div class="shop-nav">
+            <span class="shop-brand">Z-Soul</span>
+            <div class="shop-links">
+              <a href="#">Tienda</a><a href="#">Nosotros</a><a href="#">Contacto</a>
+            </div>
+          </div>
+          <div class="shop-hero">
+            <h2>NUEVA<br>COLECCIÓN</h2>
+            <p>Ropa con identidad · Santa Lucía, Uruguay</p>
+            <button class="shop-cta">Ver Colección ↓</button>
+          </div>
+          <div class="shop-grid">
+            <div class="prod-card">
+              <img src="img/buzo.jpeg" alt="Buzo Tejido con Trenzas">
+              <div class="prod-info">
+                <div class="prod-name">Buzo Tejido con Trenzas</div>
+                <div class="prod-price">$1.890</div>
+              </div>
+            </div>
+            <div class="prod-card">
+              <img src="img/jean-oxford.jpeg" alt="Jean Oxford">
+              <div class="prod-info">
+                <div class="prod-name">Jean Oxford</div>
+                <div class="prod-price">$2.190</div>
+              </div>
+            </div>
+            <div class="prod-card">
+              <img src="img/jean-wide.jpeg" alt="Jean Wide Leg">
+              <div class="prod-info">
+                <div class="prod-name">Jean Wide Leg</div>
+                <div class="prod-price">$1.990</div>
+              </div>
+            </div>
+            <div class="prod-card">
+              <img src="img/pantalon.jpeg" alt="Pantalón Wide Leg">
+              <div class="prod-info">
+                <div class="prod-name">Pantalón Wide Leg</div>
+                <div class="prod-price">$1.750</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    let selectedSize = 'S';
-    let openerCard = null;
+  <!-- ═══════════════ SLIDE 5 — MODAL ═══════════════ -->
+  <div class="slide" data-index="4">
+    <div class="s5-inner">
+      <div class="s5-copy">
+        <div class="slide-title">El modal</div>
+        <h2 class="slide-heading">Click en el producto<br><em>y a comprar.</em></h2>
+        <p>El cliente elige el talle y toca el botón verde. Se abre WhatsApp con el mensaje ya escrito: producto, talle y consulta lista.</p>
+        <div class="s4-tags">
+          <span class="tag"><i class="fa-solid fa-check"></i> Foto grande del producto</span>
+          <span class="tag"><i class="fa-solid fa-check"></i> Selector de talle XS–XL</span>
+          <span class="tag"><i class="fa-solid fa-check"></i> Botón directo a WhatsApp</span>
+        </div>
+      </div>
+      <div class="browser">
+        <div class="browser-bar">
+          <div class="browser-dots"><span></span><span></span><span></span></div>
+          <div class="browser-url">zsoul.com.uy</div>
+        </div>
+        <div class="browser-body">
+          <div class="shop-nav">
+            <span class="shop-brand">Z-Soul</span>
+            <div class="shop-links">
+              <a href="#">Tienda</a><a href="#">Nosotros</a><a href="#">Contacto</a>
+            </div>
+          </div>
+          <div class="modal-overlay">
+            <div class="modal-box">
+              <img src="img/buzo.jpeg" alt="Buzo Tejido con Trenzas" class="modal-img">
+              <div class="modal-body">
+                <div class="modal-name">Buzo Tejido con Trenzas</div>
+                <div class="modal-price">$1.890</div>
+                <div class="modal-label">Elegí tu talle</div>
+                <div class="talle-row">
+                  <div class="talle">XS</div>
+                  <div class="talle sel">S</div>
+                  <div class="talle">M</div>
+                  <div class="talle">L</div>
+                  <div class="talle">XL</div>
+                </div>
+                <button class="wa-btn"><i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function openModal(card) {
-      openerCard = card;
-      const name  = card.dataset.name;
-      const price = card.dataset.price;
-      const img   = card.dataset.img;
+  <!-- ═══════════════ SLIDE 6 — INVERSIÓN ═══════════════ -->
+  <div class="slide" data-index="5">
+    <div class="s6-inner">
+      <div>
+        <div class="slide-title">Inversión</div>
+        <h2 class="slide-heading" style="font-size:30px">Lo que incluye<br><em>y cuánto cuesta.</em></h2>
+        <br>
+        <div class="price-card">
+          <div class="price-tier">Ecommerce completo</div>
+          <div class="price-main">USD 490</div>
+          <div class="price-sub">pago único · sin comisiones</div>
+          <div class="feat-checks">
+            <div class="fc"><i class="fa-solid fa-check"></i> Tienda online con catálogo</div>
+            <div class="fc"><i class="fa-solid fa-check"></i> Modal con selector de talle</div>
+            <div class="fc"><i class="fa-solid fa-check"></i> Botón WhatsApp en cada producto</div>
+            <div class="fc"><i class="fa-solid fa-check"></i> Diseño responsive (celular y web)</div>
+            <div class="fc"><i class="fa-solid fa-check"></i> 3 variantes de estilo visual</div>
+            <div class="fc"><i class="fa-solid fa-check"></i> Subida y configuración incluida</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="price-alt">
+          <div class="price-tier">Solo página web</div>
+          <div class="price-main">USD 250</div>
+          <div class="price-sub">sin carrito · contacto por WhatsApp</div>
+          <div class="feat-checks" style="margin-top:16px">
+            <div class="fc"><i class="fa-solid fa-check"></i> Página de presentación</div>
+            <div class="fc"><i class="fa-solid fa-check"></i> Fotos y descripción de prendas</div>
+            <div class="fc"><i class="fa-solid fa-check"></i> Botón de contacto</div>
+          </div>
+        </div>
+        <br>
+        <div class="price-alt">
+          <div class="cond-title">Condiciones de pago</div>
+          <div class="cond-item">
+            <div class="cond-dot"></div>
+            <p><strong>Pago único</strong> para proyectos bajo USD 290</p>
+          </div>
+          <div class="cond-item">
+            <div class="cond-dot"></div>
+            <p><strong>50% inicio · 50% entrega</strong> para proyectos de USD 290 o más</p>
+          </div>
+          <div class="cond-item">
+            <div class="cond-dot"></div>
+            <p>Dominio y hosting <strong>aparte</strong> — te asesoramos sin costo extra</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      modalImg.src           = img;
-      modalImg.alt           = name;
-      modalName.textContent  = name;
-      modalPrice.textContent = price;
+</div><!-- /#deck -->
 
-      sizes.forEach(btn => btn.classList.toggle('is-selected', btn.dataset.size === selectedSize));
-      updateWaLink(name, selectedSize);
+<!-- Nav -->
+<div id="nav">
+  <button class="nav-btn" id="prev"><i class="fa-solid fa-chevron-left"></i></button>
+  <div id="dots"></div>
+  <button class="nav-btn" id="next"><i class="fa-solid fa-chevron-right"></i></button>
+</div>
 
-      overlay.classList.add('is-open');
-      overlay.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      document.getElementById('modalClose').focus();
-    }
+<!-- Watermark -->
+<div id="wm">
+  <img src="https://raw.githubusercontent.com/juantomasetti1/scalerics-assets/main/logo_full_alt.png" alt="Scalerics">
+</div>
 
-    function closeModal() {
-      overlay.classList.remove('is-open');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      if (openerCard) openerCard.focus();
-    }
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsEl = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  const total = slides.length;
+  let current = 0;
 
-    function updateWaLink(name, size) {
-      const text = encodeURIComponent(`Hola! Me interesa ${name} en talle ${size}. ¿Tienen disponibilidad?`);
-      modalWa.href = `https://wa.me/${WA_NUMBER}?text=${text}`;
-    }
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
 
-    document.querySelectorAll('.product-card').forEach(card => {
-      card.addEventListener('click', () => openModal(card));
+  function update() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'exit');
+      if (i === current) s.classList.add('active');
     });
-
-    document.querySelectorAll('.product-card').forEach(card => {
-      card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(card); }
-      });
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
     });
+    counter.textContent = (current + 1) + ' / ' + total;
+    progress.style.width = ((current + 1) / total * 100) + '%';
+  }
 
-    sizes.forEach(btn => {
-      btn.addEventListener('click', () => {
-        sizes.forEach(b => b.classList.remove('is-selected'));
-        btn.classList.add('is-selected');
-        selectedSize = btn.dataset.size;
-        updateWaLink(modalName.textContent, selectedSize);
-      });
-    });
+  function goTo(idx) {
+    if (idx < 0 || idx >= total) return;
+    slides[current].classList.add('exit');
+    setTimeout(() => slides[current < idx ? current : current].classList.remove('exit'), 450);
+    current = idx;
+    update();
+  }
 
-    document.getElementById('modalClose').addEventListener('click', closeModal);
-    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.getElementById('prev').addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+  document.getElementById('next').addEventListener('click', () => { if (current < total - 1) goTo(current + 1); });
 
-    // === THEME SWITCHER ===
-    const themeButtons = document.querySelectorAll('.theme-switcher__btn');
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); if (current < total - 1) goTo(current + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); if (current > 0) goTo(current - 1); }
+  });
 
-    themeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const theme = btn.dataset.theme;
-        document.body.className = theme;
-        themeButtons.forEach(b => b.classList.toggle('is-active', b === btn));
-      });
-    });
-  </script>
+  update();
+</script>
 </body>
 </html>
